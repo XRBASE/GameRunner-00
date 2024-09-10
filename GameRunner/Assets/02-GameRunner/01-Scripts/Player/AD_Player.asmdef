@@ -1,0 +1,18 @@
+{
+    "name": "AD_Player",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1752a40dcd06aa94db2e2f8b3a5d49c9",
+        "GUID:39f15d367b09ec94f92e9de88be205fa",
+        "GUID:9f0995e706b816f418d9600d72c84a0a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

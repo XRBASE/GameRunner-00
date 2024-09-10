@@ -42,19 +42,6 @@ public class ServerHandle : Singleton<ServerHandle>
     [SerializeField] private string _testInput =
         "{\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhaS5zcGFjZXNoaWZ0LnBsYXRmb3JtLmNlbnRhdXIiLCJzdWIiOiJydXRnZXJ2ZDIxNyIsImV4cCI6MTcxMzM0NjY3MiwiaWF0IjoxNzEzMjYwMjcyLCJyb2xlcyI6WyJBRE1JTiIsIkdVRVNUIiwiTUFOQUdFUiIsIlNVUEVSIiwiVVNFUiJdfQ.fSKZtqa3yN_bZTVubN3Mj5UXuoRVld_pvFdQsL70qhM\",\"baseUrl\":\"https://dev.spaceshift.ai\",\"roomId\":\"58d6a142-e326-4d40-859a-3fa0d57540e2\",\"spaceId\":\"8d3d6c74-a2ce-4585-acad-b321ae6596bd\"}";
     
-    protected override void Awake()
-    { 
-        //skip base and do singleton yourself, because of don't destroy on load
-        if (Instance != null) {
-            DestroyImmediate(this.gameObject);
-            return;
-            
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(this);
-    }
-
     private void OnDestroy() {
         AppConfig.Config.OverrideAppID("");
         AppConfig.Config.OverrideBaseUrl("");

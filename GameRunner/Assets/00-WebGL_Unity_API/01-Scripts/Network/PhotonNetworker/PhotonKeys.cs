@@ -1,6 +1,6 @@
 using System;
 
-namespace Cohort.Ravel.PhotonKeys {
+namespace Cohort.Networking.PhotonKeys {
 
     public static class Keys{
         

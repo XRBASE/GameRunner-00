@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 namespace Cohort.Config
 {
     [CreateAssetMenu(menuName = "Cohort/Config", fileName = "CohortConfig", order = 0)]
