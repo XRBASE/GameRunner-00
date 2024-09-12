@@ -1,0 +1,18 @@
+{
+    "name": "AD_AvatarAnimation",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d43bb8b9e37ef1546a0fe44e2074489a",
+        "GUID:9f0995e706b816f418d9600d72c84a0a",
+        "GUID:39f15d367b09ec94f92e9de88be205fa"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

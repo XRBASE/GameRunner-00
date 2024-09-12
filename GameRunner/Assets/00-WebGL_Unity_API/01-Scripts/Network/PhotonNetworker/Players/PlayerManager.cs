@@ -36,7 +36,6 @@ namespace Cohort.Networking.Players {
         }
         
         private void OnJoinedRoom() {
-            Debug.Log("0");
             foreach (var kv_player in Network.Local.Client.CurrentRoom.Players) {
                 if (!kv_player.Value.IsInactive) {
                     AddPlayer(kv_player.Value);

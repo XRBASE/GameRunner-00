@@ -1,0 +1,19 @@
+{
+    "name": "AD_GlbImport",
+    "rootNamespace": "",
+    "references": [
+        "GUID:96af4ea235d92d245a095007c6ca3701",
+        "GUID:da4cfad43a61cc5489a37791c1f0f5e9",
+        "GUID:9f0995e706b816f418d9600d72c84a0a",
+        "GUID:a42927d1d4a3b4cda9b076a7adecb9cc"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

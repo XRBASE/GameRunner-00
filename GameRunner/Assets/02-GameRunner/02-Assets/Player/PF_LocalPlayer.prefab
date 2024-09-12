@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5077227709532830829, guid: d7f927187f4478945ad8c2b1f88092c2, type: 3}
       propertyPath: m_Name
-      value: PF_LocalPlayer Variant
+      value: PF_LocalPlayer
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6773560205269172701, guid: d7f927187f4478945ad8c2b1f88092c2, type: 3}
@@ -61,6 +61,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1777755501539738712}
   m_SourcePrefab: {fileID: 100100000, guid: d7f927187f4478945ad8c2b1f88092c2, type: 3}
+--- !u!4 &4505228635126997319 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 488446092565794730, guid: d7f927187f4478945ad8c2b1f88092c2, type: 3}
+  m_PrefabInstance: {fileID: 4053950709151198957}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9094853435808748160 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5077227709532830829, guid: d7f927187f4478945ad8c2b1f88092c2, type: 3}
@@ -79,3 +84,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _userName: 
+  _avatarUrl: 
+  _avatarParent: {fileID: 4505228635126997319}

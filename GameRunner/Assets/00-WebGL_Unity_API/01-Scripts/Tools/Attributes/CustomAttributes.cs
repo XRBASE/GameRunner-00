@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEditor;
 #endif
 
-namespace SpaceShift.CustomAttributes
+namespace Cohort.CustomAttributes
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class ReadOnlyAttribute : PropertyAttribute { }

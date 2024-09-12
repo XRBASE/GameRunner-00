@@ -1,3 +1,24 @@
+# v0.1.3
+Avatars and animations
+
+## Summary
+Avatar importer using RPM for now. Supports functionality for prefab and GLB importing. Animation system, not hooked up yet, for 
+managing avatar animations.
+
+# v0.1.2
+Player Management
+
+## Summary
+Adds generic player management that handles network subscriptions and interface classes that can be used for initial
+player management.
+
+# v0.1.1
+patch space removal
+
+## Summary
+removed spaces and connected service and repo classes. Adds Photon service and repo class to manage connection behaviour.
+adds string id for channels which will in the future be used instead of space id's to retrieve asset data from.
+
 # v0.1.0
 codeword: Linnorm,
 ## Summary

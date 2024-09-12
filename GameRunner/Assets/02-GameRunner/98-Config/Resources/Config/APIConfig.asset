@@ -10,7 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e490bf6862f7c4e4ca77f8abdaa747d2, type: 3}
-  m_Name: CohortConfig
+  m_Name: APIConfig
   m_EditorClassIdentifier: 
   _baseUrl: 
   _appId: 
+  litShader: Universal Render Pipeline/Lit
+  unlitShader: Universal Render Pipeline/Unlit
+  _glbOpaque: {fileID: 2100000, guid: c7d0ada077dcd594ab5d3f6f970171e4, type: 2}
+  _glbTransparent: {fileID: 2100000, guid: 28ccee10b4f94ab44a913139f6cfeb4f, type: 2}

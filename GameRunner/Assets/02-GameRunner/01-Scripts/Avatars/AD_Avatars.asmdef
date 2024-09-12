@@ -1,0 +1,23 @@
+{
+    "name": "AD_Avatars",
+    "rootNamespace": "",
+    "references": [
+        "GUID:96af4ea235d92d245a095007c6ca3701",
+        "GUID:f59511cd3a4027040895e486ccf98a3c",
+        "GUID:1752a40dcd06aa94db2e2f8b3a5d49c9",
+        "GUID:47e4282a650095e4492c2d80a320cc49",
+        "GUID:39f15d367b09ec94f92e9de88be205fa",
+        "GUID:74afac8f008a37e41b1245080b324674",
+        "GUID:9f0995e706b816f418d9600d72c84a0a",
+        "GUID:d43bb8b9e37ef1546a0fe44e2074489a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

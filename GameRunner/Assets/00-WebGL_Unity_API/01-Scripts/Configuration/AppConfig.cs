@@ -1,14 +1,13 @@
 using UnityEngine;
 
-
 namespace Cohort.Config
 {
-    [CreateAssetMenu(menuName = "Cohort/Config", fileName = "CohortConfig", order = 0)]
+    [CreateAssetMenu(menuName = "Cohort/Config/App", fileName = "APIConfig", order = 0)]
     public class AppConfig : ScriptableObject {
         public static AppConfig Config {
             get {
                 if (_instance == null) {
-                    _instance = Resources.Load<AppConfig>("Config/CohortConfig");
+                    _instance = Resources.Load<AppConfig>("Config/APIConfig");
                 }
 
                 return _instance;
@@ -27,7 +26,7 @@ namespace Cohort.Config
 
         [SerializeField] private string _baseUrl;
         [SerializeField] private string _appId;
-
+        
         public void OverrideBaseUrl(string url) {
             _baseUrl = url;
         }
