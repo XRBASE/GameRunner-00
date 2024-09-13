@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Cohort.Ravel.Patterns;
+using Cohort.Patterns;
 using Photon.Realtime;
 using UnityEngine;
 #if UNITY_EDITOR

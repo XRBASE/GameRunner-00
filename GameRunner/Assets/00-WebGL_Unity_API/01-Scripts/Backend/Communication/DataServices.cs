@@ -1,7 +1,7 @@
 using Cohort.Ravel.BackendData.Data;
 using Cohort.Ravel.BackendData.DataService;
 using Cohort.Ravel.BackendData.Images;
-using Cohort.Ravel.Patterns;
+using Cohort.Patterns;
 using UnityEngine;
 
 //before other service classes

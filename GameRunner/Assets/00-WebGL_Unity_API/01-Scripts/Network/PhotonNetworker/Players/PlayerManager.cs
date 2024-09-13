@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
-using Cohort.Ravel.Patterns;
+using Cohort.Patterns;
 
 namespace Cohort.Networking.Players {
     [DefaultExecutionOrder(101)] //after players

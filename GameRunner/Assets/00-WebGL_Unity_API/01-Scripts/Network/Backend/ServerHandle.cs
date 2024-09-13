@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Runtime.InteropServices;
-using Cohort.Config;
 using Cohort.Ravel.Networking.Authorization;
-using Cohort.Ravel.Patterns;
+using Cohort.Patterns;
+using Cohort.Config;
+using System.Runtime.InteropServices;
+using System.Collections;
 using MathBuddy.Strings;
 using UnityEngine;
 

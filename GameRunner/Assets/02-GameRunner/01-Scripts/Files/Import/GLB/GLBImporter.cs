@@ -1,5 +1,5 @@
 using System;
-using Cohort.Ravel.Patterns;
+using Cohort.Patterns;
 using GLTFast;
 using ReadyPlayerMe.Core;
 using UnityEngine;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Cohort.Ravel.Patterns
+namespace Cohort.Patterns
 {
     public class ObjectPool<TData, TType> where TType : ObjectPool<TData, TType>.IPoolable
     {

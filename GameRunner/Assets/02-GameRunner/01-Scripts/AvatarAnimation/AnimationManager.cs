@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Cohort.Ravel.Patterns;
+using Cohort.Patterns;
 using UnityEngine;
 
 namespace Cohort.GameRunner.AvatarAnimations {

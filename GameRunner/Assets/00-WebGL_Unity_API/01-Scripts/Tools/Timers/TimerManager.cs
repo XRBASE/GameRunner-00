@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Cohort.Ravel.Patterns;
+using Cohort.Patterns;
 using UnityEngine;
 
 namespace Cohort.Ravel.Tools.Timers

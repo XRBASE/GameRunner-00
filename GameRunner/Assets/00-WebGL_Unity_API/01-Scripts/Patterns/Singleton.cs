@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Cohort.Ravel.Patterns
+namespace Cohort.Patterns
 {
     [DefaultExecutionOrder(-1)]
     public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>

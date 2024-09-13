@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
-using Cohort.Ravel.Patterns;
+using Cohort.Patterns;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
