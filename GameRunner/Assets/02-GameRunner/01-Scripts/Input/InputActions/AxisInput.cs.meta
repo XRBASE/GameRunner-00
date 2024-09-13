@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Ravel/Assets/00-Ravel/01-Scripts/Configuration/RavelMatGenConfig.cs.meta
+guid: 114fc0c4c3ff6314db3d7b7e2b36bd6c
+========
+guid: 96405f616a20b7e40b097781c6713b2b
+>>>>>>>> development:Ravel/Assets/00-Ravel/01-Scripts/Input/InputActions/AxisInput.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

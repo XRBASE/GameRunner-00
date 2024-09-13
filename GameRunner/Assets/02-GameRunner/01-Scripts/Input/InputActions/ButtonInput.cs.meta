@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Ravel/Assets/00-Ravel/01-Scripts/Files/3D/GlbMatGenerator/RavelImportMatGenerator.cs.meta
+guid: 35c9ebb8289ad5745a093f0079225fdb
+========
+guid: f7cf02cfb23e03d488a002986e51e89a
+>>>>>>>> development:Ravel/Assets/00-Ravel/01-Scripts/Input/InputActions/ButtonInput.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
