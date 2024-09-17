@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cohort.Patterns;
 using UnityEngine;
 
-namespace Cohort.Ravel.Tools.Timers
+namespace Cohort.Tools.Timers
 {
     public class TimerManager : Singleton<TimerManager>
     {

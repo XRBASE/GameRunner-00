@@ -48,6 +48,8 @@ namespace Cohort.GameRunner.Avatars {
 			}
 
 			_animator.Initialize(_gender);
+			
+			PlayerAudioManager.Instance.SetupPlayerAudio(gameObject, _animator, null);
 			_renderers = GetComponentsInChildren<Renderer>();
 		}
 

@@ -1,7 +1,7 @@
 using Cohort.Config;
 using Cohort.Ravel.PhotonNetworking.Callbacks;
 using Cohort.Ravel.PhotonNetworking.Rooms;
-using Cohort.Ravel.Tools.Timers;
+using Cohort.Tools.Timers;
 using Photon.Realtime;
 using UnityEngine;
 

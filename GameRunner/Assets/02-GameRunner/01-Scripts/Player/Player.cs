@@ -1,20 +1,36 @@
-using System.Security.Cryptography;
+using Avatar = Cohort.GameRunner.Avatars.Avatar;
+using Cohort.Networking.PhotonKeys;
 using Cohort.GameRunner.Avatars;
 using Cohort.Networking.Players;
-using Cohort.Networking.PhotonKeys;
 using ExitGames.Client.Photon;
 using UnityEngine;
-using Avatar = Cohort.GameRunner.Avatars.Avatar;
+using System;
 
 namespace Cohort.GameRunner.Players {
     public class Player : MonoBehaviour, IPlayer {
+        public const int LAYER = 3;
+        
+        public static LocalPlayer Local { get { return IPlayer.Local as LocalPlayer; } }
+
         public Photon.Realtime.Player PhotonPlayer { get; set; }
+        public int ActorNumber { get { return PhotonPlayer.ActorNumber; } }
+
+        public bool Initialized { get; set; }
+
+        public Hashtable CustomProperties { get { return PhotonPlayer.CustomProperties; } }
 
         public Avatar Avatar { get; private set; }
+
+        public virtual bool Visible { get { return _visible; } }
+
+        public Action<Hashtable> onPropertiesChanged;
+        public Action<Avatar> onAvatarImported;
 
         [SerializeField] protected string _userName;
         [SerializeField] protected string _avatarUrl;
         [SerializeField] protected Transform _avatarParent;
+
+        private bool _visible = true;
 
         protected void ImportAvatar() {
             if (string.IsNullOrEmpty(_avatarUrl)) {
@@ -33,7 +49,8 @@ namespace Cohort.GameRunner.Players {
             }
             
             Avatar = avatar;
-            Avatar.SetVisible(true);
+            Avatar.SetVisible(_visible);
+            onAvatarImported?.Invoke(Avatar);
         }
 
         public virtual void OnJoinedRoom() {
@@ -50,6 +67,14 @@ namespace Cohort.GameRunner.Players {
             if (changes.ContainsKey(key)) {
                 _avatarUrl = (string)changes[key];
                 ImportAvatar();
+            }
+            
+            key = Keys.Get(Keys.Player.AvatarVisible);
+            if (changes.ContainsKey(key)) {
+                _visible = (bool)changes[key];
+                if (Avatar != null) {
+                    Avatar.SetVisible(_visible);
+                }
             }
         }
 

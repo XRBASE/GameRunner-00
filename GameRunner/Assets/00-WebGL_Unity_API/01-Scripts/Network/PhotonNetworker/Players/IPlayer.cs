@@ -1,4 +1,5 @@
 using ExitGames.Client.Photon;
+using UnityEngine;
 
 namespace Cohort.Networking.Players {
     /// <summary>
@@ -11,6 +12,8 @@ namespace Cohort.Networking.Players {
         public static IPlayer Local { get; protected set; }
 
         public Photon.Realtime.Player PhotonPlayer { get; set; }
+        public int ActorNumber { get; }
+        public bool Initialized { get; set; }
         
         /// <summary>
         /// Call used to initialize this instance of the player.
@@ -23,6 +26,8 @@ namespace Cohort.Networking.Players {
             if (Network.Local.Client.InRoom) {
                 OnJoinedRoom();
             }
+
+            Initialized = true;
         }
 
         public void Destroy() {

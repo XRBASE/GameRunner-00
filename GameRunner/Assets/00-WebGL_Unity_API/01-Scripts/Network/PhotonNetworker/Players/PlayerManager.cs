@@ -10,7 +10,7 @@ namespace Cohort.Networking.Players {
         /// <summary>
         /// Player dictionary indexed by their userId
         /// </summary>
-        private Dictionary<string, IPlayer> _players = new Dictionary<string, IPlayer>();
+        protected Dictionary<string, IPlayer> _players = new Dictionary<string, IPlayer>();
         
         /// <summary>
         /// on customprops callbacks for all players in the room, indexed by userid.

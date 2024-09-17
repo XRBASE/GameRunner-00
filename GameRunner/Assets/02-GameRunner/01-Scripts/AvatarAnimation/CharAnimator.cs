@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cohort.CustomAttributes;
-using Cohort.Ravel.Tools.Timers;
+using Cohort.Tools.Timers;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -10,41 +10,47 @@ using UnityEditor;
 
 
 namespace Cohort.GameRunner.AvatarAnimations {
-    public class CharAnimator : MonoBehaviour {
-        //emote clip names
-        private const string FULL_BODY_EMOTE_NAME = "EM_Fullbody";
-        private const string UPPER_BODY_EMOTE_NAME = "EM_Upperbody";
-		
-        //parameter hashes
-        private static readonly int STATE = Animator.StringToHash("State");
-        private static readonly int SPEED = Animator.StringToHash("Speed");
-        private static readonly int GENDER = Animator.StringToHash("Gender");
-        private static readonly int EMOTE_ESC = Animator.StringToHash("EmoteEscape");
-        
-        public AnimationState State {
-            get { return _state; }
-        }
-        [ReadOnly, SerializeField] private AnimationState _state;
 
-        //currently available emotes (key is matched to emote's index in the list).
-        public EmoteSet emoteSet;
+	/// <summary>
+	/// Animator for character's this class animates all players remote, NPC and local. It steers the animation controller
+	/// and is bound by the character controller rules and states.
+	/// </summary>
+	public class CharAnimator : MonoBehaviour {
+		//emote clip names
+		private const string FULL_BODY_EMOTE_NAME = "EM_Fullbody";
+		private const string UPPER_BODY_EMOTE_NAME = "EM_Upperbody";
 
-        public AnimatorOverrideController RuntimeOverride {
-            get { return _runtimeOverride; }
-            set { _runtimeOverride = value; }
-        }
+		//parameter hashes
+		private static readonly int STATE = Animator.StringToHash("State");
+		private static readonly int SPEED = Animator.StringToHash("Speed");
+		private static readonly int GENDER = Animator.StringToHash("Gender");
+		private static readonly int EMOTE_ESC = Animator.StringToHash("EmoteEscape");
 
-        //should be available on avatar
-        private Animator _animator;
-        //provided in AnimationMananger class
-        private RuntimeAnimatorController _runtimeController;
-        //created runtime, used for swapping the emotes
-        private AnimatorOverrideController _runtimeOverride;
-        //used to store a singular emote swap
-        private List<KeyValuePair<AnimationClip, AnimationClip>> _override;
-        private Timer _upperEmoteCooldown;
-        
-        public void CopyFrom(CharAnimator copy) {
+		public AnimationState State {
+			get { return _state; }
+		}
+
+		[ReadOnly, SerializeField] private AnimationState _state;
+
+		public Action<AnimationState> onStateChange;
+
+		//currently available emotes (key is matched to emote's index in the list).
+		public EmoteSet emoteSet;
+
+		//should be available on avatar
+		private Animator _animator;
+
+		//provided in AnimationMananger class
+		private RuntimeAnimatorController _runtimeController;
+
+		//created runtime, used for swapping the emotes
+		private AnimatorOverrideController _runtimeOverride;
+
+		//used to store a singular emote swap
+		private List<KeyValuePair<AnimationClip, AnimationClip>> _override;
+		private Timer _upperEmoteCooldown;
+
+		public void CopyFrom(CharAnimator copy) {
 			if (copy == null)
 				return;
 
@@ -55,11 +61,11 @@ namespace Cohort.GameRunner.AvatarAnimations {
 			_animator.runtimeAnimatorController = _runtimeOverride;
 			_upperEmoteCooldown = copy._upperEmoteCooldown;
 			emoteSet = copy.emoteSet;
-			
+
 			_animator.SetFloat(SPEED, copy._animator.GetFloat(SPEED));
 			ForceEnterState(state, t);
 		}
-		
+
 		public void Initialize(float gender) {
 			//directly sets it to finished
 			_upperEmoteCooldown = new Timer(0f, true);
@@ -78,13 +84,14 @@ namespace Cohort.GameRunner.AvatarAnimations {
 				_runtimeController = AnimationManager.Instance.AnimationController;
 				_animator.runtimeAnimatorController = _runtimeController;
 			}
+
 			_runtimeOverride = new AnimatorOverrideController(_runtimeController);
-			
+
 			_animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
 			_animator.SetFloat(GENDER, gender);
 
 			SetState((int)AnimationState.Idle, true);
-			
+
 			_override = new List<KeyValuePair<AnimationClip, AnimationClip>>();
 		}
 
@@ -104,7 +111,7 @@ namespace Cohort.GameRunner.AvatarAnimations {
 			//if you ever need to know what state called this event
 			//(sometimes it shows the previous clip, if this is called during transition)
 			//Debug.LogError($"EVT state: {(AnimationState)state} by {_animator.GetCurrentAnimatorClipInfo(0)[0].clip.name}");
-			
+
 			SetState(state, true);
 		}
 
@@ -116,7 +123,7 @@ namespace Cohort.GameRunner.AvatarAnimations {
 		public bool SetState(int newState, bool force) {
 			return SetState((AnimationState)newState, force);
 		}
-		
+
 		/// <summary>
 		/// Changes animator state into new state that is passed.
 		/// </summary>
@@ -126,6 +133,8 @@ namespace Cohort.GameRunner.AvatarAnimations {
 		/// <returns>True/False state can (and will) be entered</returns>
 		public bool SetState(AnimationState newState, bool force = false) {
 			if (force || CanEnterState(newState)) {
+				onStateChange?.Invoke(newState);
+
 				_state = newState;
 				_animator.SetInteger(STATE, (int)newState);
 				return true;
@@ -134,7 +143,7 @@ namespace Cohort.GameRunner.AvatarAnimations {
 				return false;
 			}
 		}
-		
+
 		/// <summary>
 		/// (Unsafe) forcefully enter state without taking account of the animator constraints. The state will always be entered. 
 		/// </summary>
@@ -146,13 +155,12 @@ namespace Cohort.GameRunner.AvatarAnimations {
 
 		private void ForceEnterState(string state, float normalizedTime = 0f, int layer = 0) {
 			if (layer == 0) {
-				_state = (AnimationState)Enum.Parse(typeof(AnimationState), state, false);
-				_animator.SetInteger(STATE, (int)_state);
+				SetState((AnimationState)Enum.Parse(typeof(AnimationState), state, false), true);
 			}
-			
+
 			_animator.Play(state, layer, normalizedTime);
 		}
-		
+
 		/// <summary>
 		/// Force the emote to stop playing and enter the idle state as result.
 		/// </summary>
@@ -166,10 +174,10 @@ namespace Cohort.GameRunner.AvatarAnimations {
 		public bool CanEnterState(AnimationState state) {
 			switch (state) {
 				case AnimationState.Idle:
-					return _state 
-						is AnimationState.Moving 
-						or AnimationState.Land 
-						or AnimationState.DoubleLand  
+					return _state
+						is AnimationState.Moving
+						or AnimationState.Land
+						or AnimationState.DoubleLand
 						or AnimationState.FallDown
 						or AnimationState.StandUp
 						or AnimationState.EmoteFullBody
@@ -245,8 +253,8 @@ namespace Cohort.GameRunner.AvatarAnimations {
 		/// <returns>True/False can play emote.</returns>
 		public bool DoEmote(int emoteId) {
 			return DoEmote(emoteId, out Emote em);
-		} 
-		
+		}
+
 		/// <summary>
 		/// Call for executing emote (both upper- and fullbody)
 		/// </summary>
@@ -270,7 +278,7 @@ namespace Cohort.GameRunner.AvatarAnimations {
 
 			return DoEmote(emote);
 		}
-		
+
 		/// <summary>
 		/// Make avatar do an emote.
 		/// </summary>
@@ -279,30 +287,35 @@ namespace Cohort.GameRunner.AvatarAnimations {
 		/// <returns>True/False can play emote.</returns>
 		public bool DoEmote(Emote emote, float normalizedTime = 0f) {
 			bool enter = CanEnterState(AnimationState.EmoteFullBody);
-			if (emote.isFullBody && !enter) 
+			if (emote.isFullBody && !enter)
 				return false;
 			if (!emote.isFullBody && !_upperEmoteCooldown.HasFinished || !(enter || _state == AnimationState.Sitting))
 				return false;
-			
+
 			ReplaceClip((emote.isFullBody) ? FULL_BODY_EMOTE_NAME : UPPER_BODY_EMOTE_NAME, emote.clip);
-			
+
 			if (emote.isFullBody) {
 				ForceEnterState(AnimationState.EmoteFullBody, normalizedTime);
 			}
 			else {
+				onStateChange?.Invoke(AnimationState.EmoteHalfBody);
 				_upperEmoteCooldown = new Timer(emote.clip.length, true);
 				ForceEnterState("EmoteUpperBody", normalizedTime, 1);
 			}
 
 			return true;
 		}
-		
+
 		/// <summary>
 		/// Set animator speed value for moving characters.
 		/// </summary>
 		/// <param name="speed">Current normalized speed (1f for running, 0.5 for walk, 0 for idle).</param>
 		public void SetSpeed(float speed) {
 			_animator.SetFloat(SPEED, speed);
+		}
+
+		public float GetFloat(string paramName) {
+			return _animator.GetFloat(paramName);
 		}
 
 		/// <summary>
@@ -320,11 +333,11 @@ namespace Cohort.GameRunner.AvatarAnimations {
 
 			_override.Clear();
 			_override.Add(new KeyValuePair<AnimationClip, AnimationClip>(originalClip, clip));
-			
+
 			_runtimeOverride.ApplyOverrides(_override);
 			_animator.runtimeAnimatorController = _runtimeOverride;
 		}
-		
+
 		public enum AnimationState {
 			Unknown = -1,
 			Idle = 0,
@@ -348,7 +361,7 @@ namespace Cohort.GameRunner.AvatarAnimations {
 		[CustomEditor(typeof(CharAnimator))]
 		private class CharAnimatorEditor : Editor {
 			private CharAnimator _instance;
-			
+
 			private float _gender;
 			private AnimationState _state;
 			private int _emote = 0;
@@ -364,24 +377,25 @@ namespace Cohort.GameRunner.AvatarAnimations {
 				DrawDefaultInspector();
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField("Test functions");
-				
+
 				EditorGUI.BeginChangeCheck();
 				_gender = EditorGUILayout.Slider("gender", _gender, 0, 1);
 				if (EditorGUI.EndChangeCheck() && Application.isPlaying) {
 					_instance._animator.SetFloat(GENDER, _gender);
 				}
-				
-				_state = (AnimationState) EditorGUILayout.EnumPopup("state", _state);
+
+				_state = (AnimationState)EditorGUILayout.EnumPopup("state", _state);
 				_emote = Mathf.RoundToInt(EditorGUILayout.Slider("emote", _emote, 0, 5));
 
 				if (Application.isPlaying && GUILayout.Button("Update")) {
 					_instance.ForceEnterState(_state);
 				}
+
 				if (Application.isPlaying && GUILayout.Button("Emote")) {
 					_instance.DoEmote(_emote);
 				}
 			}
 		}
 #endif
-    }
+	}
 }

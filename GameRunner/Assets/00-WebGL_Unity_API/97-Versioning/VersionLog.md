@@ -1,4 +1,11 @@
 # v0.1.3
+namespace renames
+
+## Summary
+Found old namespaces still called ravel, which have been renamed to cohort. Also adds an Initialized boolean in the player instances
+that indicates whether the photon data has been set yet.
+
+# v0.1.3
 Avatars and animations
 
 ## Summary

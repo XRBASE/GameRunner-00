@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cohort.Ravel.Assets;
-using Cohort.Ravel.Tools.Timers;
+using Cohort.Tools.Timers;
 using UnityEngine;
 
 public class AssetService : MonoBehaviour
