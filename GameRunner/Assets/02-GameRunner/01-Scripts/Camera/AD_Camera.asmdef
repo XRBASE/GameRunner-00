@@ -1,0 +1,20 @@
+{
+    "name": "AD_Camera",
+    "rootNamespace": "",
+    "references": [
+        "GUID:47e4282a650095e4492c2d80a320cc49",
+        "GUID:9f0995e706b816f418d9600d72c84a0a",
+        "GUID:e5266252472ac85489b262fc37591755",
+        "GUID:388b518ec53dc634084ee3aa754b1f73",
+        "GUID:9910411941313bd488963aec7b627989"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

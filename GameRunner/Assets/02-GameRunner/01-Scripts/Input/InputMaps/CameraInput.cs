@@ -10,12 +10,12 @@ namespace Cohort.Input.Maps {
         /// <summary>
         /// zooms the cam.
         /// </summary>
-        public Action<Vector2, bool> zoom;
+        public Action<float> zoom;
 
         /// <summary>
         /// Pans/rotates the cam.
         /// </summary>
-        public Action<Vector2, ActionState> pan;
+        public Action<Vector2> pan;
 
         /// <summary>
         /// Go to numbered viewpoint (if exists and active).
@@ -91,7 +91,7 @@ namespace Cohort.Input.Maps {
                 return;
 
             Vector2 dir = context.ReadValue<Vector2>();
-            zoom?.Invoke(-dir, context.performed || context.started);
+            zoom?.Invoke(-dir.y);
         }
 
         private void OnMousePan(InputAction.CallbackContext context) {
@@ -102,14 +102,14 @@ namespace Cohort.Input.Maps {
             if (context.started) {
                 _validDrag = !InputManager.Instance.Raycaster.PointerOverUI;
                 if (_validDrag) {
-                    pan?.Invoke(Vector2.zero, ActionState.Started);
+                    pan?.Invoke(Vector2.zero);
                 }
             }
             else if (context.performed) {
-                pan?.Invoke(context.ReadValue<Vector2>(), ActionState.Active);
+                pan?.Invoke(context.ReadValue<Vector2>());
             }
             else {
-                pan?.Invoke(Vector2.zero, ActionState.Canceled);
+                pan?.Invoke(Vector2.zero);
             }
         }
 

@@ -122,9 +122,8 @@ namespace Cohort.GameRunner.LocoMovement {
                 //DataServices.Spaces.onSpaceChanged += TeleportToSpawn;
             }
             else {
-                
+                ActivateRigidBody();
             }
-            ActivateRigidBody();
             
             _sm.State = State.Move;
             _state = State.Move;
@@ -150,6 +149,9 @@ namespace Cohort.GameRunner.LocoMovement {
                 //DataServices.Spaces.onSpaceChanged -= TeleportToSpawn;
                 
                 SceneManager.sceneLoaded += OnSceneLoaded;
+            }
+            else {
+                ActivateRigidBody();
             }
         }
         
@@ -248,6 +250,7 @@ namespace Cohort.GameRunner.LocoMovement {
         /// Activates the rigidbody and gravity.
         /// </summary>
         public virtual void ActivateRigidBody() {
+            Debug.LogError("Activate");
             _rb.isKinematic = false;
             _rb.useGravity = true;
         }

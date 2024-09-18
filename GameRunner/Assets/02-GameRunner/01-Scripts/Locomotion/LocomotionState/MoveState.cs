@@ -122,7 +122,12 @@ namespace Cohort.GameRunner.LocoMovement {
 		/// </summary>
 		protected void UpdateFalling() {
 			if ((_fallPosition - _target.position).y >= Locomotion.FALL_RESET_HEIGHT) {
-				SpawnPoint.GetById(SpawnPoint.DEFAULT).TeleportToSpawnPoint();
+				if (SpawnPoint.TryGetById(SpawnPoint.DEFAULT, out SpawnPoint spawn)) {
+					spawn.TeleportToSpawnPoint();
+				}
+				else {
+					TeleportToPosition(Vector3.zero, Quaternion.identity);
+				}
 				_fallPosition = _target.position;
 			}
 		}

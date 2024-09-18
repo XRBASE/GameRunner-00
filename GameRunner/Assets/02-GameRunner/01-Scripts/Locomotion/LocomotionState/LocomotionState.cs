@@ -33,18 +33,11 @@ namespace Cohort.GameRunner.LocoMovement {
 		protected Locomotion _lm;
 		protected Rigidbody _rb;
 		protected Transform _target;
-		//TODO_COHORT: camera
-		//protected Camera _cam;
 		
 		public LocomotionState(Rigidbody rb, Locomotion lm) {
 			_lm = lm;
 			_rb = rb;
 			_target = rb.transform;
-
-			if (_lm.Control == Locomotion.ControlType.Local) {
-				//TODO_COHORT: camera
-				//_cam = CameraState.Instance.Camera;
-			}
 		}
 
 		public virtual void Enter()
@@ -205,9 +198,6 @@ namespace Cohort.GameRunner.LocoMovement {
 		}
 
 		protected Vector3 GetWorldDirection(Vector3 direction) {
-			//TODO_COHORT: camera 
-			//direction = _cam.transform.TransformDirection(direction);
-			//direction = _lm.transform.TransformDirection(direction);
 			direction.y = 0f;
 			return direction;
 		}
