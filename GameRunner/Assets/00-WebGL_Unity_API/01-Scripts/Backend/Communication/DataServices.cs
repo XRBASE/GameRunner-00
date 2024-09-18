@@ -8,6 +8,7 @@ using UnityEngine;
 [DefaultExecutionOrder(-1)]
 public class DataServices : Singleton<DataServices>
 {
+    //TODO: replace this with a service locator pattern maybe?
     public static LoginService Login {
         get { return _login; }
     }

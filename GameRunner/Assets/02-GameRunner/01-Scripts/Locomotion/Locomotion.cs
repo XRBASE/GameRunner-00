@@ -250,7 +250,6 @@ namespace Cohort.GameRunner.LocoMovement {
         /// Activates the rigidbody and gravity.
         /// </summary>
         public virtual void ActivateRigidBody() {
-            Debug.LogError("Activate");
             _rb.isKinematic = false;
             _rb.useGravity = true;
         }

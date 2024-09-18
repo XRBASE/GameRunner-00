@@ -1,0 +1,16 @@
+{
+    "name": "AD_Objectives",
+    "rootNamespace": "",
+    "references": [
+        "GUID:29d60a27676928849996b191f2ccb5de"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
