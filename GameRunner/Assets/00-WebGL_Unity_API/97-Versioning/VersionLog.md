@@ -1,3 +1,9 @@
+# v0.1.4
+Time scaled lerp
+
+## Summary
+Added a time scaled lerp/ framerate independet lerp to the mathbuddy collection.
+
 # v0.1.3
 namespace renames
 
