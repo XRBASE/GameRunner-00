@@ -75,7 +75,8 @@ namespace Cohort.Ravel.Patterns.States
 		}
 
 		public void Update() {
-			this[State].Update();
+			if (InState)
+				this[State].Update();
 		}
 	}
 

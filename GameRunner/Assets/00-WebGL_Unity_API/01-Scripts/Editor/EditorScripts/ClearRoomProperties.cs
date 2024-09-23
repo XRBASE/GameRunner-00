@@ -29,12 +29,15 @@ public static class ClearRoomProperties
             return;
         }
 
-        Hashtable props = Network.Local?.Client?.CurrentRoom.CustomProperties;
+        Hashtable props = Network.Local.Client.CurrentRoom.CustomProperties;
         //clear old data
         List<object> keys = props.Keys.ToList();
         foreach (var key in keys) {
             //set all properties to null (this should clear them out)
             props[key] = null;
         }
+
+        Network.Local.Client.CurrentRoom.SetCustomProperties(props);
+        Debug.Log("Room properties cleared");
     }
 }
