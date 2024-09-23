@@ -27,7 +27,7 @@ public class StepRaycaster : MonoBehaviour {
         
         _mask = mask;
         transform.SetParent(_rb.transform, false);
-        transform.position = Vector3.up * UPP_BOUND
+        transform.localPosition = Vector3.up * UPP_BOUND
                              + transform.InverseTransformDirection(Vector3.forward * FWD);
     }
 

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Cohort.Input.Maps {
+namespace Cohort.GameRunner.Input.Maps {
     /// <summary>
     /// Used only for generic cursor information, not for actual input.
     /// CursorRaycaster will use this information to track the position on screen for instance, that position will in respect

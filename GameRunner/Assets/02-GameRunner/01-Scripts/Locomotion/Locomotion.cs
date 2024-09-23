@@ -3,11 +3,12 @@ using Cohort.Networking.PhotonKeys;
 using Cohort.Ravel.Patterns.States;
 using Cohort.GameRunner.Players;
 using Cohort.CustomAttributes;
+using Cohort.GameRunner.Input;
 using ExitGames.Client.Photon;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using System;
-using Cohort.Input;
-using UnityEngine.SceneManagement;
+
 using Avatar = Cohort.GameRunner.Avatars.Avatar;
 
 namespace Cohort.GameRunner.LocoMovement {
@@ -116,17 +117,14 @@ namespace Cohort.GameRunner.LocoMovement {
             }
             
             if (Control == ControlType.Local) {
-                //TODO_COHORT: sceneloading
                 SceneManager.sceneLoaded += OnSceneLoaded;
-                //SceneManager.onSceneLoaded += ActivateRigidBody;
-                //DataServices.Spaces.onSpaceChanged += TeleportToSpawn;
             }
             else {
+                _sm.State = State.Move;
+                _state = State.Move;
+                
                 ActivateRigidBody();
             }
-            
-            _sm.State = State.Move;
-            _state = State.Move;
             
             if (Networked && Network.Local.Client.InRoom) {
                 OnJoinedRoom();
@@ -244,6 +242,9 @@ namespace Cohort.GameRunner.LocoMovement {
             TeleportToSpawn();
             
             ActivateRigidBody();
+            
+            _sm.State = State.Move;
+            _state = State.Move;
         }
         
         /// <summary>

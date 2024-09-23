@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Cohort.Input.Maps {
+namespace Cohort.GameRunner.Input.Maps {
     /// <summary>
     /// player movement related input. 
     /// </summary>

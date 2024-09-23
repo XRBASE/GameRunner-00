@@ -1,0 +1,20 @@
+{
+    "name": "AD_Interactables",
+    "rootNamespace": "",
+    "references": [
+        "GUID:39f15d367b09ec94f92e9de88be205fa",
+        "GUID:5773d53f8b0b81745841d8b55f9d41a5",
+        "GUID:9f0995e706b816f418d9600d72c84a0a",
+        "GUID:d43bb8b9e37ef1546a0fe44e2074489a",
+        "GUID:9910411941313bd488963aec7b627989"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

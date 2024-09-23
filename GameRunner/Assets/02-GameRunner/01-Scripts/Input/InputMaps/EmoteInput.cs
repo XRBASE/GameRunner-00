@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.InputSystem;
 
-namespace Cohort.Input.Maps {
+namespace Cohort.GameRunner.Input.Maps {
     /// <summary>
     /// Input for interaction with objects (select and grab)
     /// </summary>

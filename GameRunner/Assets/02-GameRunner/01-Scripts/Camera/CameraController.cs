@@ -1,6 +1,6 @@
 using Avatar = Cohort.GameRunner.Avatars.Avatar;
 using Cohort.GameRunner.Players;
-using Cohort.Input;
+using Cohort.GameRunner.Input;
 using Cohort.Patterns;
 using UnityEngine;
 

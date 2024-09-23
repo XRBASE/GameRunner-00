@@ -1,8 +1,9 @@
-using System.Collections;
 using Cohort.GameRunner.AvatarAnimations;
-using Cohort.Input;
 using Cohort.Networking.PhotonKeys;
+using Cohort.GameRunner.Input;
+using System.Collections;
 using UnityEngine;
+
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Cohort.GameRunner.LocoMovement {

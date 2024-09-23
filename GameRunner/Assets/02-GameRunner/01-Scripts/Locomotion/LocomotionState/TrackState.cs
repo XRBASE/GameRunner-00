@@ -1,7 +1,7 @@
-using System;
-using Cohort.Input;
-using MathBuddy;
+using Cohort.GameRunner.Input;
 using UnityEngine;
+using MathBuddy;
+using System;
 
 namespace Cohort.GameRunner.LocoMovement {
     /// <summary>

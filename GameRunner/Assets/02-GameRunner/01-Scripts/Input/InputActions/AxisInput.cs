@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Cohort.Input.Actions
+namespace Cohort.GameRunner.Input.Actions
 {
     using Input = UnityEngine.Input;
 

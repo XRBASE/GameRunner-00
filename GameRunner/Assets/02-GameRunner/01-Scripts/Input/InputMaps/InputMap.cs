@@ -1,6 +1,6 @@
 using UnityEngine.InputSystem;
 
-namespace Cohort.Input
+namespace Cohort.GameRunner.Input
 {
     public abstract class InputMap
     {

@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using Cohort.Input.Actions;
-using Cohort.Input.Maps;
+using Cohort.GameRunner.Input.Actions;
+using Cohort.GameRunner.Input.Maps;
 using Cohort.Patterns;
-using UnityEngine;
+using System.Collections.Generic;
+using System;
 using UnityEngine.InputSystem;
+using UnityEngine;
 
-namespace Cohort.Input
+namespace Cohort.GameRunner.Input
 {
     /// <summary>
     /// Central entry point for subscribing to input actions

@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-namespace Cohort.Input.Actions
+namespace Cohort.GameRunner.Input.Actions
 {
     /// <summary>
     /// This class reads the gamepad input for the Xbox controller and maps it to the according actions. This uses the old unity input system

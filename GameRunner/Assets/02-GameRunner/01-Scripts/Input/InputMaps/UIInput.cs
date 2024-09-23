@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.InputSystem;
 
-namespace Cohort.Input.Maps
+namespace Cohort.GameRunner.Input.Maps
 {
     /// <summary>
     /// Container for UI input actions.

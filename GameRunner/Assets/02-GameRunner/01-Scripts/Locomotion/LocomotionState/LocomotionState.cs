@@ -1,9 +1,9 @@
-using Cohort.Input;
 using Cohort.Networking.PhotonKeys;
 using Cohort.Ravel.Patterns.States;
+using Cohort.GameRunner.Input;
 using ExitGames.Client.Photon;
-using MathBuddy;
 using UnityEngine;
+using MathBuddy;
 
 namespace Cohort.GameRunner.LocoMovement {
 	/// <summary>

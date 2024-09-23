@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.InputSystem;
 
-namespace Cohort.Input.Maps {
+namespace Cohort.GameRunner.Input.Maps {
     public class TypingInput : InputMap {
         public bool PlayerTyping {
             get { return _typing; }

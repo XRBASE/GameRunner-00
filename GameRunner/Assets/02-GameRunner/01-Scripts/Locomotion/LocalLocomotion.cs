@@ -1,8 +1,8 @@
-using System;
 using Cohort.GameRunner.AvatarAnimations;
-using Cohort.Input;
 using Cohort.Networking.PhotonKeys;
+using Cohort.GameRunner.Input;
 using UnityEngine;
+using System;
 
 namespace Cohort.GameRunner.LocoMovement {
     /// <summary>
