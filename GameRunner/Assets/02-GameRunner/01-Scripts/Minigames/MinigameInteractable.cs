@@ -9,6 +9,19 @@ public class MinigameInteractable : Interactable {
 	[SerializeField] private GameObject _inUseIndicator;
 
 	private int _actor = -1;
+
+	protected override void Start() {
+		base.Start();
+		
+		Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
+	}
+
+	private void OnPlayerLeftRoom(Photon.Realtime.Player obj) {
+		if (_actor == obj.ActorNumber) {
+			_actor = -1;
+			Deactivate();
+		}
+	}
 	
 	protected override void OnJoinedRoom() {
 		base.OnJoinedRoom();
@@ -76,14 +89,10 @@ public class MinigameInteractable : Interactable {
 	}
 
 	protected override void OnActivate() {
-		Debug.LogWarning("OnActivate");
-		
 		_inUseIndicator.SetActive(true);
 	}
 
 	protected override void OnDeactivate() {
-		Debug.LogWarning("OnDeactivate");
-		
 		_inUseIndicator.SetActive(false);
 	}
 

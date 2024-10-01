@@ -73,6 +73,8 @@ namespace Cohort.GameRunner.LocoMovement {
         protected Rigidbody _rb;
         protected CapsuleCollider _collider;
         protected Player _player;
+
+        private bool _initialized = false;
         
         protected virtual void Awake() {
             if (_rb == null)
@@ -119,12 +121,6 @@ namespace Cohort.GameRunner.LocoMovement {
             if (Control == ControlType.Local) {
                 SceneManager.sceneLoaded += OnSceneLoaded;
             }
-            else {
-                _sm.State = State.Move;
-                _state = State.Move;
-                
-                ActivateRigidBody();
-            }
             
             if (Networked && Network.Local.Client.InRoom) {
                 OnJoinedRoom();
@@ -146,10 +142,7 @@ namespace Cohort.GameRunner.LocoMovement {
                 //SceneManager.onSceneLoaded -= ActivateRigidBody;
                 //DataServices.Spaces.onSpaceChanged -= TeleportToSpawn;
                 
-                SceneManager.sceneLoaded += OnSceneLoaded;
-            }
-            else {
-                ActivateRigidBody();
+                SceneManager.sceneLoaded -= OnSceneLoaded;
             }
         }
         
@@ -164,6 +157,9 @@ namespace Cohort.GameRunner.LocoMovement {
             if (Control == ControlType.Local) {
                 //TODO_COHORT: Camerastate
                 //CameraState.Instance.PlayerFocusTransform = Animator.GetBone(HumanBodyBones.Head);
+            }
+            else if (!_initialized) {
+                InitLocomotion();
             }
         }
         
@@ -239,12 +235,18 @@ namespace Cohort.GameRunner.LocoMovement {
         }
 
         public void OnSceneLoaded(Scene s, LoadSceneMode m) {
+            InitLocomotion();
+        }
+
+        private void InitLocomotion() {
             TeleportToSpawn();
             
             ActivateRigidBody();
             
             _sm.State = State.Move;
             _state = State.Move;
+            
+            _initialized = true;
         }
         
         /// <summary>

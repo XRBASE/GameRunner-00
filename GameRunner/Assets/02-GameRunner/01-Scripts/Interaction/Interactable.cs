@@ -50,7 +50,6 @@ namespace Cohort.GameRunner.Interaction {
         }
 
         protected virtual void Activate(Hashtable changes, Hashtable expected = null) {
-            Debug.LogError($"Activate");
             if (!_networked) {
                 OnActivate();
                 return;
@@ -65,7 +64,6 @@ namespace Cohort.GameRunner.Interaction {
         }
 
         protected virtual void Deactivate(Hashtable changes, Hashtable expected = null) {
-            Debug.LogError($"Deactivate");
             if (!_networked) {
                 OnDeactivate();
                 return;

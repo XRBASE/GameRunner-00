@@ -32,6 +32,12 @@ namespace Cohort.GameRunner.Players {
 
         private bool _visible = true;
 
+        public void Destroy() {
+            ((IPlayer)this).RemoveCallbacks();
+            
+            GameObject.Destroy(gameObject);
+        }
+
         protected void ImportAvatar() {
             if (string.IsNullOrEmpty(_avatarUrl)) {
                 AvatarImporter.Instance.ImportTemplate(OnAvatarImported, _avatarParent);
@@ -76,6 +82,8 @@ namespace Cohort.GameRunner.Players {
                     Avatar.SetVisible(_visible);
                 }
             }
+            
+            onPropertiesChanged?.Invoke(changes);
         }
 
         public virtual bool SetCustomProperties(Hashtable changes) {
