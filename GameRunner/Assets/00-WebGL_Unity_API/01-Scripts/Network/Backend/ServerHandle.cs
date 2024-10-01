@@ -1,13 +1,10 @@
 using Cohort.Ravel.Networking.Authorization;
+using Cohort.GameRunner.Loading;
 using Cohort.Patterns;
 using Cohort.Config;
-using MathBuddy.Strings;
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
-using Cohort.GameRunner.Loading;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
+using MathBuddy.Strings;
 using UnityEngine;
 
 //before login and most other things
@@ -175,33 +172,6 @@ public class ServerHandle : Singleton<ServerHandle>
         //TODO_COHORT: shifting effect
         //CameraState.Instance.ActivateShift(active);
     }
-
-    private void ClearPhotonRoomProperties() {
-        Hashtable props = Network.Local.Client.CurrentRoom.CustomProperties;
-        //clear old data
-        List<object> keys = props.Keys.ToList();
-        foreach (var key in keys) {
-            //set all properties to null (this should clear them out)
-            props[key] = null;
-        }
-
-        Network.Local.Client.CurrentRoom.SetCustomProperties(props);
-        Debug.Log("Room properties cleared");
-    }
-    
-#region GAMES
-    
-    public void StopGame() {
-        GameLoader.Instance.StopGame();
-
-        ClearPhotonRoomProperties();
-    }
-
-    public void OpenGame(GameDefinition gameDef) {
-        GameLoader.Instance.LoadGame(gameDef);
-    }
-#endregion
-    
     
 #region PORTALS
     /// <summary>
@@ -239,5 +209,3 @@ public class ServerHandle : Singleton<ServerHandle>
     }
 #endregion
 }
-
-
