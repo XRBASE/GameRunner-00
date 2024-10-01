@@ -1,9 +1,13 @@
 using Cohort.Ravel.Networking.Authorization;
 using Cohort.Patterns;
 using Cohort.Config;
-using System.Runtime.InteropServices;
-using System.Collections;
 using MathBuddy.Strings;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+using Cohort.GameRunner.Loading;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine;
 
 //before login and most other things
@@ -51,7 +55,11 @@ public class ServerHandle : Singleton<ServerHandle>
 #if (UNITY_WEBGL && !UNITY_EDITOR)
         //disable test for web builds
         _testData = false;
+        
+        LoadingManager.Instance.onLoadingChanged += (f, s) => UnityProgress(f);
+        LoadingManager.Instance.onLoadingFinished += () => UnityLoaded(true);
 #endif
+        
         if (_testData) {
             UnityPing();
             
@@ -63,9 +71,9 @@ public class ServerHandle : Singleton<ServerHandle>
     /// Called by server to check whether unity has started already. Response is a ping back.
     /// </summary>
     public void UnityPing() {
-        Debug.Log("UnityPing");
+        LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Start();
+        
         if (!ServerControlled) {
-            Debug.Log("ServerControlled");
             ServerControlled = true;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -78,7 +86,7 @@ public class ServerHandle : Singleton<ServerHandle>
     
     private string _baseUrl;
 
-    private LoginRequest.ServerToken _token;
+    private LoginRequest.SimpleToken _token;
     
     private string _roomId;
     private bool _dataValid;
@@ -93,15 +101,20 @@ public class ServerHandle : Singleton<ServerHandle>
     private IEnumerator Connect() {
         _dataValid = true;
         
+        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Increment("loading network data");
         _baseUrl = StringExtentions.PickFromJson<string>("baseUrl", _initData) + "/";
         _dataValid = !string.IsNullOrEmpty(_baseUrl);
         AppConfig.Config.OverrideBaseUrl(_baseUrl);
         
-        _token = JsonUtility.FromJson<LoginRequest.ServerToken>(_initData);
+        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Increment("Logging in user");
+        _token = JsonUtility.FromJson<LoginRequest.SimpleToken>(_initData);
         if (_dataValid)
             _dataValid = !string.IsNullOrEmpty(_token.token);
         DataServices.Login.OnSystemsTokenRecieved(_token);
         
+        LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Finish();
+        
+        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Start();
         _roomId = StringExtentions.PickFromJson<string>("roomId", _initData);
         if (_dataValid)
             _dataValid = !string.IsNullOrEmpty(_roomId);
@@ -112,9 +125,15 @@ public class ServerHandle : Singleton<ServerHandle>
             yield break;
         }
         
-        DataServices.Photon.ConnectToPhotonRoom(_roomId, null, OnConnectionError);
+        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Increment("Connecting networking client");
+        DataServices.Photon.ConnectToPhotonRoom(_roomId, OnConnected, OnConnectionError);
+        //TODO: Connect to photon server
     }
 
+    private void OnConnected() {
+        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Finish();
+    }
+    
     private void OnConnectionError(string error) {
         Debug.LogError($"Serverhandle connection error: {error}");
     }
@@ -145,7 +164,7 @@ public class ServerHandle : Singleton<ServerHandle>
     public void SetCursorCapture(string parse)
     {
         bool capture = bool.Parse(parse);
-        //API_TODO: input management
+        //TODO_COHORT: input management
         //InputManager.Instance.Cursor.ControlEnabled = capture;
         Debug.Log($"Server call SetCursorCapture ({capture})!");
     }
@@ -153,10 +172,37 @@ public class ServerHandle : Singleton<ServerHandle>
     public void ActivateShift(string parse) {
         bool active = bool.Parse(parse);
         
-        //API_TODO: shifting effect
+        //TODO_COHORT: shifting effect
         //CameraState.Instance.ActivateShift(active);
     }
 
+    private void ClearPhotonRoomProperties() {
+        Hashtable props = Network.Local.Client.CurrentRoom.CustomProperties;
+        //clear old data
+        List<object> keys = props.Keys.ToList();
+        foreach (var key in keys) {
+            //set all properties to null (this should clear them out)
+            props[key] = null;
+        }
+
+        Network.Local.Client.CurrentRoom.SetCustomProperties(props);
+        Debug.Log("Room properties cleared");
+    }
+    
+#region GAMES
+    
+    public void StopGame() {
+        GameLoader.Instance.StopGame();
+
+        ClearPhotonRoomProperties();
+    }
+
+    public void OpenGame(GameDefinition gameDef) {
+        GameLoader.Instance.LoadGame(gameDef);
+    }
+#endregion
+    
+    
 #region PORTALS
     /// <summary>
     /// Called when the user enters a portal and ServerControlled is true.
