@@ -330,10 +330,10 @@ namespace Cohort.Ravel.Networking {
                 return false;
             }
             
-            LoginRequest.ServerToken token =
-                JsonUtility.FromJson<LoginRequest.ServerToken>(PlayerPrefs.GetString(LoginRequest.SYSTEMS_TOKEN_KEY));
+            LoginRequest.SimpleToken token =
+                JsonUtility.FromJson<LoginRequest.SimpleToken>(PlayerPrefs.GetString(LoginRequest.SYSTEMS_TOKEN_KEY));
             
-            if (token == null || token.GetExpiary() < DateTime.Now) {
+            if (token == null /*|| token.GetExpiary() < DateTime.Now*/) {
                 return false;
             }
 
@@ -356,10 +356,10 @@ namespace Cohort.Ravel.Networking {
         /// </summary>
         public static string GetToken()
         {
-            LoginRequest.ServerToken token =
-                JsonUtility.FromJson<LoginRequest.ServerToken>(PlayerPrefs.GetString(LoginRequest.SYSTEMS_TOKEN_KEY));
+            LoginRequest.SimpleToken token =
+                JsonUtility.FromJson<LoginRequest.SimpleToken>(PlayerPrefs.GetString(LoginRequest.SYSTEMS_TOKEN_KEY));
             
-            if (token == null || token.GetExpiary() < DateTime.Now) {
+            if (token == null /*|| token.GetExpiary() < DateTime.Now*/) {
                 DataServices.Login.Logout();
             }
             

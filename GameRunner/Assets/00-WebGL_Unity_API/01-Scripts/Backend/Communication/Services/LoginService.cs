@@ -27,7 +27,7 @@ public class LoginService : MonoBehaviour
     /// <param name="token">login token that has been created on the dashboard.</param>
     /// <param name="onSuccess">success called with access token.</param>
     /// <param name="onFailure">failure, called with error message.</param>
-    public void TokenizedLogin(string token, UnityAction<LoginRequest.ServerToken> onSuccess = null, UnityAction<string> onFailure = null)
+    public void TokenizedLogin(string token, UnityAction<LoginRequest.SimpleToken> onSuccess = null, UnityAction<string> onFailure = null)
     {
         onSuccess += OnSystemsTokenRecieved;
         StartCoroutine(_repo.TokenizedLogin(token, onSuccess, onFailure));
@@ -37,9 +37,8 @@ public class LoginService : MonoBehaviour
     /// Called as responce to recieving the accesstoken.
     /// </summary>
     /// <param name="accessToken">the access token.</param>
-    public void OnSystemsTokenRecieved(LoginRequest.ServerToken token)
+    public void OnSystemsTokenRecieved(LoginRequest.SimpleToken token)
     {
-        token.Decode();
         PlayerCache.SetString(LoginRequest.SYSTEMS_TOKEN_KEY, JsonUtility.ToJson(token));
         
         #if UNITY_EDITOR

@@ -30,9 +30,13 @@ namespace Cohort.Networking.Players {
             Initialized = true;
         }
 
-        public void Destroy() {
+        public void RemoveCallbacks() {
             Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
+            
+            Initialized = false;
         }
+
+        public void Destroy();
 
         public void OnJoinedRoom();
 

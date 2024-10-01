@@ -36,11 +36,16 @@ namespace Cohort.Ravel.Networking.Authorization
             return new LoginRequest("login", json);
         }
         
+        [Serializable]
+        public class SimpleToken {
+            public string token;
+        }
+        
         /// <summary>
         /// Token wrapper and handler class.
         /// </summary>
         [Serializable]
-        public class ServerToken {
+        public class JWTToken {
             //date from which the JWT tokens count themselves
             private readonly DateTime NUL_DATE = new (1970, 1, 1);
             //reduce time by 10 seconds to ensure token expires a bit before actual expiary

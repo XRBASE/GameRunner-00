@@ -105,10 +105,14 @@ namespace Cohort.Networking.PhotonKeys {
             TimeLord = 1,
             RefTime = 2,
             Game = 3,
+            Scene = 4,
         }
 
         public enum Game {
             Actor = 0,
+            Definition = 1,
+            PlayerReady = 2,
+            Session = 3,
         }
     }
 }
