@@ -20,7 +20,7 @@ public class CodeStatsWindow : EditorWindow {
     public void CreateGUI() {
         _root = rootVisualElement;
 
-        Label label = new Label("Lot's code stats at your service!");
+        Label label = new Label("It's a Lott of code stats!");
         _root.Add(label);
 
         CreateStats(_stats);

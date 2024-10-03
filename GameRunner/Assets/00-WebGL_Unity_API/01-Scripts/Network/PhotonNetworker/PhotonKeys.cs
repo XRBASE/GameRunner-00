@@ -113,6 +113,7 @@ namespace Cohort.Networking.PhotonKeys {
             Definition = 1,
             PlayerReady = 2,
             Session = 3,
+            Index = 4,
         }
     }
 }

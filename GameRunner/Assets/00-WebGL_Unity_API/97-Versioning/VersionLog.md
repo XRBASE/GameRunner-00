@@ -1,3 +1,11 @@
+# v0.1.5
+Added loading management for controling server UI. Adds updated token flow
+
+## Summary
+Loading manager that is handled to update and disable the server's loading screen.
+Adds a new way of using the token, to match the new workflow that is applied to
+the webserver.
+
 # v0.1.4
 Time scaled lerp
 
