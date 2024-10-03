@@ -3,6 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DefaultExecutionOrder(101)] //After gameloader
 public class ServerActionsPanel : UIPanel
 {
 	private const float ANIM_DURATION = 0.5f;
@@ -40,7 +41,7 @@ public class ServerActionsPanel : UIPanel
 		GameLoader.Instance.StopGame();
 	}
 
-	private void StartGame() {
+	private void StartGame() { ;
 		GameLoader.Instance.LoadGame(_gameDef);
 	}
 

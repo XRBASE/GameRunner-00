@@ -239,7 +239,9 @@ namespace Cohort.GameRunner.LocoMovement {
         }
 
         private void InitLocomotion() {
-            TeleportToSpawn();
+            if (Control == ControlType.Local) {
+                TeleportToSpawn();
+            }
             
             ActivateRigidBody();
             

@@ -1,3 +1,4 @@
+using System;
 using Cohort.Networking.PhotonKeys;
 using Cohort.CustomAttributes;
 using ExitGames.Client.Photon;
@@ -39,6 +40,13 @@ namespace Cohort.GameRunner.Interaction {
             }
         }
 
+        protected virtual void OnDestroy() {
+            if (_networked) {
+                Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
+                Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropertiesChanged;
+            }
+        }
+
         public abstract void OnInteract();
 
         public virtual void Activate() {
@@ -51,7 +59,7 @@ namespace Cohort.GameRunner.Interaction {
 
         protected virtual void Activate(Hashtable changes, Hashtable expected = null) {
             if (!_networked) {
-                OnActivate();
+                ActivateLocal();
                 return;
             }
 
@@ -65,7 +73,7 @@ namespace Cohort.GameRunner.Interaction {
 
         protected virtual void Deactivate(Hashtable changes, Hashtable expected = null) {
             if (!_networked) {
-                OnDeactivate();
+                DeactivateLocal();
                 return;
             }
 
@@ -84,16 +92,16 @@ namespace Cohort.GameRunner.Interaction {
             _initial = false;
             _active = newState;
             if (_active) {
-                OnActivate();
+                ActivateLocal();
             }
             else {
-                OnDeactivate();
+                DeactivateLocal();
             }
         }
 
-        protected abstract void OnActivate();
+        protected abstract void ActivateLocal();
 
-        protected abstract void OnDeactivate();
+        protected abstract void DeactivateLocal();
 
         protected virtual void OnJoinedRoom() {
             OnPropertiesChanged(Network.Local.Client.CurrentRoom.CustomProperties);

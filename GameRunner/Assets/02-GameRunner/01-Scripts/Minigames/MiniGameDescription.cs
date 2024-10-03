@@ -1,8 +1,8 @@
 using System;
-using UnityEngine;
 
 [Serializable]
 public class MiniGameDescription {
-    [SerializeField] private string _assetRef;
-    [SerializeField] private bool _isBundle;
+    public string assetRef;
+    public bool isBundle;
+    public string data;
 }

@@ -28,17 +28,14 @@ namespace Cohort.GameRunner.LocoMovement {
 
 			_key = Keys.Get(Keys.Player.Jump);
 			if (changes.ContainsKey(_key)) {
-				Debug.LogError("Jump 0");
 				if (((CharAnimator.AnimationState)changes[_key] == CharAnimator.AnimationState.Jump ||
 				    (CharAnimator.AnimationState)changes[_key] == CharAnimator.AnimationState.DoubleJump) &&
 				    _sm.State == State.Move) {
 					
-					Debug.LogError("Jump 1");
 					//check if it was not to long ago that the player in question jumped.
 					float expire = (float)changes[Keys.Get(Keys.Player.JumpExpire)];
 					if (expire >= TimeManager.Instance.RefTime &&
 					    expire - TimeManager.Instance.RefTime < TimeManager.RESET_VALUE / 2f) {
-						Debug.LogError("Jump 2");
 						((MoveState)_sm.Current).Jump();
 					}
 				}
@@ -56,7 +53,7 @@ namespace Cohort.GameRunner.LocoMovement {
 					Animator.DoEmote(em, nt);
 				}
 			}
-
+			
 			_sm.Current.OnPlayerPropertiesChanged(changes, initialize);
 		}
 	}

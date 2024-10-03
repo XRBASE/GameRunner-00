@@ -1,20 +1,22 @@
-using System;
+using Cohort.Networking.PhotonKeys;
+using Cohort.GameRunner.Players;
+using Cohort.Patterns;
+
 using System.Collections.Generic;
 using System.Linq;
-using Cohort.GameRunner.Players;
-using Cohort.Networking.PhotonKeys;
-using Cohort.Patterns;
+using System;
 using ExitGames.Client.Photon;
-using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine;
 
-[DefaultExecutionOrder(100)] // before Gameloader
+[DefaultExecutionOrder(100)] // After environment loader
 public class GameLoader : Singleton<GameLoader>
 {
     public bool InGame { get; private set; }
     public bool AllPlayersReady { get; private set; }
 
-    public Action onAllPlayersReady; 
+    public Action onActivityStart; 
+    public Action onActivityStop; 
 
     [SerializeField] private int _session = -1;
     private GameDefinition _definition;
@@ -52,6 +54,9 @@ public class GameLoader : Singleton<GameLoader>
     }
 
     private void OnPlayerReady() {
+        if (AllPlayersReady)
+            return;
+        
         string key;
         foreach (var kv_player in Network.Local.Client.CurrentRoom.Players) {
             if (kv_player.Value.IsInactive)
@@ -65,8 +70,19 @@ public class GameLoader : Singleton<GameLoader>
         }
 
         AllPlayersReady = true;
-        onAllPlayersReady?.Invoke();
         Debug.LogError("All Players ready");
+        onActivityStart?.Invoke();
+    }
+    
+    public void StopGame() {
+        if (!InGame)
+            return;
+
+        InGame = false;
+        AllPlayersReady = false;
+        
+        onActivityStop?.Invoke();
+        ClearPhotonRoomProperties();
     }
 
     private void OnJoinRoom() {
@@ -103,13 +119,6 @@ public class GameLoader : Singleton<GameLoader>
             LoadGameLocal();
         }
     }
-
-    public void StopGame() {
-        if (!InGame)
-            return;
-        
-        ClearPhotonRoomProperties();
-    }
     
     private void ClearPhotonRoomProperties() {
         Hashtable props = Network.Local.Client.CurrentRoom.CustomProperties;
@@ -133,6 +142,9 @@ public class GameLoader : Singleton<GameLoader>
     }
 
     public void LoadGame(GameDefinition definition) {
+        if (InGame)
+            return;
+        
         Hashtable changes = new Hashtable();
         changes.Add(GetGameDefKey(), JsonUtility.ToJson(definition));
         changes.Add(GetGameSessionKey(), _session + 1);

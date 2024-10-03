@@ -19,7 +19,7 @@ public class ObjIndicator : MonoBehaviour {
     private Vector2 hMargin;
 
     private void Start() {
-        SetUp(enabled, _icon, _color, _size, _target);
+        SetUp(_enabled, _icon, _color, _size, _target);
     }
 
     private void OnDestroy() {
@@ -40,12 +40,7 @@ public class ObjIndicator : MonoBehaviour {
         _parentRt = (RectTransform)_rt.parent;
         _cam = Camera.main;
         
-        if (enabled) {
-            _enabled = true;
-            
-            //force so cached value is always applied
-            SetActive(true, true);
-        }
+        SetActive(enabled, true);
     }
 
     public void SetActive(bool enabled, bool force = false) {

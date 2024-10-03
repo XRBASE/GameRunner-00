@@ -421,6 +421,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4767001516417549727}
   - component: {fileID: 9163634208381118182}
+  - component: {fileID: 272345075221853396}
   m_Layer: 0
   m_Name: Games
   m_TagString: Untagged
@@ -456,6 +457,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _session: -1
+--- !u!114 &272345075221853396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8902273365620279222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff90d3090b67ebd47badc38208dafac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minigames:
+  - assetRef: 00-Minigame_Quiz
+    isBundle: 0
+    data: '{"lives" : 3, "questions" : [{"question" : "What is your favorite color","answers"
+      : ["green", "blue"],"correctId" : 1},{"question" : "e^i*PI = ?","answers" :
+      ["3.124576(...)", "15", "0", "3.14159(...)"],"correctId" : 2},{"question" :
+      "Who is the coolest girl","answers" : ["Lotte", "niet Lotte"],"correctId" :
+      0},{"question" : "How much wood, would a woodchuck chuck, if a woodchuck could
+      chuck wood?","answers" : ["0", "15", "20", "5"],"correctId" : 3}]}'
+  _newGameTimeMin: 10
+  _newGameTimeMax: 20
 --- !u!1001 &5515116889434254526
 PrefabInstance:
   m_ObjectHideFlags: 0
