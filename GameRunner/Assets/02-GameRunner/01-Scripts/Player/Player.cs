@@ -12,6 +12,10 @@ namespace Cohort.GameRunner.Players {
         
         public static LocalPlayer Local { get { return IPlayer.Local as LocalPlayer; } }
 
+        public string Name {
+            get { return _userName; }
+        }
+
         public Photon.Realtime.Player PhotonPlayer { get; set; }
         public int ActorNumber { get { return PhotonPlayer.ActorNumber; } }
 
@@ -25,9 +29,9 @@ namespace Cohort.GameRunner.Players {
 
         public Action<Hashtable> onPropertiesChanged;
         public Action<Avatar> onAvatarImported;
-
-        [SerializeField] protected string _userName;
-        [SerializeField] protected string _avatarUrl;
+        
+        protected string _userName;
+        protected string _avatarUrl;
         [SerializeField] protected Transform _avatarParent;
 
         private bool _visible = true;

@@ -1,11 +1,7 @@
 {
-    "name": "AD_GameLoader",
+    "name": "AD_ActivityConfig",
     "rootNamespace": "",
-    "references": [
-        "GUID:39f15d367b09ec94f92e9de88be205fa",
-        "GUID:9f0995e706b816f418d9600d72c84a0a",
-        "GUID:388b518ec53dc634084ee3aa754b1f73"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

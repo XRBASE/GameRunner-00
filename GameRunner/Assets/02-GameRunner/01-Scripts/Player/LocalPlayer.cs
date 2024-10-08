@@ -1,9 +1,12 @@
 using Cohort.Networking.PhotonKeys;
 using Cohort.Networking.Players;
 using ExitGames.Client.Photon;
+using UnityEngine;
 
 namespace Cohort.GameRunner.Players {
 	public class LocalPlayer : Player {
+		public string UUID { get; private set; }
+
 		private void Awake() {
 			IPlayer.Local = this;
 		}
@@ -13,6 +16,7 @@ namespace Cohort.GameRunner.Players {
 		}
 
 		public override void OnJoinedRoom() {
+			UUID = DataServices.Users.Local.id;
 			_userName = DataServices.Users.Local.userName;
 			_avatarUrl = DataServices.Users.Local.rpmAvatarUri;
 			

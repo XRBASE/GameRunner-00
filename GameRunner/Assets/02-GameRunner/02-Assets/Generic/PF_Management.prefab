@@ -478,8 +478,8 @@ MonoBehaviour:
       "Who is the coolest girl","answers" : ["Lotte", "niet Lotte"],"correctId" :
       0},{"question" : "How much wood, would a woodchuck chuck, if a woodchuck could
       chuck wood?","answers" : ["0", "15", "20", "5"],"correctId" : 3}]}'
-  _newGameTimeMin: 10
-  _newGameTimeMax: 20
+  _newGameTimeMin: 2
+  _newGameTimeMax: 5
 --- !u!1001 &5515116889434254526
 PrefabInstance:
   m_ObjectHideFlags: 0

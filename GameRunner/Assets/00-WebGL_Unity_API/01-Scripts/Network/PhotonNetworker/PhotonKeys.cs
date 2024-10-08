@@ -2,7 +2,9 @@ using System;
 
 namespace Cohort.Networking.PhotonKeys {
 
-    public static class Keys{
+    public static class Keys {
+
+        public const char SEPARATOR = '_';
         
         /// <summary>
         /// Not 100% tested.
@@ -12,7 +14,7 @@ namespace Cohort.Networking.PhotonKeys {
         /// <returns></returns>
         public static string Decode(string key, bool isRoomProp)
         {
-            string[] keys = key.Split('_');
+            string[] keys = key.Split(SEPARATOR);
 
             if (!int.TryParse(keys[0], out int keyId)) {
                 return key;
@@ -24,14 +26,14 @@ namespace Cohort.Networking.PhotonKeys {
                 
                 int i = 1;
                 switch (r) {
-                    case Room.Game:
+                    case Room.Activity:
                         decode += DecodeGameKey(keys[i]);
                         i++;
                         break;
                 }
                 
                 for (; i < keys.Length; i++) {
-                    decode += $"_{keys[i]}";
+                    decode += $"{SEPARATOR}{keys[i]}";
                 }
                 return decode;
             }
@@ -42,7 +44,7 @@ namespace Cohort.Networking.PhotonKeys {
         }
 
         private static string DecodeGameKey(string data) {
-            return $"Game_{(Game)int.Parse(data)}";
+            return $"Game{SEPARATOR}{(Activity)int.Parse(data)}";
         }
         
         public static string Get<T>(T enumValue) where T : Enum
@@ -61,7 +63,7 @@ namespace Cohort.Networking.PhotonKeys {
             
             string output = "";
             for (int i = 0; i < args.Length; i++) {
-                output += $"{Get(args[i])}_";
+                output += Get(args[i]) + SEPARATOR;
             }
 
             //cut of the last underscore
@@ -75,7 +77,7 @@ namespace Cohort.Networking.PhotonKeys {
             
             string output = "";
             for (int i = 0; i < args.Length; i++) {
-                output += $"{args[i]}_";
+                output += args[i] + SEPARATOR;
             }
 
             //cut of the last underscore
@@ -104,16 +106,21 @@ namespace Cohort.Networking.PhotonKeys {
             Interactable = 0,
             TimeLord = 1,
             RefTime = 2,
-            Game = 3,
+            Activity = 3,
             Scene = 4,
+            Minigame = 5,
         }
 
-        public enum Game {
-            Actor = 0,
+        public enum Activity {
             Definition = 1,
             PlayerReady = 2,
             Session = 3,
-            Index = 4,
+            Score = 4,
+        }
+
+        public enum Minigame {
+            Index = 0,
+            Actor = 1,
         }
     }
 }

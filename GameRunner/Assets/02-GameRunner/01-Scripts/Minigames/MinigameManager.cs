@@ -1,3 +1,4 @@
+using System;
 using Cohort.Patterns;
 using Cohort.Tools.Timers;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class MinigameManager : Singleton<MinigameManager> {
+    public Action<float> onMinigameFinished;
+    
     [SerializeField] private MiniGameDescription[] _minigames;
     [SerializeField] private float _newGameTimeMin = 10f;
     [SerializeField] private float _newGameTimeMax = 20f;
@@ -18,31 +21,14 @@ public class MinigameManager : Singleton<MinigameManager> {
         
         _newGameTimer = new Timer(Random.Range(_newGameTimeMin, _newGameTimeMax), false, ActivateMinigame);
     }
-
-    private void Start() {
-        GameLoader.Instance.onActivityStart += OnPlayersReady;
-        GameLoader.Instance.onActivityStop += OnActivityStop;
-    }
     
     private void OnDestroy() {
-        GameLoader.Instance.onActivityStart -= OnPlayersReady;
-        GameLoader.Instance.onActivityStop -= OnActivityStop;
-        
         for (int i = 0; i < _interactables.Length; i++) {
             _interactables[i].onMinigameStart -= OnMinigameStart;
         }
     }
 
-    private void OnActivityStop() {
-        if (_current != default) {
-            OnMinigameFinished(false);
-        }
-        
-        _newGameTimer.Stop();
-        _newGameTimer.Reset();
-    }
-
-    private void OnPlayersReady() {
+    public void StartMinigames() {
         _interactables = FindObjectsOfType<MinigameInteractable>();
         for (int i = 0; i < _interactables.Length; i++) {
             _interactables[i].onMinigameStart += OnMinigameStart;
@@ -50,6 +36,15 @@ public class MinigameManager : Singleton<MinigameManager> {
         
         _newGameTimer.Start();
         Debug.Log($"Start timer {_newGameTimer.duration} (initial)");
+    }
+    
+    public void StopMinigames() {
+        if (_current != default) {
+            OnMinigameFinished(0f);
+        }
+        
+        _newGameTimer.Stop();
+        _newGameTimer.Reset();
     }
 
     private void SetUpTimer() {
@@ -70,7 +65,7 @@ public class MinigameManager : Singleton<MinigameManager> {
         int random = Random.Range(0, _interactables.Length);
         int i = 0;
         int c = 0;
-        while (random > 0) {
+        while (random >= 0) {
             if (!_interactables[i].HasMinigame) {
                 random--;
             }
@@ -96,14 +91,14 @@ public class MinigameManager : Singleton<MinigameManager> {
         SceneManager.LoadScene(_current.desc.assetRef, LoadSceneMode.Additive);
     }
 
-    private void OnMinigameFinished(bool completed) {
-        Debug.LogError($"Minigame has been {(completed? "completed" : "failed")}");
-        
+    private void OnMinigameFinished(float completed) {
         SceneManager.UnloadSceneAsync(_current.desc.assetRef);
         
         _current.interactable.DeactivateMinigame();
         _current.interactable.Deactivate();
         _current = default;
+        
+        onMinigameFinished?.Invoke(completed);
     }
 
     public void SetupMinigame(Minigame game) {

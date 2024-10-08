@@ -10,7 +10,7 @@ public class ServerActionsPanel : UIPanel
 
 	private bool Open { get; set; }
 
-	[SerializeField] private GameDefinition _gameDef;
+	[SerializeField] private ActivityDefinition activityDef;
 	[SerializeField] private Button _toggleBtn;
 	[SerializeField] private Button _startBtn;
 	[SerializeField] private Button _stopBtn;
@@ -38,11 +38,11 @@ public class ServerActionsPanel : UIPanel
 	}
 	
 	private void StopGame() {
-		GameLoader.Instance.StopGame();
+		ActivityLoader.Instance.StopActivity();
 	}
 
 	private void StartGame() { ;
-		GameLoader.Instance.LoadGame(_gameDef);
+		ActivityLoader.Instance.LoadActivity(activityDef);
 	}
 
 	public void ToggleState() {

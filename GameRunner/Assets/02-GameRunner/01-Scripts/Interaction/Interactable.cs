@@ -1,6 +1,5 @@
-using System;
-using Cohort.Networking.PhotonKeys;
 using Cohort.CustomAttributes;
+using Cohort.Networking.PhotonKeys;
 using ExitGames.Client.Photon;
 using UnityEngine;
 
@@ -8,8 +7,8 @@ namespace Cohort.GameRunner.Interaction {
     public abstract class Interactable : MonoBehaviour, IUniqueId {
         protected const int LAYER = 6;
 
-        public bool Active {
-            get { return _active; }
+        public bool Value {
+            get { return _value; }
         }
 
         public int Identifier {
@@ -23,7 +22,7 @@ namespace Cohort.GameRunner.Interaction {
         //event like interactions will fire and directly reset themselves, whereas more
         //permanent Interactables retain it.
 
-        [SerializeField] private bool _active = false;
+        [Tooltip("Current state on/off"), SerializeField] private bool _value = false;
         [SerializeField] private bool _networked = true;
         private bool _initial = true;
         
@@ -86,12 +85,12 @@ namespace Cohort.GameRunner.Interaction {
         }
 
         private void ChangeState(bool newState, bool force = false) {
-            if (!(force || _initial) && _active == newState)
+            if (!(force || _initial) && _value == newState)
                 return;
             
             _initial = false;
-            _active = newState;
-            if (_active) {
+            _value = newState;
+            if (_value) {
                 ActivateLocal();
             }
             else {

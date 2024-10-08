@@ -341,11 +341,55 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8902273365620279222, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: m_Name
+      value: Activity
+      objectReference: {fileID: 0}
+    - target: {fileID: 9163634208381118182, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _score
+      value: 
+      objectReference: {fileID: 1465991579230822491}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8902273365620279222, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1465991579230822491}
   m_SourcePrefab: {fileID: 100100000, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+--- !u!1 &1465991579230822490 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8902273365620279222, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+  m_PrefabInstance: {fileID: 1465991579230822489}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1465991579230822491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465991579230822490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471d50cc026cf444d84de474106eda71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _debug:
+  - name: 
+    evalScore: 0
+    displayScore: 
+  - name: 
+    evalScore: 0
+    displayScore: 
+  - name: 
+    evalScore: 0
+    displayScore: 
+  - name: 
+    evalScore: 0
+    displayScore: 
+  - name: 
+    evalScore: 0
+    displayScore: 
 --- !u!1001 &4731898021979801552
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -396,7 +440,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: _testInput
-      value: '{"token":"57314643344934662B734172504143587246716B62673D3D","baseUrl":"https://dev.spaceshift.ai","roomId":"0da5f5d9-5eb4-401e-9823-74d0a280b911","spaceId":"13ba1001-e88d-4d7a-946a-a678cb0d01cd"}'
+      value: '{"token":"3973494C44597A6350776C3036304C303472485551673D3D","baseUrl":"https://dev.spaceshift.ai","roomId":"504339eb-9b06-4604-87c0-1321faa68465","spaceId":"3d5a5139-bdc0-43fe-a9ee-e36526cae0a2"}'
       objectReference: {fileID: 0}
     - target: {fileID: 7509324001149410918, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: m_Name
@@ -583,10 +627,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6625824251593518944, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
-      propertyPath: m_MatchWidthOrHeight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6651940031917372821, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -605,10 +645,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6651940031917372821, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6943458051526649543, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
-      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

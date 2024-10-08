@@ -9,8 +9,8 @@ using ExitGames.Client.Photon;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
-[DefaultExecutionOrder(100)] // After environment loader
-public class GameLoader : Singleton<GameLoader>
+[DefaultExecutionOrder(102)] // After playermanagement
+public class ActivityLoader : Singleton<ActivityLoader>
 {
     public bool InGame { get; private set; }
     public bool AllPlayersReady { get; private set; }
@@ -19,7 +19,8 @@ public class GameLoader : Singleton<GameLoader>
     public Action onActivityStop; 
 
     [SerializeField] private int _session = -1;
-    private GameDefinition _definition;
+    [SerializeField] private HighscoreTracker _score; 
+    private ActivityDefinition _definition;
 
     private void Start() {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -37,6 +38,25 @@ public class GameLoader : Singleton<GameLoader>
         
         Network.Local.Callbacks.onJoinedRoom -= OnJoinRoom;
         Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropsChanged;
+    }
+    
+    private void StartActivity() {
+        onActivityStart?.Invoke();
+        MinigameManager.Instance.StartMinigames();
+    }
+    
+    public void StopActivity() {
+        if (!InGame)
+            return;
+
+        InGame = false;
+        AllPlayersReady = false;
+        
+        onActivityStop?.Invoke();
+        MinigameManager.Instance.StopMinigames();
+        //TODO: publish minigames
+        
+        ClearPhotonRoomProperties();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -71,20 +91,9 @@ public class GameLoader : Singleton<GameLoader>
 
         AllPlayersReady = true;
         Debug.LogError("All Players ready");
-        onActivityStart?.Invoke();
+        StartActivity();
     }
     
-    public void StopGame() {
-        if (!InGame)
-            return;
-
-        InGame = false;
-        AllPlayersReady = false;
-        
-        onActivityStop?.Invoke();
-        ClearPhotonRoomProperties();
-    }
-
     private void OnJoinRoom() {
         OnPropsChanged(Network.Local.Client.CurrentRoom.CustomProperties);
     }
@@ -98,7 +107,7 @@ public class GameLoader : Singleton<GameLoader>
             }
         }
         
-        key = GetGameSessionKey();
+        key = GetActivitySessionKey();
         if (changes.ContainsKey(key)) {
             if (changes[key] == null) {
                 _session = -1;
@@ -108,15 +117,15 @@ public class GameLoader : Singleton<GameLoader>
             _session = (int)changes[key];
         }
         
-        key = GetGameDefKey();
+        key = GetActivityDefKey();
         if (changes.ContainsKey(key)) {
             if (string.IsNullOrEmpty((string)changes[key])) {
-                StopGameLocal();
+                StopActivityLocal();
                 return;
             }
 
-            _definition = JsonUtility.FromJson<GameDefinition>((string)changes[key]);
-            LoadGameLocal();
+            _definition = JsonUtility.FromJson<ActivityDefinition>((string)changes[key]);
+            LoadActivityLocal();
         }
     }
     
@@ -133,7 +142,7 @@ public class GameLoader : Singleton<GameLoader>
         Debug.Log("Room properties cleared");
     }
 
-    private void StopGameLocal() {
+    private void StopActivityLocal() {
         if (!InGame)
             return;
         
@@ -141,32 +150,34 @@ public class GameLoader : Singleton<GameLoader>
         _definition = null;
     }
 
-    public void LoadGame(GameDefinition definition) {
+    public void LoadActivity(ActivityDefinition definition) {
         if (InGame)
             return;
         
         Hashtable changes = new Hashtable();
-        changes.Add(GetGameDefKey(), JsonUtility.ToJson(definition));
-        changes.Add(GetGameSessionKey(), _session + 1);
+        changes.Add(GetActivityDefKey(), JsonUtility.ToJson(definition));
+        changes.Add(GetActivitySessionKey(), _session + 1);
         changes.Add(GetSceneKey(), definition.AssetRef);
         
         Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
     }
 
-    private void LoadGameLocal() {
+    private void LoadActivityLocal() {
         InGame = true;
+        
+        _score.Initialize(_definition, _session);
     }
 
-    private string GetGameDefKey() {
-        return Keys.Concatenate(Keys.Room.Game, Keys.Game.Definition);
+    private string GetActivityDefKey() {
+        return Keys.Concatenate(Keys.Room.Activity, Keys.Activity.Definition);
     }
     
-    private string GetGameSessionKey() {
-        return Keys.Concatenate(Keys.Room.Game, Keys.Game.Session);
+    private string GetActivitySessionKey() {
+        return Keys.Concatenate(Keys.Room.Activity, Keys.Activity.Session);
     }
 
     private string GetPlayerReadyKey(int actorNumber = -1) {
-        string key = Keys.Concatenate(Keys.Room.Game, Keys.Game.PlayerReady);
+        string key = Keys.Concatenate(Keys.Room.Activity, Keys.Activity.PlayerReady);
         if (actorNumber >= 0) {
             return Keys.Concatenate(key, actorNumber.ToString());
         }

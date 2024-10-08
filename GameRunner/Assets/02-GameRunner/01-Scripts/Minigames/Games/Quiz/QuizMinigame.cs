@@ -5,7 +5,7 @@ using System;
 using TMPro;
 
 public class QuizMinigame : Minigame {
-    public Action<bool> onGameComplete;
+    public Action<float> onGameComplete;
     
     [SerializeField] private TMP_Text _questionField;
     [SerializeField] private QuizAnswer _answerTemplate;
@@ -20,7 +20,7 @@ public class QuizMinigame : Minigame {
     private int _questionIndex = 0;
     private int _selectedAnswer = -1;
     
-    public override void Initialize(string gameData, Action<bool> onGameFinished) {
+    public override void Initialize(string gameData, Action<float> onGameFinished) {
         _quiz = JsonUtility.FromJson<Quiz>(gameData);
         _answerTemplate.onValueChanged += OnAnswerChanged;
         
@@ -81,7 +81,7 @@ public class QuizMinigame : Minigame {
     }
 
     public void OnFinish(bool complete) {
-        onGameComplete?.Invoke(complete);
+        onGameComplete?.Invoke(complete? 1:0);
     }
 
     public void OnIncorrect() {

@@ -39,7 +39,7 @@ public class MinigameInteractable : Interactable {
 	protected override void OnJoinedRoom() {
 		base.OnJoinedRoom();
 		
-		if (Active && !PlayerManager.Instance.ActorNumberExists(_actor)) {
+		if (Value && !PlayerManager.Instance.ActorNumberExists(_actor)) {
 			_actor = -1;
 			Deactivate();
 		}
@@ -76,7 +76,7 @@ public class MinigameInteractable : Interactable {
 		if (!HasMinigame)
 			return;
 		
-		if (Active) {
+		if (Value) {
 			Deactivate();
 		}
 		else {
@@ -142,13 +142,13 @@ public class MinigameInteractable : Interactable {
 	
 	private string GetMiniGamePlayerKey() {
 		return Keys.Concatenate(
-			Keys.Concatenate(Keys.Room.Game, Keys.Game.Actor), 
+			Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.Actor), 
 			Identifier.ToString());
 	}
 
 	private string GetMiniGameIdKey() {
 		return Keys.Concatenate(
-			Keys.Concatenate(Keys.Room.Game, Keys.Game.Index), 
+			Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.Index), 
 			Identifier.ToString());
 	}
 }

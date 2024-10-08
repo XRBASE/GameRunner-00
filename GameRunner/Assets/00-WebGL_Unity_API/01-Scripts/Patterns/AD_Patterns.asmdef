@@ -1,9 +1,7 @@
 {
     "name": "AD_Patterns",
     "rootNamespace": "",
-    "references": [
-        "GUID:d78d5587af9f7ca45b5485a055817da8"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
