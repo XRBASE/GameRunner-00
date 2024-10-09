@@ -42,7 +42,7 @@ public class ActivityLoader : Singleton<ActivityLoader>
     
     private void StartActivity() {
         onActivityStart?.Invoke();
-        MinigameManager.Instance.StartMinigames();
+        MinigameManager.Instance.StartMinigames(_definition.ScoreMultiplier);
     }
     
     public void StopActivity() {
@@ -90,7 +90,6 @@ public class ActivityLoader : Singleton<ActivityLoader>
         }
 
         AllPlayersReady = true;
-        Debug.LogError("All Players ready");
         StartActivity();
     }
     

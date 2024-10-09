@@ -12,6 +12,7 @@ public class MinigameManager : Singleton<MinigameManager> {
     [SerializeField] private float _newGameTimeMin = 10f;
     [SerializeField] private float _newGameTimeMax = 20f;
 
+    private int _scoreMultiplier = 1;
     private Timer _newGameTimer;
     private MinigameInteractable[] _interactables;
     private (MinigameInteractable interactable, MiniGameDescription desc) _current;
@@ -28,8 +29,9 @@ public class MinigameManager : Singleton<MinigameManager> {
         }
     }
 
-    public void StartMinigames() {
+    public void StartMinigames(int scoreFactor) {
         _interactables = FindObjectsOfType<MinigameInteractable>();
+        _scoreMultiplier = scoreFactor;
         for (int i = 0; i < _interactables.Length; i++) {
             _interactables[i].onMinigameStart += OnMinigameStart;
         }
@@ -102,6 +104,6 @@ public class MinigameManager : Singleton<MinigameManager> {
     }
 
     public void SetupMinigame(Minigame game) {
-        game.Initialize(_current.desc.data, OnMinigameFinished);
+        game.Initialize(_current.desc.data, _scoreMultiplier, OnMinigameFinished);
     }
 }

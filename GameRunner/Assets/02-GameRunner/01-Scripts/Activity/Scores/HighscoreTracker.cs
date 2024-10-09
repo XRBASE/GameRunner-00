@@ -41,24 +41,36 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		foreach (var kv_prop in changes) {
 			if (kv_prop.Key.ToString().StartsWith(key)) {
 				string uuid = GetPlayerUuid(kv_prop.Key.ToString());
-				_scores[uuid] = JsonUtility.FromJson<PlayerScore>((string)kv_prop.Value);
-				
-				if (uuid == Player.Local.UUID) {
-					_local = _scores[uuid];
+				if (kv_prop.Value == null) {
+					_scores.Remove(uuid);
 				}
-				changed = true;
+				else {
+					_scores[uuid] = JsonUtility.FromJson<PlayerScore>((string)kv_prop.Value);
+				
+					if (uuid == Player.Local.UUID) {
+						_local = _scores[uuid];
+					}
+					changed = true;
+				}
 			}
 		}
 
 		if (changed) {
-			//TODO: nullpointer
-			onScoresUpdated?.Invoke(_scores.Values.OrderBy(s => s.score).Reverse().ToArray());
+			if (_scores == null) {
+				onScoresUpdated?.Invoke(Array.Empty<PlayerScore>());
+			}
+			else {
+				onScoresUpdated?.Invoke(_scores.Values.OrderBy(s => s.score).Reverse().ToArray());
+			}
 		}
 	}
 
+	public PlayerScore[] GetScores()
+	{
+		return _scores.Values.OrderBy(s => s.score).Reverse().ToArray();
+	}
+
 	public void OnMinigameFinished(float dec) {
-		int mwap = Mathf.RoundToInt(dec * _multiplier);
-		Debug.LogError($"({_local.name}) {_local.score} + {mwap} -> {_local.score + mwap} ({_multiplier})");
 		_local.score += Mathf.RoundToInt(dec * _multiplier);
 		
 		UpdateLocalPlayerScore(_local);

@@ -119,7 +119,7 @@ namespace Cohort.GameRunner.LocoMovement {
             }
             
             if (Control == ControlType.Local) {
-                SceneManager.sceneLoaded += OnSceneLoaded;
+                EnvironmentLoader.Instance.onEnvironmentLoaded += InitLocomotion;
             }
             
             if (Networked && Network.Local.Client.InRoom) {
@@ -138,11 +138,7 @@ namespace Cohort.GameRunner.LocoMovement {
             }
             
             if (Control == ControlType.Local) {
-                //TODO_COHORT: Scene switching
-                //SceneManager.onSceneLoaded -= ActivateRigidBody;
-                //DataServices.Spaces.onSpaceChanged -= TeleportToSpawn;
-                
-                SceneManager.sceneLoaded -= OnSceneLoaded;
+                EnvironmentLoader.Instance.onEnvironmentLoaded -= InitLocomotion;
             }
         }
         
@@ -232,10 +228,6 @@ namespace Cohort.GameRunner.LocoMovement {
             else {
                 TeleportTo(Vector3.zero, Quaternion.identity);
             }
-        }
-
-        public void OnSceneLoaded(Scene s, LoadSceneMode m) {
-            InitLocomotion();
         }
 
         private void InitLocomotion() {

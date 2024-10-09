@@ -1,0 +1,18 @@
+{
+    "name": "AD_Environments",
+    "rootNamespace": "",
+    "references": [
+        "GUID:39f15d367b09ec94f92e9de88be205fa",
+        "GUID:1504c8aadbd33ad4db1d1be3ded424e4",
+        "GUID:9f0995e706b816f418d9600d72c84a0a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -46,8 +46,6 @@ public class MinigameInteractable : Interactable {
 	}
 
 	protected override void OnPropertiesChanged(Hashtable changes) {
-		base.OnPropertiesChanged(changes);
-		
 		string key = GetMiniGameIdKey();
 		if (changes.ContainsKey(key)) {
 			if (changes[key] == null) {
@@ -70,6 +68,8 @@ public class MinigameInteractable : Interactable {
 				_actor = (int)changes[key];
 			}
 		}
+		
+		base.OnPropertiesChanged(changes);
 	}
 
 	public override void OnInteract() {
@@ -119,7 +119,10 @@ public class MinigameInteractable : Interactable {
 		_inUseIndicator.SetActive(true);
 		
 		_minigameIndicator.SetActive(false);
-		onMinigameStart?.Invoke(_minigameIndex, this);
+		
+		if (_actor == Player.Local.ActorNumber) {
+			onMinigameStart?.Invoke(_minigameIndex, this);
+		}
 	}
 
 	protected override void DeactivateLocal() {

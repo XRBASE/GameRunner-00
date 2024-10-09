@@ -1,8 +1,6 @@
-using System;
-using System.Linq;
 using Cohort.Patterns;
+using System.Linq;
 using UnityEngine;
-
 
 public class Scoreboard : MonoBehaviour {
     [SerializeField] private ScoreboardEntry _templateEntry;
@@ -14,6 +12,7 @@ public class Scoreboard : MonoBehaviour {
         _pool = new ObjectPool<HighscoreTracker.PlayerScore, ScoreboardEntry>(_templateEntry);
         
         HighscoreTracker.Instance.onScoresUpdated += OnScoresUpdated;
+        OnScoresUpdated(HighscoreTracker.Instance.GetScores());
     }
 
     private void OnDestroy() {

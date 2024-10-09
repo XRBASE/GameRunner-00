@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/02-GameRunner/00-Scenes/Minigames/00-Minigame_Quiz.unity
     guid: d833ab3d207615d4bbbe6509c9598325
+  - enabled: 1
+    path: Assets/02-GameRunner/00-Scenes/Minigames/01-Minigame_Quiz.unity
+    guid: 00fad1bfdbad63a43823e96177196c88
   m_configObjects: {}

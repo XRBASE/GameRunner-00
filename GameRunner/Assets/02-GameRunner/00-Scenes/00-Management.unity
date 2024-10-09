@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -297,6 +297,19 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[0].data
+      value: '{"lives" : 2, "questions" : [{"question" : "Hoeveel inwoners heeft
+        Zeeland?","answers" : ["1600", "4800", "6200", "10.200"],"correctId" : 1},{"question"
+        : "Wat is de massa van de aarde?","answers" : ["5.900 x 10^24kg", "1.900
+        x 9^13kg", "10.900 x 10^45kg", "7.123 x 8^15kg"],"correctId" : 0},{"question"
+        : "Hoever ligt de maan vanaf de aarde?","answers" : ["400.000.000km", "600.000km",
+        "0.6 lichtseconden", "1 lichtseconde"],"correctId" : 3},{"question" : "In
+        welk jaar is het dorp Tiel een stad geworden?","answers" : ["1200", "500",
+        "1000", "1500"],"correctId" : 2},{"question" : "Hoeveel duckpower heeft een
+        auto van 500 horse power?","answers" : ["13450", "250", "54750", "65600"],"correctId"
+        : 2}]}'
+      objectReference: {fileID: 0}
     - target: {fileID: 1694045838604335278, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: m_Name
       value: Management
@@ -341,55 +354,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8902273365620279222, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: m_Name
-      value: Activity
-      objectReference: {fileID: 0}
-    - target: {fileID: 9163634208381118182, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _score
-      value: 
-      objectReference: {fileID: 1465991579230822491}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8902273365620279222, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1465991579230822491}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
---- !u!1 &1465991579230822490 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8902273365620279222, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-  m_PrefabInstance: {fileID: 1465991579230822489}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1465991579230822491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465991579230822490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 471d50cc026cf444d84de474106eda71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _debug:
-  - name: 
-    evalScore: 0
-    displayScore: 
-  - name: 
-    evalScore: 0
-    displayScore: 
-  - name: 
-    evalScore: 0
-    displayScore: 
-  - name: 
-    evalScore: 0
-    displayScore: 
-  - name: 
-    evalScore: 0
-    displayScore: 
 --- !u!1001 &4731898021979801552
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -440,7 +409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: _testInput
-      value: '{"token":"3973494C44597A6350776C3036304C303472485551673D3D","baseUrl":"https://dev.spaceshift.ai","roomId":"504339eb-9b06-4604-87c0-1321faa68465","spaceId":"3d5a5139-bdc0-43fe-a9ee-e36526cae0a2"}'
+      value: '{"token":"7941787571446D2F46314F415A6C58344659724232773D3D","baseUrl":"https://dev.spaceshift.ai","roomId":"0da5f5d9-5eb4-401e-9823-74d0a280b911","spaceId":"13ba1001-e88d-4d7a-946a-a678cb0d01cd"}'
       objectReference: {fileID: 0}
     - target: {fileID: 7509324001149410918, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: m_Name

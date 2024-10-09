@@ -1,0 +1,18 @@
+{
+    "name": "AD_Quiz",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:9f0995e706b816f418d9600d72c84a0a",
+        "GUID:984c7d183d7372b4d8dfc26747106a6c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

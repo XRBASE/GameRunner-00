@@ -422,8 +422,9 @@ GameObject:
   - component: {fileID: 4767001516417549727}
   - component: {fileID: 9163634208381118182}
   - component: {fileID: 272345075221853396}
+  - component: {fileID: 23640337112341281}
   m_Layer: 0
-  m_Name: Games
+  m_Name: Activity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -457,6 +458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _session: -1
+  _score: {fileID: 23640337112341281}
 --- !u!114 &272345075221853396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,14 +474,43 @@ MonoBehaviour:
   _minigames:
   - assetRef: 00-Minigame_Quiz
     isBundle: 0
-    data: '{"lives" : 3, "questions" : [{"question" : "What is your favorite color","answers"
-      : ["green", "blue"],"correctId" : 1},{"question" : "e^i*PI = ?","answers" :
-      ["3.124576(...)", "15", "0", "3.14159(...)"],"correctId" : 2},{"question" :
-      "Who is the coolest girl","answers" : ["Lotte", "niet Lotte"],"correctId" :
-      0},{"question" : "How much wood, would a woodchuck chuck, if a woodchuck could
-      chuck wood?","answers" : ["0", "15", "20", "5"],"correctId" : 3}]}'
-  _newGameTimeMin: 2
-  _newGameTimeMax: 5
+    data: '{"lives" : 3, "questions" : [{"question" : "Welk nummer is het 5e getal
+      achter de comma in PI","answers" : ["5", "6", "1", "4", "9"],"correctId" :
+      4},{"question" : "Wat is de naam van de grootste maan van Saturnus?","answers"
+      : ["Uranus", "Thetys", "Dione", "Titan"],"correctId" : 3},{"question" : "Wie
+      wordt vaak beschouwd als de uitvinder van de eerste programmeertaal?","answers"
+      : ["Ada Lovelace", "Alan Turing", "Hendrik Janssen", "Ping Wu"],"correctId"
+      : 0},{"question" : "Hoever heeft Vasa gevaren op haar eerste trip?","answers"
+      : ["500 m", "2000 km", "14 km", "1300m"],"correctId" : 3},{"question" : "Wat
+      is het grootste meer ter wereld, gemeten naar oppervlakte?","answers" : ["Lake
+      Huron", "Het kaspische zee", "De rode zee", "Lake Michigan"],"correctId" :
+      1}]}'
+  - assetRef: 01-Minigame_Quiz
+    isBundle: 0
+    data: '{"lives" : 3, "questions" : [{"question" : "Welk nummer is het 5e getal
+      achter de comma in PI","answers" : ["5", "6", "1", "9"],"correctId" : 3},{"question"
+      : "Wat is de naam van de grootste maan van Saturnus?","answers" : ["Uranus",
+      "Thetys", "Dione", "Titan"],"correctId" : 3},{"question" : "Wie wordt vaak
+      beschouwd als de uitvinder van de eerste programmeertaal?","answers" : ["Ada
+      Lovelace", "Alan Turing", "Hendrik Janssen", "Ping Wu"],"correctId" : 0},{"question"
+      : "Hoever heeft Vasa gevaren op haar eerste trip?","answers" : ["500 m", "2000
+      km", "14 km", "1300m"],"correctId" : 3},{"question" : "Wat is het grootste
+      meer ter wereld, gemeten naar oppervlakte?","answers" : ["Lake Huron", "Het
+      kaspische zee", "De rode zee", "Lake Michigan"],"correctId" : 1}]}'
+  _newGameTimeMin: 10
+  _newGameTimeMax: 20
+--- !u!114 &23640337112341281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8902273365620279222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471d50cc026cf444d84de474106eda71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5515116889434254526
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -16,11 +16,12 @@ public class QuizMinigame : Minigame {
     private ObjectPool<string, QuizAnswer> _pool;
     private Quiz _quiz;
 
+    private int _maxLives;
     private int _lives;
     private int _questionIndex = 0;
     private int _selectedAnswer = -1;
     
-    public override void Initialize(string gameData, Action<float> onGameFinished) {
+    public override void Initialize(string gameData, int scoreMultiplier, Action<float> onGameFinished) {
         _quiz = JsonUtility.FromJson<Quiz>(gameData);
         _answerTemplate.onValueChanged += OnAnswerChanged;
         
@@ -33,6 +34,7 @@ public class QuizMinigame : Minigame {
         _submitBtn.onClick.AddListener(AnswerQuestion);
         
         _lives = _quiz.lives;
+        _maxLives = _quiz.lives;
         _lifeObjects = new GameObject[_lives];
         _lifeObjects[0] = _lifeTemplate;
         for (int i = 1; i < _lives; i++) {
@@ -76,12 +78,13 @@ public class QuizMinigame : Minigame {
             ShowQuestion();
         }
         else {
-            OnFinish(true);
+            OnFinish(_lives / (float)_maxLives);
         }
     }
 
-    public void OnFinish(bool complete) {
-        onGameComplete?.Invoke(complete? 1:0);
+    public void OnFinish(float score) {
+        onGameComplete?.Invoke(score);
+        onGameComplete = null;
     }
 
     public void OnIncorrect() {
@@ -92,7 +95,7 @@ public class QuizMinigame : Minigame {
         }
         
         if (_lives <= 0) {
-            OnFinish(false);
+            OnFinish(0f);
         }
     }
 

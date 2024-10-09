@@ -1,17 +1,22 @@
+using System;
 using Cohort.GameRunner.Loading;
 using Cohort.Networking.PhotonKeys;
+using Cohort.Patterns;
 using ExitGames.Client.Photon;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(99)] // before Gameloader
-public class EnvironmentLoader : MonoBehaviour {
+public class EnvironmentLoader : Singleton<EnvironmentLoader> {
 	private const string LOBBY_SCENE = "01-Lobby";
+
+	public Action onEnvironmentLoaded;
 
 	private bool _initial = true;
 	private string _activeScene;
 	
-    private void Awake() {
+    protected override void Awake() {
+	    base.Awake();
 	    SceneManager.sceneLoaded += OnSceneLoaded;
 	    
 	    Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
@@ -70,6 +75,7 @@ public class EnvironmentLoader : MonoBehaviour {
 
 	    SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
 	    _activeScene = sceneName;
+	    onEnvironmentLoaded?.Invoke();
     }
     
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
