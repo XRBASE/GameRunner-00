@@ -2,6 +2,7 @@ using Cohort.UI.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DefaultExecutionOrder(10)] //Before interactable
 public class ObjIndicator : MonoBehaviour {
     [SerializeField] private Transform _target;
     [SerializeField] private Sprite _icon;
@@ -18,6 +19,8 @@ public class ObjIndicator : MonoBehaviour {
     private Vector2 hSize;
     private Vector2 hMargin;
 
+    private bool _initialized;
+
     private void Start() {
         SetUp(_enabled, _icon, _color, _size, _target);
     }
@@ -30,6 +33,9 @@ public class ObjIndicator : MonoBehaviour {
     }
 
     public void SetUp(bool enabled, Sprite icon, Color icoColor, Vector2 size, Transform target = null) {
+        if (_initialized)
+            return;
+        
         if (target != null) {
             _target = target;
         }
@@ -40,10 +46,16 @@ public class ObjIndicator : MonoBehaviour {
         _parentRt = (RectTransform)_rt.parent;
         _cam = Camera.main;
         
+        _initialized = true;
         SetActive(enabled, true);
     }
 
     public void SetActive(bool enabled, bool force = false) {
+        if (!_initialized) {
+            SetUp(enabled, _icon, _color, _size, _target);
+            return;                              
+        }
+        
         if (force || _enabled != enabled) {
             if (enabled) {
                 UILocator.Get<ObjIndicatorPanel>().OnActivate();
@@ -52,7 +64,6 @@ public class ObjIndicator : MonoBehaviour {
                 UILocator.Get<ObjIndicatorPanel>().OnDeactivate();
             }
         }
-        
         _enabled = enabled;
         _rt.gameObject.SetActive(enabled);
     }

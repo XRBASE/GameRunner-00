@@ -80,8 +80,81 @@ Transform:
   - {fileID: 2037986758056737892}
   - {fileID: 4767001516417549727}
   - {fileID: 8558304588008443641}
+  - {fileID: 4841952143186102252}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2366807048163624429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4841952143186102252}
+  - component: {fileID: 7927385942490766275}
+  m_Layer: 0
+  m_Name: Minigames
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4841952143186102252
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366807048163624429}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3372190018214959068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7927385942490766275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366807048163624429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff90d3090b67ebd47badc38208dafac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minigames:
+  - assetRef: 00-Minigame_Quiz
+    isBundle: 0
+    data: '{"lives" : 3, "questions" : [{"question" : "Welk nummer is het 5e getal
+      achter de comma in PI","answers" : ["5", "6", "1", "4", "9"],"correctId" :
+      4},{"question" : "Wat is de naam van de grootste maan van Saturnus?","answers"
+      : ["Uranus", "Thetys", "Dione", "Titan"],"correctId" : 3},{"question" : "Wie
+      wordt vaak beschouwd als de uitvinder van de eerste programmeertaal?","answers"
+      : ["Ada Lovelace", "Alan Turing", "Hendrik Janssen", "Ping Wu"],"correctId"
+      : 0},{"question" : "Hoever heeft Vasa gevaren op haar eerste trip?","answers"
+      : ["500 m", "2000 km", "14 km", "1300m"],"correctId" : 3},{"question" : "Wat
+      is het grootste meer ter wereld, gemeten naar oppervlakte?","answers" : ["Lake
+      Huron", "Het kaspische zee", "De rode zee", "Lake Michigan"],"correctId" :
+      1}]}'
+  - assetRef: 01-Minigame_Quiz
+    isBundle: 0
+    data: '{"lives" : 3, "questions" : [{"question" : "Welk nummer is het 5e getal
+      achter de comma in PI","answers" : ["5", "6", "1", "9"],"correctId" : 3},{"question"
+      : "Wat is de naam van de grootste maan van Saturnus?","answers" : ["Uranus",
+      "Thetys", "Dione", "Titan"],"correctId" : 3},{"question" : "Wie wordt vaak
+      beschouwd als de uitvinder van de eerste programmeertaal?","answers" : ["Ada
+      Lovelace", "Alan Turing", "Hendrik Janssen", "Ping Wu"],"correctId" : 0},{"question"
+      : "Hoever heeft Vasa gevaren op haar eerste trip?","answers" : ["500 m", "2000
+      km", "14 km", "1300m"],"correctId" : 3},{"question" : "Wat is het grootste
+      meer ter wereld, gemeten naar oppervlakte?","answers" : ["Lake Huron", "Het
+      kaspische zee", "De rode zee", "Lake Michigan"],"correctId" : 1}]}'
+  _newGameTimeMin: 10
+  _newGameTimeMax: 20
 --- !u!1 &3461544638466721081
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,7 +494,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4767001516417549727}
   - component: {fileID: 9163634208381118182}
-  - component: {fileID: 272345075221853396}
   - component: {fileID: 23640337112341281}
   m_Layer: 0
   m_Name: Activity
@@ -459,46 +531,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _session: -1
   _score: {fileID: 23640337112341281}
---- !u!114 &272345075221853396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8902273365620279222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff90d3090b67ebd47badc38208dafac5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _minigames:
-  - assetRef: 00-Minigame_Quiz
-    isBundle: 0
-    data: '{"lives" : 3, "questions" : [{"question" : "Welk nummer is het 5e getal
-      achter de comma in PI","answers" : ["5", "6", "1", "4", "9"],"correctId" :
-      4},{"question" : "Wat is de naam van de grootste maan van Saturnus?","answers"
-      : ["Uranus", "Thetys", "Dione", "Titan"],"correctId" : 3},{"question" : "Wie
-      wordt vaak beschouwd als de uitvinder van de eerste programmeertaal?","answers"
-      : ["Ada Lovelace", "Alan Turing", "Hendrik Janssen", "Ping Wu"],"correctId"
-      : 0},{"question" : "Hoever heeft Vasa gevaren op haar eerste trip?","answers"
-      : ["500 m", "2000 km", "14 km", "1300m"],"correctId" : 3},{"question" : "Wat
-      is het grootste meer ter wereld, gemeten naar oppervlakte?","answers" : ["Lake
-      Huron", "Het kaspische zee", "De rode zee", "Lake Michigan"],"correctId" :
-      1}]}'
-  - assetRef: 01-Minigame_Quiz
-    isBundle: 0
-    data: '{"lives" : 3, "questions" : [{"question" : "Welk nummer is het 5e getal
-      achter de comma in PI","answers" : ["5", "6", "1", "9"],"correctId" : 3},{"question"
-      : "Wat is de naam van de grootste maan van Saturnus?","answers" : ["Uranus",
-      "Thetys", "Dione", "Titan"],"correctId" : 3},{"question" : "Wie wordt vaak
-      beschouwd als de uitvinder van de eerste programmeertaal?","answers" : ["Ada
-      Lovelace", "Alan Turing", "Hendrik Janssen", "Ping Wu"],"correctId" : 0},{"question"
-      : "Hoever heeft Vasa gevaren op haar eerste trip?","answers" : ["500 m", "2000
-      km", "14 km", "1300m"],"correctId" : 3},{"question" : "Wat is het grootste
-      meer ter wereld, gemeten naar oppervlakte?","answers" : ["Lake Huron", "Het
-      kaspische zee", "De rode zee", "Lake Michigan"],"correctId" : 1}]}'
-  _newGameTimeMin: 10
-  _newGameTimeMax: 20
 --- !u!114 &23640337112341281
 MonoBehaviour:
   m_ObjectHideFlags: 0

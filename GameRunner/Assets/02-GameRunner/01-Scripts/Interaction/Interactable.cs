@@ -104,6 +104,7 @@ namespace Cohort.GameRunner.Interaction {
 
         protected virtual void OnJoinedRoom() {
             OnPropertiesChanged(Network.Local.Client.CurrentRoom.CustomProperties);
+            
             if (!Network.Local.Client.CurrentRoom.CustomProperties.ContainsKey(GetInteractableKey())) {
                 Deactivate();
             }
@@ -111,6 +112,7 @@ namespace Cohort.GameRunner.Interaction {
 
         protected virtual void OnPropertiesChanged(Hashtable changes) {
             string key = GetInteractableKey();
+            
             if (changes.ContainsKey(key)) {
                 if (changes[key] == null) {
                     Deactivate();

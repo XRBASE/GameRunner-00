@@ -7,6 +7,7 @@ using UnityEngine;
 using System;
 
 namespace Cohort.GameRunner.Players {
+    [DefaultExecutionOrder(-2)]
     public class Player : MonoBehaviour, IPlayer {
         public const int LAYER = 3;
         

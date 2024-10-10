@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -298,6 +298,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _newGameTimeMax
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _newGameTimeMin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: _minigames.Array.data[0].data
       value: '{"lives" : 2, "questions" : [{"question" : "Hoeveel inwoners heeft
         Zeeland?","answers" : ["1600", "4800", "6200", "10.200"],"correctId" : 1},{"question"
@@ -309,6 +321,31 @@ PrefabInstance:
         "1000", "1500"],"correctId" : 2},{"question" : "Hoeveel duckpower heeft een
         auto van 500 horse power?","answers" : ["13450", "250", "54750", "65600"],"correctId"
         : 2}]}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[2].data
+      value: '{"lives" : 3, "questions" : [{"question" : "Welk nummer is het 5e getal
+        achter de comma in PI","answers" : ["5", "6", "1", "9"],"correctId" : 3},{"question"
+        : "Wat is de naam van de grootste maan van Saturnus?","answers" : ["Uranus",
+        "Thetys", "Dione", "Titan"],"correctId" : 3},{"question" : "Wie wordt vaak
+        beschouwd als de uitvinder van de eerste programmeertaal?","answers" : ["Ada
+        Lovelace", "Alan Turing", "Hendrik Janssen", "Ping Wu"],"correctId" : 0},{"question"
+        : "Hoever heeft Vasa gevaren op haar eerste trip?","answers" : ["500 m",
+        "2000 km", "14 km", "1300m"],"correctId" : 3},{"question" : "Wat is het grootste
+        meer ter wereld, gemeten naar oppervlakte?","answers" : ["Lake Huron", "Het
+        kaspische zee", "De rode zee", "Lake Michigan"],"correctId" : 1}]}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[0].isBundle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[1].isBundle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[2].assetRef
+      value: 01-Minigame_Quiz
       objectReference: {fileID: 0}
     - target: {fileID: 1694045838604335278, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: m_Name

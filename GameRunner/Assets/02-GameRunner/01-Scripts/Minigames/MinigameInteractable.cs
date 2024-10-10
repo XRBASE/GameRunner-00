@@ -54,7 +54,7 @@ public class MinigameInteractable : Interactable {
 			else {
 				_minigameIndex = (int)changes[key];
 			}
-
+			
 			HasMinigame = _minigameIndex >= 0;
 			_minigameIndicator.SetActive(HasMinigame);
 		}
@@ -76,12 +76,7 @@ public class MinigameInteractable : Interactable {
 		if (!HasMinigame)
 			return;
 		
-		if (Value) {
-			Deactivate();
-		}
-		else {
-			Activate();
-		}
+		Activate();
 	}
 
 	protected override void Activate(Hashtable changes, Hashtable expected = null) {
@@ -103,6 +98,7 @@ public class MinigameInteractable : Interactable {
 			changes = new Hashtable();
 		}
 		changes.Add(GetMiniGamePlayerKey(), null);
+		changes.Add(GetMiniGameIdKey(), -1);
 		
 		//if there is an actor, this item can only be deactivated by that actor
 		if (_actor != -1) {

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Cohort.Networking.Players;
 using UnityEngine;
 
@@ -20,6 +19,10 @@ namespace Cohort.GameRunner.Players {
         }
 
         public bool ActorNumberExists(int playerNumber) {
+            if (_players == null) {
+                return false;
+            }
+            
             foreach (var kv_player in _players) {
                 if (kv_player.Value.ActorNumber == playerNumber) {
                     return !kv_player.Value.PhotonPlayer.IsInactive;
