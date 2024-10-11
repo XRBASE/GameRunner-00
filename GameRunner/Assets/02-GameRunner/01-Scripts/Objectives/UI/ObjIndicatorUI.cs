@@ -2,7 +2,7 @@ using Cohort.UI.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ObjIndicatorPanel : UIPanel {
+public class ObjIndicatorUI : UIPanel {
     [SerializeField] private RectTransform _parent;
     [SerializeField] private Image _indicatorPrefab;
     [SerializeField] private Sprite fallbackIco;
@@ -14,7 +14,7 @@ public class ObjIndicatorPanel : UIPanel {
     }
 
     private void Destroy() {
-        UILocator.Remove<ObjIndicatorPanel>();
+        UILocator.Remove<ObjIndicatorUI>();
     }
 
     public Image CreateIndicator(Vector2 size, Color col, Sprite ico = null, string name = "unnamed_indicator") {

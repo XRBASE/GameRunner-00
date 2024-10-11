@@ -1,6 +1,7 @@
 using System;
 using Cohort.Patterns;
 using Cohort.Tools.Timers;
+using Cohort.UI.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -19,6 +20,10 @@ public class MinigameManager : Singleton<MinigameManager> {
 
     protected override void Awake() {
         base.Awake();
+
+        for (int i = 0; i < _minigames.Length; i++) {
+            _minigames[i]._index = i;
+        }
         
         _newGameTimer = new Timer(Random.Range(_newGameTimeMin, _newGameTimeMax), false, ActivateMinigame);
     }
@@ -44,6 +49,8 @@ public class MinigameManager : Singleton<MinigameManager> {
         if (_current != default) {
             OnMinigameFinished(0f);
         }
+
+        UILocator.Get<MinigameUILog>().Clear();
         
         _newGameTimer.Stop();
         _newGameTimer.Reset();
@@ -64,39 +71,45 @@ public class MinigameManager : Singleton<MinigameManager> {
         SetUpTimer();
         int minigameId = Random.Range(0, _minigames.Length);
         
-        int random = Random.Range(0, _interactables.Length);
-        int i = 0;
+        int i = Random.Range(0, _interactables.Length);
         int c = 0;
-        while (random >= 0) {
+        while (c <= _interactables.Length) {
+            i = (i + 1) % _interactables.Length;
+            
             if (!_interactables[i].HasMinigame) {
-                random--;
+                Debug.LogWarning($"I:{i}\t True\t C:{_interactables.Length - c}");
+                break;
             }
             else {
                 c++;
-
+                
                 if (c >= _interactables.Length) {
-                    Debug.Log("Skipped new minigame, system is at capacity");
+                    Debug.LogWarning($"I:{i}\t False\t C:{_interactables.Length - c}, Skipped new minigame, system is at capacity");
                     return;
                 }
+                else {
+                    Debug.LogWarning($"I:{i}\t False\t C:{_interactables.Length - c}");
+                }
             }
-
-            i = (i + 1) % _interactables.Length;
         }
         
-        _interactables[i].ActivateMinigame(minigameId);
+        Debug.LogError($"{_interactables[i].Description} has minigame");
+        _interactables[i].SetMinigame(_minigames[minigameId]);
     }
 
-    private void OnMinigameStart(int index, MinigameInteractable interactable) {
+    private void OnMinigameStart(MiniGameDescription desc, MinigameInteractable interactable) {
 
-        _current.desc = _minigames[index];
+        _current.desc = desc;
+        desc._state = MiniGameDescription.State.InGame;
         _current.interactable = interactable;
-        SceneManager.LoadScene(_current.desc.assetRef, LoadSceneMode.Additive);
+        SceneManager.LoadScene(_current.desc.sceneName, LoadSceneMode.Additive);
     }
 
     private void OnMinigameFinished(float completed) {
-        SceneManager.UnloadSceneAsync(_current.desc.assetRef);
+        _current.desc._state = (completed > 0.01f)? MiniGameDescription.State.Completed : MiniGameDescription.State.Failed;
+        SceneManager.UnloadSceneAsync(_current.desc.sceneName);
         
-        _current.interactable.DeactivateMinigame();
+        _current.interactable.UnsetMinigame();
         _current.interactable.Deactivate();
         _current = default;
         
@@ -105,5 +118,9 @@ public class MinigameManager : Singleton<MinigameManager> {
 
     public void SetupMinigame(Minigame game) {
         game.Initialize(_current.desc.data, _scoreMultiplier, OnMinigameFinished);
+    }
+
+    public MiniGameDescription GetDescription(int index) {
+        return _minigames[index];
     }
 }

@@ -40,7 +40,7 @@ public class ObjIndicator : MonoBehaviour {
             _target = target;
         }
         
-        _rnd = UILocator.Get<ObjIndicatorPanel>().CreateIndicator(_size, _color, icon, gameObject.name); 
+        _rnd = UILocator.Get<ObjIndicatorUI>().CreateIndicator(_size, _color, icon, gameObject.name); 
         
         _rt = (RectTransform)_rnd.transform;
         _parentRt = (RectTransform)_rt.parent;
@@ -58,10 +58,10 @@ public class ObjIndicator : MonoBehaviour {
         
         if (force || _enabled != enabled) {
             if (enabled) {
-                UILocator.Get<ObjIndicatorPanel>().OnActivate();
+                UILocator.Get<ObjIndicatorUI>().OnActivate();
             }
             else {
-                UILocator.Get<ObjIndicatorPanel>().OnDeactivate();
+                UILocator.Get<ObjIndicatorUI>().OnDeactivate();
             }
         }
         _enabled = enabled;

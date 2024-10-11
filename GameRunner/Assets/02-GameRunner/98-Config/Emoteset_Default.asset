@@ -12,4 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10f16936a89ebbf4690bb50044de45df, type: 3}
   m_Name: Emoteset_Default
   m_EditorClassIdentifier: 
-  _emotes: []
+  _emotes:
+  - clip: {fileID: -203655887218126122, guid: 6c4f112449961cc4e8e91ca82f6c41a7, type: 3}
+    isFullBody: 1
+    _guid: f831b91e-f3c8-40d7-a7e0-0cd83bc1469f
+  - clip: {fileID: -6109229945026769816, guid: b54a88b11097b0140af56c8c9f9d5c30, type: 3}
+    isFullBody: 1
+    _guid: 7735230a-13c9-400f-a12b-8a7631bc549a
+  - clip: {fileID: -77769399478275220, guid: 9c8a35a1c43d70545bf1c321c3833871, type: 3}
+    isFullBody: 1
+    _guid: 78ff8b5e-d677-4412-95a6-ecf5661cd16d
+  - clip: {fileID: -203655887218126122, guid: 8104713406cf9604e9474baaa3d98168, type: 3}
+    isFullBody: 1
+    _guid: 87033b0f-131e-4a4a-a589-cb9fa67a4773
+  - clip: {fileID: -203655887218126122, guid: 29ba479762dff35498f49193fcc2bb2f, type: 3}
+    isFullBody: 1
+    _guid: 89ee6cb0-d829-47bc-bb9b-52112784ec05

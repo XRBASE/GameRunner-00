@@ -2,20 +2,27 @@ using System;
 using Cohort.GameRunner.Interaction;
 using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
+using Cohort.UI.Generic;
 using ExitGames.Client.Photon;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class MinigameInteractable : Interactable {
+	public string Description {
+		get { return _description; }
+	}
+
 	public bool HasMinigame { get; private set; }
+	
+	public Action<MiniGameDescription, MinigameInteractable> onMinigameStart;
 	
 	[SerializeField] private GameObject _inUseIndicator;
 	[SerializeField] private ObjIndicator _minigameIndicator;
+	[SerializeField] private string _description = "At position";
 
 	private int _actor = -1;
-	private int _minigameIndex = -1;
-
-	public Action<int, MinigameInteractable> onMinigameStart;
+	private MiniGameDescription _minigame = null;
+	private MinigameLogEntry _currentGame;
 
 	protected override void Start() {
 		base.Start();
@@ -49,14 +56,11 @@ public class MinigameInteractable : Interactable {
 		string key = GetMiniGameIdKey();
 		if (changes.ContainsKey(key)) {
 			if (changes[key] == null) {
-				_minigameIndex = -1;
+				MinigameSetLocal(-1);
 			}
 			else {
-				_minigameIndex = (int)changes[key];
+				MinigameSetLocal((int)changes[key]);
 			}
-			
-			HasMinigame = _minigameIndex >= 0;
-			_minigameIndicator.SetActive(HasMinigame);
 		}
 		
 		key = GetMiniGamePlayerKey();
@@ -92,6 +96,16 @@ public class MinigameInteractable : Interactable {
 		
 		base.Activate(changes, expected);
 	}
+	
+	protected override void ActivateLocal() {
+		_inUseIndicator.SetActive(true);
+		
+		_minigameIndicator.SetActive(false);
+		
+		if (_actor == Player.Local.ActorNumber) {
+			onMinigameStart?.Invoke(_minigame, this);
+		}
+	}
 
 	protected  override void Deactivate(Hashtable changes, Hashtable expected = null) {
 		if (changes == null) {
@@ -110,33 +124,45 @@ public class MinigameInteractable : Interactable {
 		
 		base.Deactivate(changes, expected);
 	}
-
-	protected override void ActivateLocal() {
-		_inUseIndicator.SetActive(true);
-		
-		_minigameIndicator.SetActive(false);
-		
-		if (_actor == Player.Local.ActorNumber) {
-			onMinigameStart?.Invoke(_minigameIndex, this);
-		}
-	}
-
+	
 	protected override void DeactivateLocal() {
 		_inUseIndicator.SetActive(false);
 	}
 	
-	public void ActivateMinigame(int minigameIndex) {
+	public void SetMinigame(MiniGameDescription minigame) {
 		Hashtable changes = new Hashtable();
-		changes.Add(GetMiniGameIdKey(), minigameIndex);
+		changes.Add(GetMiniGameIdKey(), minigame._index);
 
 		Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
 	}
 
-	public void DeactivateMinigame() {
+	public void UnsetMinigame() {
 		Hashtable changes = new Hashtable();
 		changes.Add(GetMiniGameIdKey(), -1);
 
 		Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
+	}
+
+	protected void MinigameSetLocal(int minigameIndex) {
+		HasMinigame = minigameIndex >= 0;
+		_minigameIndicator.SetActive(HasMinigame);
+		
+		if (HasMinigame) {
+			_minigame = MinigameManager.Instance.GetDescription(minigameIndex);
+			
+			_currentGame = UILocator.Get<MinigameUILog>().AddEntry(this, _minigame);
+		}
+		else if (_currentGame != null) {
+			if (_actor == Player.Local.ActorNumber) {
+				_currentGame.FinishTask(_minigame._state);
+			}
+			else {
+				_currentGame.FinishTask(MiniGameDescription.State.Failed);
+			}
+
+			_minigame = null;
+			_currentGame = null;
+		}
 	}
 	
 	private string GetMiniGamePlayerKey() {

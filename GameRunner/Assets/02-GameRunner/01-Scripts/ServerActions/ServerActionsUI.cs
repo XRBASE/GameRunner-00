@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [DefaultExecutionOrder(101)] //After gameloader
-public class ServerActionsPanel : UIPanel
+public class ServerActionsUI : UIPanel
 {
 	private const float ANIM_DURATION = 0.5f;
 
@@ -30,7 +30,7 @@ public class ServerActionsPanel : UIPanel
 	}
 
 	private void OnDestroy() {
-		UILocator.Remove<ServerActionsPanel>();
+		UILocator.Remove<ServerActionsUI>();
 		
 		_toggleBtn.onClick.RemoveListener(ToggleState);
 		_startBtn.onClick.RemoveListener(StartGame);
