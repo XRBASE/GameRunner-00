@@ -1,5 +1,6 @@
+using Cohort.Networking;
+
 using System.Collections.Generic;
-using Cohort.Ravel.Networking;
 
 public class SpriteRequest : RavelWebRequest
 {

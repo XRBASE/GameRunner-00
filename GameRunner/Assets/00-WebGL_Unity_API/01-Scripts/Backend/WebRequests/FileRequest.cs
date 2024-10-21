@@ -1,6 +1,6 @@
 using Cohort.Config;
 
-namespace Cohort.Ravel.Networking.Files
+namespace Cohort.Networking.Files
 {
     /// <summary>
     /// Overlaying class to retrieve specific web requests from the files subset of the backend.

@@ -29,8 +29,10 @@ public class MinigameManager : Singleton<MinigameManager> {
     }
     
     private void OnDestroy() {
-        for (int i = 0; i < _interactables.Length; i++) {
-            _interactables[i].onMinigameStart -= OnMinigameStart;
+        if (_interactables != null) {
+            for (int i = 0; i < _interactables.Length; i++) {
+                _interactables[i].onMinigameStart -= OnMinigameStart;
+            }
         }
     }
 

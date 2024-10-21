@@ -1,7 +1,6 @@
 using System;
-using UnityEngine.Serialization;
 
-namespace Cohort.Ravel.BackendData.Data {
+namespace Cohort.BackendData.Storage {
 	
 	[Serializable]
 	public class StorageData : DataContainer {

@@ -1,9 +1,10 @@
-using System;
-using Cohort.Ravel.BackendData.Data;
-using Cohort.Ravel.BackendData.Images;
-using UnityEngine;
+using Cohort.BackendData.Images;
+using Cohort.BackendData;
 
-namespace Cohort.Ravel.Assets
+using UnityEngine;
+using System;
+
+namespace Cohort.Assets
 {
     /// <summary>
     /// Container class for images.

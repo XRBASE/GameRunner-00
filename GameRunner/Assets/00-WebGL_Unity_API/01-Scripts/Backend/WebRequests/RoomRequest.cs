@@ -1,4 +1,4 @@
-using Cohort.Ravel.Networking;
+using Cohort.Networking;
 
 public class RoomRequest : TokenWebRequest
 {

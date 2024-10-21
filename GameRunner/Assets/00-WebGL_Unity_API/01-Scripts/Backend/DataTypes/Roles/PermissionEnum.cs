@@ -1,6 +1,6 @@
 using System;
 
-namespace Cohort.Ravel.Permissions
+namespace Cohort.Permissions
 {
 	public enum SystemRole
 	{

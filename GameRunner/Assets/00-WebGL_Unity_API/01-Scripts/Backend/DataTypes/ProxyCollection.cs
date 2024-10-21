@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Cohort.Ravel.Networking {
+namespace Cohort.Networking {
     /// <summary>
     /// Class for creating a list with webcall data proxies.
     /// </summary>

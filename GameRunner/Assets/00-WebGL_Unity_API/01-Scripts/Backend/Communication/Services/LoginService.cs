@@ -1,7 +1,8 @@
-using Cohort.Ravel.Networking.Authorization;
-using Cohort.Ravel.Users;
-using UnityEngine;
+using Cohort.Networking.Authorization;
+using Cohort.Users;
+
 using UnityEngine.Events;
+using UnityEngine;
 
 public class LoginService : MonoBehaviour
 {

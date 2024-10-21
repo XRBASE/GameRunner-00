@@ -1,8 +1,9 @@
-using System;
-using Cohort.Ravel.BackendData.Data;
-using UnityEngine;
+using Cohort.BackendData;
 
-namespace Cohort.Ravel.Assets
+using UnityEngine;
+using System;
+
+namespace Cohort.Assets
 {
     /// <summary>
     /// Baseclass which is used to contain asset data.

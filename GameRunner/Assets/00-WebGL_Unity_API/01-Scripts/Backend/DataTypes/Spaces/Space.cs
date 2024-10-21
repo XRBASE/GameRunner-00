@@ -1,8 +1,8 @@
 using System;
-using Cohort.Ravel.Assets;
-using Cohort.Ravel.BackendData.Data;
+using Cohort.Assets;
+using Cohort.BackendData;
 
-namespace Cohort.Ravel.Spaces
+namespace Cohort.Spaces
 {
     [Serializable]
     public class Space : DataContainer

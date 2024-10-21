@@ -1,9 +1,10 @@
-using System;
-using Cohort.Ravel.Networking;
-using Cohort.Ravel.Networking.Spaces;
-using UnityEngine;
+using Cohort.Networking.Spaces;
+using Cohort.Networking;
 
-namespace Cohort.Ravel.BackendData.Images
+using UnityEngine;
+using System;
+
+namespace Cohort.BackendData.Images
 {
     /// <summary>
     /// For not not connected to backend, download handler for images. Downloads images and stores them using given key

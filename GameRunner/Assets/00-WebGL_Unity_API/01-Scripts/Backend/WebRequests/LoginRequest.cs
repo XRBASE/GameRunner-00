@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using UnityEngine;
 
-namespace Cohort.Ravel.Networking.Authorization
+namespace Cohort.Networking.Authorization
 {
     /// <summary>
     /// Overlaying class to retrieve specific web requests from the login subset of the backend.

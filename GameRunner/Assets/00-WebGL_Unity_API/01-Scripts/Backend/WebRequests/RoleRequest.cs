@@ -1,4 +1,4 @@
-namespace Cohort.Ravel.Networking.Roles
+namespace Cohort.Networking.Roles
 {
     /// <summary>
     /// Overlaying class to retrieve specific web requests from the role subset of the backend.

@@ -1,4 +1,4 @@
-namespace Cohort.Ravel.Networking.Spaces
+namespace Cohort.Networking.Spaces
 {
     /// <summary>
     /// Overlaying class to retrieve specific web requests from the space subset of the backend.

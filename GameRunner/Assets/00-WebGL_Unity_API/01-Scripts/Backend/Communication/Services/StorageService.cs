@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Cohort.Ravel.BackendData.Data {
+namespace Cohort.BackendData.Storage {
 	public class StorageService : MonoBehaviour {
 		private StorageRepository _repo;
 

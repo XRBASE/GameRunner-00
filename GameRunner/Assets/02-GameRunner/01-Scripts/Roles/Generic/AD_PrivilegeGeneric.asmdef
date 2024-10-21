@@ -1,0 +1,16 @@
+{
+    "name": "AD_PrivilegeGeneric",
+    "rootNamespace": "",
+    "references": [
+        "GUID:47e4282a650095e4492c2d80a320cc49"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

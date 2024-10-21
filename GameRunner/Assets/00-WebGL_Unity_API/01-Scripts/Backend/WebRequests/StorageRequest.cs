@@ -1,4 +1,4 @@
-namespace Cohort.Ravel.Networking {
+namespace Cohort.Networking {
 
 	public class StorageRequest : TokenWebRequest {
 		private const string PREFIX = "storage";

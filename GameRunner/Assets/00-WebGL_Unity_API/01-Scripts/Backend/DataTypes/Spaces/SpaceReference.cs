@@ -1,8 +1,10 @@
-using Cohort.Ravel.Assets;
-using Cohort.Ravel.BackendData.Images;
+using Cohort.BackendData.Images;
+using Cohort.Assets;
+using Cohort.Spaces;
+
 using UnityEngine;
-using Cohort.Ravel.Spaces;
-using Space = Cohort.Ravel.Spaces.Space;
+
+using Space = Cohort.Spaces.Space;
 
 /// <summary>
 /// Internal version of space, for use outside of the backend e.g. personal room or scene testing.

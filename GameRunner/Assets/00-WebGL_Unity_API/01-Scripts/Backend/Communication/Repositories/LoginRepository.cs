@@ -1,8 +1,9 @@
+using Cohort.Networking.Authorization;
+using Cohort.Networking;
+
 using System.Collections;
-using Cohort.Ravel.Networking;
-using Cohort.Ravel.Networking.Authorization;
-using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine;
 
 public class LoginRepository
 {
