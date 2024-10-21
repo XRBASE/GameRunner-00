@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 public abstract class Minigame : MonoBehaviour {
-    public bool IsPlaying { get; protected set; }
+    protected bool IsPlaying { get; set; }
     
     /// <summary>
     /// Initializes the minigame with given json data.

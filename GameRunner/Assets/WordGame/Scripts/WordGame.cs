@@ -3,36 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.Playables;
 using Random = UnityEngine.Random;
 
 public class WordGame : Minigame
 {
-    private Word _currentWord => _words[_entryIndex];
+    private const float INVALID_FEEDBACK_TIMEOUT = 1f;
+    private const float GAME_COMPLETE_FEEDBACK_TIMEOUT = 2f;
+    private Word CurrentWord => _words[_entryIndex];
     private bool CanPlay => IsPlaying && _entryIndex < _words.Count;
+    
+    public Word wordPrefab;
     public WordGameInput wordGameInput;
     public Transform gameParent;
     public TextMeshProUGUI title;
-    public Word wordPrefab;
     public AudioSource feedbackAudio;
     public AudioClip successAudioClip, failureAudioClip;
     public ScoreUI scoreUI;
     public TextMeshProUGUI hintText;
-    private int _wordLength;
-
-    private List<Word> _words = new List<Word>();
+    public PlayableDirector invalidWordFeedback;
+    
+    private readonly List<Word> _words = new List<Word>();
+    private List<string> _wordDictionary;
     private WordGameData _wordGameData;
     private Action<float> _onGameFinished;
+    private Action<float> _testOnGameFinished;
     private WordData _chosenWord;
-    private int _entryIndex;
+    private IEnumerator _feedBackTimeoutRoutine;
     private string _text = string.Empty;
-    private List<string> _wordDictionary;
-    
+    private int _entryIndex;
+    private int _wordLength;
     private float _completionPercent;
     private float _scoreMultiplier;
-    private Action<float> _testOnGameFinished;
-    public WordGameDataSO _wordGameDataSo;
+
 
     public override void Initialize(string gameData, int scoreMultiplier, Action<float> onGameFinished)
     {
@@ -44,22 +48,15 @@ public class WordGame : Minigame
         title.text = _wordGameData.title;
         BuildGame(_wordLength, _wordGameData.tries);
     }
-
-    private void TestData()
-    {
-        _testOnGameFinished += delegate(float f) {  Debug.LogError($"Score: {f}");};
-        Initialize(_wordGameDataSo.wordGameDataJson(), 1, _testOnGameFinished);
-    }
     
     protected override void Awake()
     {
-        //base.Awake();
+        base.Awake();
         wordGameInput.onKeyboardInput += ValueChanged;
         wordGameInput.remove += RemoveLastLetter;
-        TestData();
     }
 
-    private void GameFinished(float score)
+    private void DisplayScore(float score)
     {
         scoreUI.PlayScore((int)(score * _scoreMultiplier));
     }
@@ -75,7 +72,6 @@ public class WordGame : Minigame
         }
         _chosenWord = _wordGameData.wordList[Random.Range(0, _wordGameData.wordList.Count)];
         hintText.text = _chosenWord.hint;
-        Debug.LogError(_chosenWord.word);
         _entryIndex = 0;
         IsPlaying = true;
     }
@@ -86,34 +82,54 @@ public class WordGame : Minigame
             return;
         if (!_wordDictionary.Contains(_text))
         {
-            Debug.LogError("Word does not contain in word list");
-            _text = string.Empty;
-            _currentWord.ClearAllLetters();
-            _currentWord.InCorrectFeedback();
-            feedbackAudio.PlayOneShot(failureAudioClip);
+            HandleAnswerInvalid();
             return;
         }
 
-        HandleAnswer(_currentWord.CheckWord(_chosenWord.word));
+        HandleAnswer(CurrentWord.CheckWord(_chosenWord.word));
+    }
+
+    private void HandleAnswerInvalid()
+    {
+        CurrentWord.InCorrectFeedback();
+        feedbackAudio.PlayOneShot(failureAudioClip);
+        PlayableDirectorFeedback(invalidWordFeedback);
+        wordGameInput.SetInputActive(false);
+        DoFeedbackTimeout(INVALID_FEEDBACK_TIMEOUT, FeedbackTimeout);
+    }
+
+    private void PlayableDirectorFeedback(PlayableDirector playableDirector)
+    {
+        playableDirector.time = 0;
+        playableDirector.Stop();
+        playableDirector.Evaluate();
+        playableDirector.Play();
+    }
+
+    private void FeedbackTimeout()
+    {
+        CurrentWord.ClearAllLetters();
+        _text = string.Empty;
+        wordGameInput.SetInputActive(true);
     }
 
     private void HandleAnswer(bool correct)
     {
         if (correct)
         {
-            _currentWord.DoCorrectFeedbackRoutine();
+            CurrentWord.DoCorrectFeedbackRoutine();
             feedbackAudio.PlayOneShot(successAudioClip);
             HandleGameComplete();
         }
         else
         {
-            _currentWord.InCorrectFeedback();
+            CurrentWord.InCorrectFeedback();
             feedbackAudio.PlayOneShot(failureAudioClip);
         }
 
         _text = string.Empty;
         _entryIndex += 1;
-        if (_entryIndex > _words.Count)
+        if (_entryIndex >= _words.Count)
         {
             HandleGameComplete();
         }
@@ -122,9 +138,14 @@ public class WordGame : Minigame
     private void HandleGameComplete()
     {
         _completionPercent = (_wordGameData.tries - _entryIndex) / (float) _wordGameData.tries;
-        GameFinished(_completionPercent);
+        DisplayScore(_completionPercent);
         IsPlaying = false;
-        DoDelayedGameComplete();
+        DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, GameFinished);
+    }
+
+    private void GameFinished()
+    {
+        _onGameFinished?.Invoke(_completionPercent);
     }
 
     private void ValueChanged(string text)
@@ -132,7 +153,7 @@ public class WordGame : Minigame
         if (!CanPlay || (_text + text).Length > _wordLength)
             return;
         _text += text;
-        _currentWord.AddLetter(_text.Length - 1, _text.Last());
+        CurrentWord.AddLetter(_text.Length - 1, _text.Last());
         if(_text.Length == _wordLength)
         {
             Submit();
@@ -143,19 +164,19 @@ public class WordGame : Minigame
     {
         if (_text.Length - 1 < 0)
             return;
-        _currentWord.ClearLetter(_text.Length - 1);
+        CurrentWord.ClearLetter(_text.Length - 1);
         _text = _text.Substring(0, _text.Length - 1);
     }
-
-    private void DoDelayedGameComplete()
+    
+    private void DoFeedbackTimeout(float time, Action onFeedbackTimeout)
     {
-        StartCoroutine(DelayedGameCompleteRoutine());
+        _feedBackTimeoutRoutine = FeedbackTimeOutRoutine(time, onFeedbackTimeout);
+        StartCoroutine(_feedBackTimeoutRoutine);
     }
 
-    private IEnumerator DelayedGameCompleteRoutine()
+    private IEnumerator FeedbackTimeOutRoutine(float time, Action onFeedbackTimeout)
     {
-        yield return new WaitForSeconds(2f);
-        _onGameFinished?.Invoke(_completionPercent);
-        
+        yield return new WaitForSeconds(time);
+        onFeedbackTimeout?.Invoke();
     }
 }

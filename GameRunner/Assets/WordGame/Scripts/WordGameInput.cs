@@ -28,4 +28,13 @@ public class WordGameInput : MonoBehaviour
         _wordGameActionMap["Remove"].performed += _ => remove?.Invoke();
         _wordGameActionMap["Submit"].performed += _ => submit?.Invoke();
     }
+
+
+    public void SetInputActive(bool active)
+    {
+        if (active)
+            inputActionAsset.Enable();
+        else
+            inputActionAsset.Disable();
+    }
 }
