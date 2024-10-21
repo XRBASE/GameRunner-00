@@ -416,12 +416,34 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[2].data
+      value: "{\"title\":\"Guess the word\",\"tries\":5,\"wordList\":[{\"word\":\"penis\",\"hint\":\"49%
+        van de wereld bevolking heeft het tussen hun benen\"},{\"word\":\"moord\",\"hint\":\"Jeffrey
+        dahmer is er voor veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt veel
+        gebruikt in thaise recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier
+        uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt
+        voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt na de start\"},{\"word\":\"sport\",\"hint\":\"Dikke
+        mensen doen het weinig\"}]}"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: _minigames.Array.data[0].sceneName
       value: 00-Minigame_Quiz
       objectReference: {fileID: 0}
     - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: _minigames.Array.data[1].sceneName
       value: 01-Minigame_Quiz
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[2].sceneName
+      value: 02-Minigame-WordGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[2].actionDescription
+      value: Word Game
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
