@@ -4,19 +4,19 @@ public class RoomRequest : TokenWebRequest
 {
 	private RoomRequest(Method method, string postfix) : base(method, "api/") {
 		if (string.IsNullOrEmpty(postfix)) {
-			_url += "room";
+			_url += "session";
 		}
 		else {
-			_url += "room/" + postfix;
+			_url += "session/" + postfix + "/instance";
 		}
 	}
 
 	private RoomRequest(Method method, string postfix, string json) : base(method, "api/") {
 		if (string.IsNullOrEmpty(postfix)) {
-			_url += "room";
+			_url += "session";
 		}
 		else {
-			_url += "room/" + postfix;
+			_url += "session/" + postfix;
 		}
 
 		_data = json;

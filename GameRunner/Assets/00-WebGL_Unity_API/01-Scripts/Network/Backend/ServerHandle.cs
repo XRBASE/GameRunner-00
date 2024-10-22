@@ -87,7 +87,7 @@ public class ServerHandle : Singleton<ServerHandle>
 
     private LoginRequest.SimpleToken _token;
     
-    private string _roomId;
+    private string _sessionId;
     private bool _dataValid;
     
     public void InitData(string data) {
@@ -114,18 +114,18 @@ public class ServerHandle : Singleton<ServerHandle>
         LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Finish();
         
         LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Start();
-        _roomId = StringExtentions.PickFromJson<string>("roomId", _initData);
+        _sessionId = StringExtentions.PickFromJson<string>("sessionId", _initData);
         if (_dataValid)
-            _dataValid = !string.IsNullOrEmpty(_roomId);
+            _dataValid = !string.IsNullOrEmpty(_sessionId);
         
         if (!_dataValid) {
             Debug.LogError($"Stopping logging because of data error:" +
-                             $"roomid: {_roomId}, baseURL: {_baseUrl}, token: {_token.token}");
+                             $"sessionId: {_sessionId}, baseURL: {_baseUrl}, token: {_token.token}");
             yield break;
         }
         
         LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Increment("Connecting networking client");
-        DataServices.Photon.ConnectToPhotonRoom(_roomId, OnConnected, OnConnectionError);
+        DataServices.Photon.ConnectToPhotonRoom(_sessionId, OnConnected, OnConnectionError);
         //TODO: Connect to photon server
     }
 
