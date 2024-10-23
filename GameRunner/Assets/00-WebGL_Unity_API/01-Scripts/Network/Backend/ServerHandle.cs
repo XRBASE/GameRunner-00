@@ -4,7 +4,6 @@ using MathBuddy.Strings;
 using Cohort.Patterns;
 using Cohort.Config;
 
-
 using System.Runtime.InteropServices;
 using System.Collections;
 using UnityEngine;
@@ -126,7 +125,6 @@ public class ServerHandle : Singleton<ServerHandle>
         
         LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Increment("Connecting networking client");
         DataServices.Photon.ConnectToPhotonRoom(_sessionId, OnConnected, OnConnectionError);
-        //TODO: Connect to photon server
     }
 
     private void OnConnected() {
