@@ -472,7 +472,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: _testInput
-      value: '{"token":"666655394C46634F414B5841524B674149656A2B34773D3D","baseUrl":"https://dev.spaceshift.ai","roomId":"504339eb-9b06-4604-87c0-1321faa68465","spaceId":"3d5a5139-bdc0-43fe-a9ee-e36526cae0a2"}'
+      value: '{"token":"7561584F422B482F546F36676B4632635959585644513D3D","baseUrl":"https://dev.cohort.games","sessionId":"95dd9e39-a595-481e-8eef-9e2ee8aadc6b"}'
       objectReference: {fileID: 0}
     - target: {fileID: 7509324001149410918, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: m_Name
