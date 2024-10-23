@@ -41,15 +41,15 @@ Material:
     m_Floats:
     - _ColorThresholdMax: 1
     - _ColorThresholdMin: 0
-    - _DepthThresholdMax: 0.1
-    - _DepthThresholdMin: 0.1
-    - _FadeRangeEnd: 0
-    - _FadeRangeStart: 0
+    - _DepthThresholdMax: 1
+    - _DepthThresholdMin: 0
+    - _FadeRangeEnd: 100
+    - _FadeRangeStart: 1
     - _NormalThresholdMax: 2
     - _NormalThresholdMin: 0
     - _Thickness: 2
     m_Colors:
-    - _EdgeColor: {r: 0, g: 0, b: 0, a: 0.38431373}
+    - _EdgeColor: {r: 0, g: 0, b: 0, a: 0.6509804}
   m_BuildTextureStacks: []
 --- !u!114 &11400000
 MonoBehaviour:
@@ -63,15 +63,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 130791d3e20646d2b6d81688877b0909, type: 3}
   m_Name: Toon Outline Settings
   m_EditorClassIdentifier: 
-  edgeColor: {r: 0, g: 0, b: 0, a: 0.38431373}
+  edgeColor: {r: 0, g: 0, b: 0, a: 0.6509804}
   thickness: 2
   resolutionInvariant: 0
   fadeWithDistance: 1
-  fadeRangeStart: 0
-  fadeRangeEnd: 0
+  fadeRangeStart: 1
+  fadeRangeEnd: 100
   useDepth: 1
-  minDepthThreshold: 0.1
-  maxDepthThreshold: 0.1
+  minDepthThreshold: 0
+  maxDepthThreshold: 1
   useNormals: 0
   minNormalsThreshold: 0
   maxNormalsThreshold: 2
