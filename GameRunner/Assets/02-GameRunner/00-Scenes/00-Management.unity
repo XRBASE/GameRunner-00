@@ -472,7 +472,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: _testInput
-      value: '{"token":"7561584F422B482F546F36676B4632635959585644513D3D","baseUrl":"https://dev.cohort.games","sessionId":"95dd9e39-a595-481e-8eef-9e2ee8aadc6b"}'
+      value: '{"token":"2F743848685643394933466E5A4277634B66793655773D3D","baseUrl":"https://dev.cohort.games","sessionId":"b7503cbc-e966-4c1b-abbf-1df0d994c982"}'
       objectReference: {fileID: 0}
     - target: {fileID: 7509324001149410918, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: m_Name
