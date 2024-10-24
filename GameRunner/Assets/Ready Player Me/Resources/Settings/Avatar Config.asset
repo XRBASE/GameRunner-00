@@ -20,7 +20,7 @@ MonoBehaviour:
   UseHands: 1
   UseDracoCompression: 0
   UseMeshOptCompression: 0
-  Shader: {fileID: 0}
+  Shader: {fileID: 4800000, guid: bee44b4a58655ee4cbff107302a3e131, type: 3}
   ShaderProperties:
   - TextureChannel: 0
     PropertyName: _MainTex
@@ -32,4 +32,32 @@ MonoBehaviour:
     PropertyName: 
   - TextureChannel: 4
     PropertyName: 
+  ShaderPropertyMapping:
+  - SourceProperty: baseColorTexture
+    TargetProperty: _BaseMap
+    Type: 0
+  - SourceProperty: normalTexture
+    TargetProperty: _BumpMap
+    Type: 0
+  - SourceProperty: metallicRoughnessTexture
+    TargetProperty: 
+    Type: 0
+  - SourceProperty: metallicFactor
+    TargetProperty: metallicFactor
+    Type: 1
+  - SourceProperty: roughnessFactor
+    TargetProperty: 
+    Type: 1
+  - SourceProperty: emissiveTexture
+    TargetProperty: emissiveTexture
+    Type: 0
+  - SourceProperty: emissiveFactor
+    TargetProperty: emissiveFactor
+    Type: 2
+  - SourceProperty: occlusionTexture
+    TargetProperty: occlusionTexture
+    Type: 0
+  - SourceProperty: occlusionTexture_strength
+    TargetProperty: 
+    Type: 1
   MorphTargets: []
