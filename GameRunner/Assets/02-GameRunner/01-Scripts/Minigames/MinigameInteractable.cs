@@ -19,10 +19,12 @@ public class MinigameInteractable : Interactable {
 	[SerializeField] private GameObject _inUseIndicator;
 	[SerializeField] private ObjIndicator _minigameIndicator;
 	[SerializeField] private string _description = "At position";
+	
+	[SerializeField] private MiniGameDescription[] _minigames;
+	private int _minigameIndex = 0;
 
 	private int _actor = -1;
-	private MiniGameDescription _minigame = null;
-	private MinigameLogEntry _currentGame;
+	private MinigameLogEntry _log;
 
 	protected override void Start() {
 		base.Start();
@@ -103,7 +105,7 @@ public class MinigameInteractable : Interactable {
 		_minigameIndicator.SetActive(false);
 		
 		if (_actor == Player.Local.ActorNumber) {
-			onMinigameStart?.Invoke(_minigame, this);
+			onMinigameStart?.Invoke(_minigames[_minigameIndex], this);
 		}
 	}
 
@@ -129,7 +131,8 @@ public class MinigameInteractable : Interactable {
 		_inUseIndicator.SetActive(false);
 	}
 	
-	public void SetMinigame(MiniGameDescription minigame) {
+	public void ActivateMinigame() {
+		//activate "next" minigame
 		Hashtable changes = new Hashtable();
 		changes.Add(GetMiniGameIdKey(), minigame._index);
 
@@ -150,18 +153,18 @@ public class MinigameInteractable : Interactable {
 		if (HasMinigame) {
 			_minigame = MinigameManager.Instance.GetDescription(minigameIndex);
 			
-			_currentGame = UILocator.Get<MinigameUILog>().AddEntry(this, _minigame);
+			_log = UILocator.Get<MinigameUILog>().AddEntry(this, _minigame);
 		}
-		else if (_currentGame != null) {
+		else if (_log != null) {
 			if (_actor == Player.Local.ActorNumber) {
-				_currentGame.FinishTask(_minigame._state);
+				_log.FinishTask(_minigame._state);
 			}
 			else {
-				_currentGame.FinishTask(MiniGameDescription.State.Failed);
+				_log.FinishTask(MiniGameDescription.State.Failed);
 			}
 
 			_minigame = null;
-			_currentGame = null;
+			_log = null;
 		}
 	}
 	

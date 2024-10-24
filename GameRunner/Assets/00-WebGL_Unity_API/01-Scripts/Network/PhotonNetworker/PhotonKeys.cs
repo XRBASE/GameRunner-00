@@ -121,6 +121,8 @@ namespace Cohort.Networking.PhotonKeys {
         public enum Minigame {
             Index = 0,
             Actor = 1,
+            TimerActive = 2,
+            TimerTime = 3,
         }
     }
 }
