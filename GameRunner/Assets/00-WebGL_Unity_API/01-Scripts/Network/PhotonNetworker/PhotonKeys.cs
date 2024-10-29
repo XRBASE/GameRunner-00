@@ -104,11 +104,11 @@ namespace Cohort.Networking.PhotonKeys {
         public enum Room
         {
             Interactable = 0,
-            TimeLord = 1,
+            Time = 1,
             RefTime = 2,
             Activity = 3,
             Scene = 4,
-            Minigame = 5,
+            Learning = 5,
         }
 
         public enum Activity {
@@ -118,11 +118,15 @@ namespace Cohort.Networking.PhotonKeys {
             Score = 4,
         }
 
-        public enum Minigame {
+        public enum Learning {
             Index = 0,
-            Actor = 1,
-            TimerActive = 2,
-            TimerTime = 3,
+            Actor = 1
+        }
+
+        public enum Time {
+            TimeLord = 0,
+            TimerActive = 1,
+            TimerTime = 2,
         }
     }
 }

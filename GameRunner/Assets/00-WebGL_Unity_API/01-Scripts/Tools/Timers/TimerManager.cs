@@ -102,7 +102,11 @@ namespace Cohort.Tools.Timers
         /// Is timer running right now.
         /// </summary>
         public bool Active { get; private set; }
-        
+
+        public float Elapsed {
+            get { return _elapsed; }
+        }
+
         private bool Invoke { get; set; }
 
         public float duration;

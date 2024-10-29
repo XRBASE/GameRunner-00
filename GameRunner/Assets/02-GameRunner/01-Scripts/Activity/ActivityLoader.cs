@@ -42,7 +42,8 @@ public class ActivityLoader : Singleton<ActivityLoader>
     
     private void StartActivity() {
         onActivityStart?.Invoke();
-        MinigameManager.Instance.OnActivityStart(_definition.ScoreMultiplier);
+        //TODO_COHORT: learning activity start
+        LearningManager.Instance.OnActivityStart(_definition.ScoreMultiplier);
     }
     
     public void StopActivity() {
@@ -53,8 +54,10 @@ public class ActivityLoader : Singleton<ActivityLoader>
         AllPlayersReady = false;
         
         onActivityStop?.Invoke();
-        MinigameManager.Instance.OnActivityStop();
-        //TODO: publish minigames
+        
+        //TODO_COHORT: learning activity start
+        LearningManager.Instance.OnActivityStop();
+        
         
         ClearPhotonRoomProperties();
     }

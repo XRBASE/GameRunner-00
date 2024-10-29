@@ -23,7 +23,8 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		
 		Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
-		MinigameManager.Instance.onMinigameFinished += OnMinigameFinished;
+		//TODO_COHORT: learning finished call
+        //MinigameManager.Instance.onMinigameFinished += OnMinigameFinished;
 		
 		if (Network.Local.Client.InRoom) {
 			OnJoinedRoom();

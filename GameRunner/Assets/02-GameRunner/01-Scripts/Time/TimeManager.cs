@@ -94,7 +94,7 @@ public class TimeManager : Singleton<TimeManager>
     private void OnPlayerLeftRoom(Photon.Realtime.Player player)
     {
         //if the timelord leaces the room, all players send a request to become timelord.
-        string key = Keys.Get(Keys.Room.TimeLord);
+        string key = Keys.Concatenate(Keys.Room.Time, Keys.Time.TimeLord);
         if ((int) Network.Local.Client.CurrentRoom.CustomProperties[key] == player.ActorNumber) {
             //because the expected value is the actor nunmber of the player that has just left, only the first player
             //is made to be timelord.
@@ -105,7 +105,7 @@ public class TimeManager : Singleton<TimeManager>
     private void OnJoinedRoom()
     {
         //if nothing set to timelord or the set timelord does not exist, preset value to 0.
-        string key = Keys.Get(Keys.Room.TimeLord);
+        string key = Keys.Concatenate(Keys.Room.Time, Keys.Time.TimeLord);
         if (!Network.Local.Client.CurrentRoom.CustomProperties.ContainsKey(key) ||
             !PlayerManager.Instance.ActorNumberExists((int)Network.Local.Client.CurrentRoom.CustomProperties[key])) 
         {
@@ -120,7 +120,7 @@ public class TimeManager : Singleton<TimeManager>
 
     private void OnRoomPropsChanged(Hashtable changes)
     {
-        string key = Keys.Get(Keys.Room.TimeLord);
+        string key = Keys.Concatenate(Keys.Room.Time, Keys.Time.TimeLord);
         if (changes.ContainsKey(key)) {
             if (changes[key] == null || (int)changes[key] == 0){
                 //no timelord, try to set timelord to me
@@ -172,7 +172,7 @@ public class TimeManager : Singleton<TimeManager>
     private void TrySetTimeLord(int exp = 0)
     {
         //the laws of time are MINE
-        string key = Keys.Get(Keys.Room.TimeLord);
+        string key = Keys.Concatenate(Keys.Room.Time, Keys.Time.TimeLord);
         Hashtable changes = new Hashtable();
         changes.Add(key, Player.Local.ActorNumber);
         
