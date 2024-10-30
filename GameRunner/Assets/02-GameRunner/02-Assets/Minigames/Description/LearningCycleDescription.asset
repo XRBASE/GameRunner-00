@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bccf00997fa35d2419a13ca3fd85a5e2, type: 3}
+  m_Name: LearningCycleDescription
+  m_EditorClassIdentifier: 
+  learnings:
+  - actionDescription: Press a button
+    sceneName: 00-Tester
+    data: '-'
+    locations: 00000000010000000200000003000000
+    state: 0
+    index: 0
+  useTimer: 1
+  linear: 0
+  complete: 1
+  networked: 1

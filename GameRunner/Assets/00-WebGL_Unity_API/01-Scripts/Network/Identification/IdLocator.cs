@@ -9,7 +9,7 @@ public class IdLocator : AssetModificationProcessor {
 	    bool[] taken = new bool[holders.Length];
 
 	    for (int i = 0; i < holders.Length; i++) {
-		    if (holders[i].Identifier < 0) {
+		    if (holders[i].Identifier >= 0) {
 			    taken[holders[i].Identifier] = true;
 		    }
 	    }

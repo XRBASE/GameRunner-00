@@ -1,5 +1,5 @@
 using System;
-using Unity.Collections;
+using Cohort.CustomAttributes;
 
 [Serializable]
 public class LearningDescription {
@@ -8,11 +8,11 @@ public class LearningDescription {
 	public string data;
 	public int[] locations;
 	
-	[ReadOnly] public State state = State.None;
+	[ReadOnly] public State state = State.Open; 
 	[ReadOnly] public int index;
 	
 	public enum State {
-		None = 0,
+		Open = 0,
 		Active,
 		Completed,
 		Failed

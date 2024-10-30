@@ -23,7 +23,7 @@ namespace Cohort.GameRunner.Interaction {
         //permanent Interactables retain it.
 
         [Tooltip("Current state on/off"), SerializeField] private bool _value = false;
-        [SerializeField] private bool _networked = true;
+        [SerializeField] protected bool _networked = true;
         private bool _initial = true;
         
         protected virtual void Start() {

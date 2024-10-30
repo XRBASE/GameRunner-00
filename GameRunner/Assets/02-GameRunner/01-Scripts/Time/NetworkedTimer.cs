@@ -3,6 +3,11 @@ using Cohort.Networking.PhotonKeys;
 using ExitGames.Client.Photon;
 
 public class NetworkedTimer : MonoTimer {
+    
+    public bool Active {
+        get { return _timer != null && _timer.Active; }
+    }
+
     private float _expire;
     private bool _initialized;
 
@@ -25,7 +30,7 @@ public class NetworkedTimer : MonoTimer {
     }
 
     public void StartTimer(float duration) {
-        if (_timer.Active)
+        if (Active)
             return;
         
         _duration = duration;
@@ -33,7 +38,7 @@ public class NetworkedTimer : MonoTimer {
     }
 
     public override void StartTimer() {
-        if (_timer.Active)
+        if (Active)
             return;
         
         _expire = TimeManager.Instance.RefTime + _duration;
@@ -50,7 +55,7 @@ public class NetworkedTimer : MonoTimer {
     }
 
     public override void StopTimer() {
-        if (!_timer.Active)
+        if (!Active)
             return;
 
         Hashtable changes = new Hashtable();
@@ -69,7 +74,7 @@ public class NetworkedTimer : MonoTimer {
     }
 
     private void OnTimeReset() {
-        if (_timer.Active) {
+        if (Active) {
             _expire %= TimeManager.RESET_VALUE;
             _timer.duration = _expire - TimeManager.Instance.RefTime;
         }

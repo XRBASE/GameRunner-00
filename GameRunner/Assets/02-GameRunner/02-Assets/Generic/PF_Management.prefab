@@ -92,9 +92,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4841952143186102252}
-  - component: {fileID: 7927385942490766275}
+  - component: {fileID: 6022535076515289338}
+  - component: {fileID: 7813685095492712436}
   m_Layer: 0
-  m_Name: Minigames
+  m_Name: Learning
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,7 +116,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3372190018214959068}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7927385942490766275
+--- !u!114 &6022535076515289338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,37 +125,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 2366807048163624429}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff90d3090b67ebd47badc38208dafac5, type: 3}
+  m_Script: {fileID: 11500000, guid: 5edff2a95e09f8c45a642bd42ced631e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minigames:
-  - assetRef: 00-Minigame_Quiz
-    isBundle: 0
-    data: '{"lives" : 3, "questions" : [{"question" : "Welk nummer is het 5e getal
-      achter de comma in PI","answers" : ["5", "6", "1", "4", "9"],"correctId" :
-      4},{"question" : "Wat is de naam van de grootste maan van Saturnus?","answers"
-      : ["Uranus", "Thetys", "Dione", "Titan"],"correctId" : 3},{"question" : "Wie
-      wordt vaak beschouwd als de uitvinder van de eerste programmeertaal?","answers"
-      : ["Ada Lovelace", "Alan Turing", "Hendrik Janssen", "Ping Wu"],"correctId"
-      : 0},{"question" : "Hoever heeft Vasa gevaren op haar eerste trip?","answers"
-      : ["500 m", "2000 km", "14 km", "1300m"],"correctId" : 3},{"question" : "Wat
-      is het grootste meer ter wereld, gemeten naar oppervlakte?","answers" : ["Lake
-      Huron", "Het kaspische zee", "De rode zee", "Lake Michigan"],"correctId" :
-      1}]}'
-  - assetRef: 01-Minigame_Quiz
-    isBundle: 0
-    data: '{"lives" : 3, "questions" : [{"question" : "Welk nummer is het 5e getal
-      achter de comma in PI","answers" : ["5", "6", "1", "9"],"correctId" : 3},{"question"
-      : "Wat is de naam van de grootste maan van Saturnus?","answers" : ["Uranus",
-      "Thetys", "Dione", "Titan"],"correctId" : 3},{"question" : "Wie wordt vaak
-      beschouwd als de uitvinder van de eerste programmeertaal?","answers" : ["Ada
-      Lovelace", "Alan Turing", "Hendrik Janssen", "Ping Wu"],"correctId" : 0},{"question"
-      : "Hoever heeft Vasa gevaren op haar eerste trip?","answers" : ["500 m", "2000
-      km", "14 km", "1300m"],"correctId" : 3},{"question" : "Wat is het grootste
-      meer ter wereld, gemeten naar oppervlakte?","answers" : ["Lake Huron", "Het
-      kaspische zee", "De rode zee", "Lake Michigan"],"correctId" : 1}]}'
-  _newGameTimeMin: 10
-  _newGameTimeMax: 20
+  _settings: {fileID: 11400000, guid: 2f00570fc8a8f894eb9918ba523f59c7, type: 2}
+  _timer: {fileID: 7813685095492712436}
+--- !u!114 &7813685095492712436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2366807048163624429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e261805080c0954408744887001c00e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _duration: 0
+  _startOnAwake: 0
+  onStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onFinish:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3461544638466721081
 GameObject:
   m_ObjectHideFlags: 0

@@ -307,56 +307,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _newGameTimeMax
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _newGameTimeMin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _minigames.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _minigames.Array.data[0].data
-      value: '{"lives" : 2, "questions" : [{"question" : "Hoeveel inwoners heeft
-        Zeeland?","answers" : ["1600", "4800", "6200", "10.200"],"correctId" : 1},{"question"
-        : "Wat is de massa van de aarde?","answers" : ["5.900 x 10^24kg", "1.900
-        x 9^13kg", "10.900 x 10^45kg", "7.123 x 8^15kg"],"correctId" : 0},{"question"
-        : "Hoever ligt de maan vanaf de aarde?","answers" : ["400.000.000km", "600.000km",
-        "0.6 lichtseconden", "1 lichtseconde"],"correctId" : 3},{"question" : "In
-        welk jaar is het dorp Tiel een stad geworden?","answers" : ["1200", "500",
-        "1000", "1500"],"correctId" : 2},{"question" : "Hoeveel duckpower heeft een
-        auto van 500 horse power?","answers" : ["13450", "250", "54750", "65600"],"correctId"
-        : 2}]}'
-      objectReference: {fileID: 0}
-    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _minigames.Array.data[2].data
-      value: '{"lives" : 3, "questions" : [{"question" : "Welk nummer is het 5e getal
-        achter de comma in PI","answers" : ["5", "6", "1", "9"],"correctId" : 3},{"question"
-        : "Wat is de naam van de grootste maan van Saturnus?","answers" : ["Uranus",
-        "Thetys", "Dione", "Titan"],"correctId" : 3},{"question" : "Wie wordt vaak
-        beschouwd als de uitvinder van de eerste programmeertaal?","answers" : ["Ada
-        Lovelace", "Alan Turing", "Hendrik Janssen", "Ping Wu"],"correctId" : 0},{"question"
-        : "Hoever heeft Vasa gevaren op haar eerste trip?","answers" : ["500 m",
-        "2000 km", "14 km", "1300m"],"correctId" : 3},{"question" : "Wat is het grootste
-        meer ter wereld, gemeten naar oppervlakte?","answers" : ["Lake Huron", "Het
-        kaspische zee", "De rode zee", "Lake Michigan"],"correctId" : 1}]}'
-      objectReference: {fileID: 0}
-    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _minigames.Array.data[0].isBundle
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _minigames.Array.data[1].isBundle
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 272345075221853396, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _minigames.Array.data[2].assetRef
-      value: 01-Minigame_Quiz
-      objectReference: {fileID: 0}
     - target: {fileID: 1694045838604335278, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: m_Name
       value: Management
@@ -400,22 +350,6 @@ PrefabInstance:
     - target: {fileID: 3372190018214959068, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _newGameTimeMax
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _newGameTimeMin
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _minigames.Array.data[0].sceneName
-      value: 00-Minigame_Quiz
-      objectReference: {fileID: 0}
-    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
-      propertyPath: _minigames.Array.data[1].sceneName
-      value: 01-Minigame_Quiz
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

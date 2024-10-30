@@ -7,11 +7,16 @@ public class LearningLogUI : UIPanel {
     
     private void Awake() {
         UILocator.Register(this);
+        _template.gameObject.SetActive(false);
+        
+        //TODO_COHORT: objectpool
     }
 
     public LearningLogEntry CreateLogEntry(string action, string location) {
         LearningLogEntry entry = Instantiate(_template, _logParent);
         entry.Text = action + location + "!";
+        
+        entry.gameObject.SetActive(true);
         
         return entry;
     }
