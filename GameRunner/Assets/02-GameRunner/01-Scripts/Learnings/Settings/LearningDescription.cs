@@ -10,6 +10,7 @@ public class LearningDescription {
 	
 	[ReadOnly] public State state = State.Open; 
 	[ReadOnly] public int index;
+	[ReadOnly] public LearningLogEntry log;
 	
 	public enum State {
 		Open = 0,

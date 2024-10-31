@@ -19,7 +19,8 @@ MonoBehaviour:
     locations: 00000000010000000200000003000000
     state: 0
     index: 0
-  useTimer: 1
+    log: {fileID: 0}
+  useTimer: 0
   linear: 0
-  complete: 1
+  complete: 0
   networked: 1

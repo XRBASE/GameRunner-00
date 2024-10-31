@@ -42,7 +42,7 @@ namespace Cohort.Tools.Timers
                 if (timer.Update(Time.deltaTime)) {
                     //if timer is reset on the onComplete call, this prevents the timer from being removed
                     if (timer.HasFinished) {
-                        _elapsedTimers.Add(timer);    
+                        _elapsedTimers.Add(timer);
                     }
                 }
             }
@@ -173,6 +173,7 @@ namespace Cohort.Tools.Timers
         {
             _elapsed += deltaTime;
             if (HasFinished) {
+                Active = false;
                 if (Invoke) {
                     _onComplete?.Invoke();
                 }

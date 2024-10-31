@@ -1,21 +1,28 @@
 using System;
+using System.Collections;
 using Cohort.Networking.PhotonKeys;
-using ExitGames.Client.Photon;
+using UnityEngine;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class NetworkedTimer : MonoTimer {
+public class NetworkedTimer : MonoBehaviour {
+    public Action onFinish;
     
-    public bool Active {
-        get { return _timer != null && _timer.Active; }
-    }
-
+    private bool _active;
+    private float _duration;
     private float _expire;
+    
     private bool _initialized;
+    private bool _invoked;
 
     private void Start() {
         Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
         Network.Local.Callbacks.onRoomPropertiesChanged += OnPropertiesChanged;
         
         TimeManager.Instance.onRefTimeReset += OnTimeReset;
+        
+        _active = false;
+        _invoked = false;
+        _initialized = false;
         
         if (Network.Local.Client.InRoom) {
             OnJoinedRoom();
@@ -29,54 +36,53 @@ public class NetworkedTimer : MonoTimer {
         TimeManager.Instance.onRefTimeReset -= OnTimeReset;
     }
 
-    public void StartTimer(float duration) {
-        if (Active)
-            return;
-        
-        _duration = duration;
-        StartTimer();
+    private void Update() {
+        if (!_invoked && _expire > 0 && _expire <= TimeManager.Instance.RefTime) {
+            _invoked = true;
+            StartCoroutine(OnTimerFinished());
+        }
     }
 
-    public override void StartTimer() {
-        if (Active)
-            return;
-        
+    private IEnumerator OnTimerFinished() {
+        Hashtable changes = new Hashtable();
+        changes.Add(GetStateKey(), false);
+
+        Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
+
+        //TODO_COHORT: replace fixedupdate by some other form of network update.
+        yield return new WaitForFixedUpdate();
+        onFinish?.Invoke();
+    }
+
+    public void StartTimer(float duration) {
+        _duration = duration;
         _expire = TimeManager.Instance.RefTime + _duration;
 
-        string key = GetActiveKey();
-        Hashtable changes = new Hashtable();
-        changes.Add(key, true);
-
+        string key = GetStateKey();
         Hashtable expected = new Hashtable();
         expected.Add(key, false);
+        
+        Hashtable changes = new Hashtable();
+        changes.Add(key, true);
         changes.Add(GetTimeKey(), _expire);
 
         Network.Local.Client.CurrentRoom.SetCustomProperties(changes, expected);
     }
 
-    public override void StopTimer() {
-        if (!Active)
+    public void StopTimer() {
+        if (_initialized && !_active)
             return;
 
         Hashtable changes = new Hashtable();
         changes.Add(GetTimeKey(), -1);
-        changes.Add(GetActiveKey(), false);
+        changes.Add(GetStateKey(), false);
 
         Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
     }
 
-    public virtual void ResetTimer() {
-        throw new NotImplementedException();
-    }
-
-    public virtual void FinishTimer() {
-        throw new NotImplementedException();
-    }
-
     private void OnTimeReset() {
-        if (Active) {
+        if (_active) {
             _expire %= TimeManager.RESET_VALUE;
-            _timer.duration = _expire - TimeManager.Instance.RefTime;
         }
     }
 
@@ -89,7 +95,18 @@ public class NetworkedTimer : MonoTimer {
     }
     
     private void OnPropertiesChanged(Hashtable changes) {
-        string key = GetActiveKey();
+        string key = GetTimeKey();
+        if (changes.ContainsKey(key)) {
+            if (changes[key] == null) {
+                StopTimer();
+            }
+            else {
+                _expire = float.Parse(changes[key].ToString());
+                _duration = _expire - TimeManager.Instance.RefTime;
+            }
+        }
+        
+        key = GetStateKey();
         if (changes.ContainsKey(key)) {
             if (changes[key] == null) {
                 _initialized = false;
@@ -98,32 +115,16 @@ public class NetworkedTimer : MonoTimer {
             }
             else {
                 _initialized = true;
-                
-                if (_timer.Active != (bool)changes[key]) {
-                    if (_timer.Active) {
-                        base.StopTimer();
-                    }
-                    else {
-                        base.StartTimer();
-                    }
+                _active = (bool)changes[key];
+                if (_active) {
+                    _invoked = false;
                 }
-            }
-        }
-
-        key = GetTimeKey();
-        if (changes.ContainsKey(key)) {
-            if (changes[key] == null) {
-                StopTimer();
-            }
-            else {
-                _expire = float.Parse(changes[key].ToString());
-                _timer.duration = _expire - TimeManager.Instance.RefTime;
             }
         }
     }
 
-    private string GetActiveKey() {
-        return Keys.Concatenate(Keys.Get(Keys.Room.Time), Keys.Get(Keys.Time.TimerActive));
+    private string GetStateKey() {
+        return Keys.Concatenate(Keys.Get(Keys.Room.Time), Keys.Get(Keys.Time.TimerState));
     }
 
     private string GetTimeKey() {

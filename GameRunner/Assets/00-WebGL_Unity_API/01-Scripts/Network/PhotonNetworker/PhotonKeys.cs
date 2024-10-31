@@ -125,7 +125,7 @@ namespace Cohort.Networking.PhotonKeys {
 
         public enum Time {
             TimeLord = 0,
-            TimerActive = 1,
+            TimerState = 1,
             TimerTime = 2,
         }
     }

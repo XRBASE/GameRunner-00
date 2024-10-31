@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cohort.Patterns;
+using Cohort.UI.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -30,11 +31,17 @@ public class LearningManager : Singleton<LearningManager> {
     private LearningDescription _currenOpenLearning;
     private LearningInteractable _currentOpenInteractable;
 
+    private void OnDestroy() {
+        for (int i = 0; i < _settings.learnings.Length; i++) {
+            _settings.learnings[i].state = LearningDescription.State.Open;
+        }
+    }
+
     public void OnActivityStart(int scoreMultiplier) {
         _scoreMultiplier = scoreMultiplier;
         _interactables = FindObjectsOfType<LearningInteractable>().ToList().OrderBy((s) => s.Identifier).ToArray();
 
-        _timer.onFinish.AddListener(OnTimerFinished);
+        _timer.onFinish += OnTimerFinished;
         if (_settings.useTimer) {
             StartTimer();
         }
@@ -44,7 +51,7 @@ public class LearningManager : Singleton<LearningManager> {
     }
 
     public void OnActivityStop() {
-        _timer.onFinish.RemoveListener(OnTimerFinished);
+        _timer.onFinish -= OnTimerFinished;
     }
     
     private void StartTimer() {
@@ -63,6 +70,7 @@ public class LearningManager : Singleton<LearningManager> {
     private void ActivateLearning() {
         LearningDescription learning = GetNextLearning();
         LearningInteractable interactable = GetInteractable(learning);
+        learning.log = UILocator.Get<LearningLogUI>().CreateLogEntry(learning.actionDescription, interactable.LocationDescription);
         
         interactable.SetLearning(learning);
     }
@@ -138,11 +146,24 @@ public class LearningManager : Singleton<LearningManager> {
     }
 
     private void OnLearningFinished(float scorePercentage) {
-        _currenOpenLearning.state = (scorePercentage > 0.001f)
+        LearningDescription.State s = (scorePercentage > 0.001f)
             ? LearningDescription.State.Completed
             : LearningDescription.State.Failed;
         
+        if (_settings.complete) {
+            _currenOpenLearning.state = s;
+        }
+        else {
+            _currenOpenLearning.state = LearningDescription.State.Open;
+        }
+        
+        _currenOpenLearning.log.CheckLogItem(s);
+        _currenOpenLearning.log = null;
+        
         SceneManager.UnloadSceneAsync(_currenOpenLearning.sceneName);
+        
+        //TODO_COHORT: fix the double call thingie?
+        _currentOpenInteractable.ClearLearning();;
         _currentOpenInteractable.Deactivate();
 
         _currenOpenLearning = null;
@@ -150,6 +171,13 @@ public class LearningManager : Singleton<LearningManager> {
         
         if (!_settings.useTimer) {
             ActivateLearning();
+        }
+    }
+
+    public void RemoveLearningLog(LearningDescription learning) {
+        if (learning.log != null) {
+            learning.log.CheckLogItem(LearningDescription.State.Failed);
+            learning.log = null;
         }
     }
     

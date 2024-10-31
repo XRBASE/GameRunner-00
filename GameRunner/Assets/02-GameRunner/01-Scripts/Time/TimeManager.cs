@@ -1,4 +1,5 @@
 using System;
+using Cohort.CustomAttributes;
 using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 using UnityEngine;
@@ -6,7 +7,7 @@ using Cohort.Patterns;
 using ExitGames.Client.Photon;
 
 //After playermanager
-[DefaultExecutionOrder(102)]
+[DefaultExecutionOrder(-1)]
 public class TimeManager : Singleton<TimeManager>
 {
     //if time from the master differs by this threshold, the ref time is updated to match the master's time.
@@ -17,7 +18,9 @@ public class TimeManager : Singleton<TimeManager>
     /// <summary>
     /// Reference time that is used to sync up the timed values like audio and animation.
     /// </summary>
-    public float RefTime { get; private set; }
+    public float RefTime {
+        get { return _refTime; }
+    }
 
     public bool TimeLord {
         get { return _isTimeLord; }
@@ -37,6 +40,7 @@ public class TimeManager : Singleton<TimeManager>
     private string _timeKey;
     private bool _timeReset = false;
     private bool _callReset = false;
+    [ReadOnly, SerializeField] private float _refTime;
 
     private void Start()
     {
@@ -63,11 +67,11 @@ public class TimeManager : Singleton<TimeManager>
 
     private void Update()
     {
-        RefTime += Time.deltaTime;
+        _refTime += Time.deltaTime;
 
         //Checks if reset point has been reached and resets the time.
         if (RefTime > RESET_VALUE) {
-            RefTime %= RESET_VALUE;
+            _refTime %= RESET_VALUE;
             //this boolean triggers the onRefTimeReset call, but this happens after the network call of photon, that's
             //why both this bool and callreset are used in succession of eachother. This ensures that all player's have recieved the 
             //time reset locally, before invoking the reset call.
@@ -111,7 +115,7 @@ public class TimeManager : Singleton<TimeManager>
         {
             Hashtable changes = new Hashtable();
             changes.Add(key, 0);
-            RefTime = 0f;
+            _refTime = 0f;
             Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
         }
         
@@ -153,7 +157,7 @@ public class TimeManager : Singleton<TimeManager>
                 float t = (float)changes[_timeKey];
                 if (Mathf.Abs(t - RefTime) > ADJUSTMENT_THRESHOLD) {
                     //add one fixed step as time recieved was (most likly) from the previous fixed update
-                    RefTime = t;
+                    _refTime = t;
                     onRefTimeChange?.Invoke(RefTime);
                 }
             }

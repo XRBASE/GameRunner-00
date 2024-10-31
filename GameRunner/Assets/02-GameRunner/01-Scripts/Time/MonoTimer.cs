@@ -35,8 +35,10 @@ public class MonoTimer : MonoBehaviour
             Debug.LogWarning($"Timer was already started ({gameObject.name}).");
             return;
         }
-
+        
+        _timer.duration = _duration;
         _timer.Start();
+        Debug.LogError($"Started timer {_timer.duration} -> {_timer.Elapsed}");
         
         if (_hasCountdown) {
             _countdown.StartCountdown();
@@ -56,6 +58,7 @@ public class MonoTimer : MonoBehaviour
     /// </summary>
     public virtual void StopTimer() {
         _timer?.Stop();
+        Debug.LogError($"Stopped timer");
     }
 
     /// <summary>

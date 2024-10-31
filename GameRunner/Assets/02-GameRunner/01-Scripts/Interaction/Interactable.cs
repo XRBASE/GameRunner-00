@@ -51,7 +51,7 @@ namespace Cohort.GameRunner.Interaction {
         public virtual void Activate() {
             Activate(null, null);
         }
-
+        
         public virtual void Deactivate() {
             Deactivate(null, null);
         }

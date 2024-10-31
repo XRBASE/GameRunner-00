@@ -1,18 +1,18 @@
 using Cohort.GameRunner.Interaction;
 using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
-using Cohort.UI.Generic;
 using ExitGames.Client.Photon;
 using UnityEngine;
 
 public class LearningInteractable : Interactable {
+    
+    public string LocationDescription { get { return _locationDescription; } }
     public bool HasLearning { get; private set; }
     
     [SerializeField] private string _locationDescription = "At position";
     [SerializeField] private ObjIndicator _indicator;
     
-    private int _actor;
-    private LearningLogEntry _logEntry;
+    private int _actor = -1;
     private LearningDescription _learning;
 
     protected override void Start() {
@@ -81,7 +81,11 @@ public class LearningInteractable : Interactable {
     }
 
     protected override void DeactivateLocal() {
-        _learning = null;
+        ClearLearning();
+    }
+    
+    public void ClearLearning() {
+        _learning = null;    
     }
 
     public void SetLearning(LearningDescription learning = null) {
@@ -108,24 +112,14 @@ public class LearningInteractable : Interactable {
             _learning = LearningManager.Instance[index];
             
             _indicator.SetActive(true);
-            //TODO: possibly these two parts can be split, so that the log is just initialized and linked to the on mini game finished call?
-            
-            _logEntry = UILocator.Get<LearningLogUI>().CreateLogEntry(_learning.actionDescription, _locationDescription);
             return;
         }
         
         _indicator.SetActive(false);
-        if (_logEntry != null) {
-            if (_actor == Player.Local.ActorNumber) {
-                _logEntry.CheckLogItem(_learning.state);
-            }
-            else {
-                //task has not failed, but someone else solved the learning.
-                _logEntry.CheckLogItem(LearningDescription.State.Failed);
-            }
-
+        
+        if (_learning != null) {
+            LearningManager.Instance.RemoveLearningLog(_learning);
             _learning = null;
-            _logEntry = null;
         }
     }
     
