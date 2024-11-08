@@ -410,12 +410,34 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[2].data
+      value: "{\"title\":\"Guess the word\",\"tries\":5,\"wordList\":[{\"word\":\"penis\",\"hint\":\"49%
+        van de wereld bevolking heeft het tussen hun benen\"},{\"word\":\"moord\",\"hint\":\"Jeffrey
+        dahmer is er voor veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt veel
+        gebruikt in thaise recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier
+        uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt
+        voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt na de start\"},{\"word\":\"sport\",\"hint\":\"Dikke
+        mensen doen het weinig\"}]}"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: _minigames.Array.data[0].sceneName
       value: 00-Minigame_Quiz
       objectReference: {fileID: 0}
     - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: _minigames.Array.data[1].sceneName
       value: 01-Minigame_Quiz
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[2].sceneName
+      value: 02-Minigame-WordGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927385942490766275, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _minigames.Array.data[2].actionDescription
+      value: Word Game
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -472,7 +494,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: _testInput
+<<<<<<< HEAD
       value: '{"token":"666655394C46634F414B5841524B674149656A2B34773D3D","baseUrl":"https://dev.spaceshift.ai","roomId":"504339eb-9b06-4604-87c0-1321faa68465","spaceId":"3d5a5139-bdc0-43fe-a9ee-e36526cae0a2"}'
+=======
+      value: '{"token":"4C72765036676F376477444361736C67596A2F776D413D3D","baseUrl":"https://dev.spaceshift.ai","roomId":"fc10d476-d7a2-43c8-ae99-3b079b4a0f1e","spaceId":"22c96862-58e1-47df-a8a3-76e137dcf4a8"}'
+>>>>>>> feature/word-game
       objectReference: {fileID: 0}
     - target: {fileID: 7509324001149410918, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: m_Name
