@@ -1,4 +1,3 @@
-using System;
 using Cohort.Patterns;
 using TMPro;
 using UnityEngine;
@@ -12,7 +11,11 @@ public class ScoreboardEntry : MonoBehaviour, ObjectPool<HighscoreTracker.Player
 
     [SerializeField] private TMP_Text nameField;
     [SerializeField] private TMP_Text scoreField;
-    
+
+    public void Initialize(ObjectPool<HighscoreTracker.PlayerScore, ScoreboardEntry> pool) {
+        
+    }
+
     public void UpdatePoolable(int index, HighscoreTracker.PlayerScore data) {
         nameField.text = data.name;
         scoreField.text = data.score.ToString();

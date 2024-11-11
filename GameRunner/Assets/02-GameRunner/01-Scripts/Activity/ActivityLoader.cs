@@ -15,6 +15,10 @@ public class ActivityLoader : Singleton<ActivityLoader>
     public bool InGame { get; private set; }
     public bool AllPlayersReady { get; private set; }
 
+    public ActivityDefinition Activity {
+        get { return _definition; }
+    }
+
     public Action onActivityStart; 
     public Action onActivityStop; 
 
@@ -42,8 +46,6 @@ public class ActivityLoader : Singleton<ActivityLoader>
     
     private void StartActivity() {
         onActivityStart?.Invoke();
-        //TODO_COHORT: learning activity start
-        LearningManager.Instance.OnActivityStart(_definition.ScoreMultiplier);
     }
     
     public void StopActivity() {
@@ -54,10 +56,6 @@ public class ActivityLoader : Singleton<ActivityLoader>
         AllPlayersReady = false;
         
         onActivityStop?.Invoke();
-        
-        //TODO_COHORT: learning activity start
-        LearningManager.Instance.OnActivityStop();
-        
         
         ClearPhotonRoomProperties();
     }

@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cohort.Networking.PhotonKeys;
 using Cohort.Patterns;
 using Cohort.UI.Generic;
+using ExitGames.Client.Photon;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
+[DefaultExecutionOrder(1)] //After LearningInteractable 
 public class LearningManager : Singleton<LearningManager> {
     public const float MIN_TIME = 2;
-    public const float MAX_TIME = 5;
-
+    public const float MAX_TIME = 10;
+    
     public LearningDescription this[int index] {
         get { return _settings.learnings[index]; }
     }
@@ -31,27 +34,62 @@ public class LearningManager : Singleton<LearningManager> {
     private LearningDescription _currenOpenLearning;
     private LearningInteractable _currentOpenInteractable;
 
+    private void Start() {
+        ActivityLoader.Instance.onActivityStart += OnActivityStart;
+        ActivityLoader.Instance.onActivityStop += OnActivityStop;
+
+        if (_settings.networked) {
+            Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
+            Network.Local.Callbacks.onRoomPropertiesChanged += OnPropsChanged;
+        }
+    }
+
     private void OnDestroy() {
+        ResetLearnings();
+        
+        ActivityLoader.Instance.onActivityStart -= OnActivityStart;
+        ActivityLoader.Instance.onActivityStop -= OnActivityStop;
+
+        if (_settings.networked) {
+            Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
+            Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropsChanged;
+        }
+    }
+
+    private void ResetLearnings() {
         for (int i = 0; i < _settings.learnings.Length; i++) {
             _settings.learnings[i].state = LearningDescription.State.Open;
         }
     }
 
-    public void OnActivityStart(int scoreMultiplier) {
-        _scoreMultiplier = scoreMultiplier;
+    public void OnActivityStart() {
+        _scoreMultiplier = ActivityLoader.Instance.Activity.ScoreMultiplier;
         _interactables = FindObjectsOfType<LearningInteractable>().ToList().OrderBy((s) => s.Identifier).ToArray();
 
         _timer.onFinish += OnTimerFinished;
         if (_settings.useTimer) {
             StartTimer();
         }
-        else {
+        else if (!AnyLearningActive()) {
             ActivateLearning();
         }
     }
 
+    private bool AnyLearningActive() {
+        for (int i = 0; i < _interactables.Length; i++) {
+            if (_interactables[i].HasLearning) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void OnActivityStop() {
         _timer.onFinish -= OnTimerFinished;
+        _lastLearingIndex = -1;
+        
+        ResetLearnings();
     }
     
     private void StartTimer() {
@@ -68,17 +106,28 @@ public class LearningManager : Singleton<LearningManager> {
     }
 
     private void ActivateLearning() {
-        LearningDescription learning = GetNextLearning();
-        LearningInteractable interactable = GetInteractable(learning);
-        learning.log = UILocator.Get<LearningLogUI>().CreateLogEntry(learning.actionDescription, interactable.LocationDescription);
-        
-        interactable.SetLearning(learning);
+        if (TryGetNextLearning(out LearningDescription learning) &&
+            TryGetInteractable(learning, out LearningInteractable interactable)) {
+            
+            interactable.SetLearning(learning);
+        }
     }
     
-    private LearningDescription GetNextLearning() {
+    private bool TryGetNextLearning(out LearningDescription learning) {
         int learningId;
         if (_settings.linear) {
-            learningId = _lastLearingIndex + 1;
+            learningId = -1;
+            
+            for (int i = 0; i < _settings.learnings.Length; i++) {
+                if (_settings.learnings[i].state == LearningDescription.State.Open) {
+                    learningId = i;
+                    break;
+                }
+            }
+
+            if (learningId == -1) {
+                throw new Exception("All learnings finished!");
+            }
         }
         else {
             learningId = Random.Range(0, _settings.learnings.Length);
@@ -95,14 +144,19 @@ public class LearningManager : Singleton<LearningManager> {
             }
 
             if (!found) {
-                throw new Exception("No available learnings anymore");
+                Debug.LogError("No available learnings anymore");
+                learning = null;
+                return false;
             }
         }
         
-        return _settings.learnings[learningId];
+        Debug.LogError($"Picked next learning: {learningId}");
+        _lastLearingIndex = learningId;
+        learning = _settings.learnings[learningId];
+        return true;
     }
     
-    private LearningInteractable GetInteractable(LearningDescription learning) {
+    private bool TryGetInteractable(LearningDescription learning, out LearningInteractable interactable) {
         List<LearningInteractable> options = new List<LearningInteractable>();
         for (int iL = 0; iL < learning.locations.Length; iL++) {
             for (int iI = 0; iI < _interactables.Length; iI++) {
@@ -117,24 +171,33 @@ public class LearningManager : Singleton<LearningManager> {
             Debug.LogError("Options do not match locations: This should not happen!");
         }
 
-        int interactableId = learning.locations[Random.Range(0,learning.locations.Length)];
+        if (options.Count == 0) {
+            interactable = null;
+            return false;
+        }
+
+        int optionId = Random.Range(0,learning.locations.Length);
         int check;
         bool found = false;
         
         for (int i = 0; i < options.Count; i++) {
-            check = (interactableId + i) % options.Count;
+            check = (optionId + i) % options.Count;
             if (!options[check].HasLearning) {
-                interactableId = check;
+                optionId = check;
                 found = true;
                 break;
             }
         }
 
         if (!found) {
-            throw new Exception("No available interactables!");
+            Debug.LogError($"No available interactable for learning {learning.index}!");
+            
+            interactable = null;
+            return false;
         }
 
-        return options[interactableId];
+        interactable = options[optionId];
+        return true;
     }
 
     public void OnLearningStart(LearningDescription learning, LearningInteractable interactable) {
@@ -156,15 +219,22 @@ public class LearningManager : Singleton<LearningManager> {
         else {
             _currenOpenLearning.state = LearningDescription.State.Open;
         }
+
+        if (_settings.networked) {
+            PushLearningState(_currenOpenLearning);
+        }
+        
         
         _currenOpenLearning.log.CheckLogItem(s);
         _currenOpenLearning.log = null;
         
+        HighscoreTracker.Instance.OnLearningFinished(scorePercentage);
+        
         SceneManager.UnloadSceneAsync(_currenOpenLearning.sceneName);
         
         //TODO_COHORT: fix the double call thingie?
-        _currentOpenInteractable.ClearLearning();;
         _currentOpenInteractable.Deactivate();
+        _currentOpenInteractable.SetLearningLocal(-1);
 
         _currenOpenLearning = null;
         _currentOpenInteractable = null;
@@ -174,6 +244,21 @@ public class LearningManager : Singleton<LearningManager> {
         }
     }
 
+    private void PushLearningState(LearningDescription l) {
+        Hashtable changes = new Hashtable();
+        changes.Add(GetLearningStateKey(l.index), l.state);
+
+        Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
+    }
+
+    private void SetLearningState(int learningId, LearningDescription.State state) {
+        _settings.learnings[learningId].state = state;
+    }
+
+    public void SetLearningLog(LearningDescription learning, LearningInteractable interactable) {
+        learning.log = UILocator.Get<LearningLogUI>().CreateLogEntry(learning.actionDescription, interactable.LocationDescription);
+    }
+    
     public void RemoveLearningLog(LearningDescription learning) {
         if (learning.log != null) {
             learning.log.CheckLogItem(LearningDescription.State.Failed);
@@ -183,5 +268,34 @@ public class LearningManager : Singleton<LearningManager> {
     
     public void InitializeLearning(Learning learning) {
         learning.Initialize(_currenOpenLearning.data, _scoreMultiplier, OnLearningFinished);
+    }
+
+    private string GetLearningStateKey(int learningId) {
+        return Keys.Concatenate(
+            Keys.Concatenate(Keys.Room.Learning, Keys.Learning.State), 
+            learningId.ToString());
+    }
+
+    private void OnJoinedRoom() {
+        OnPropsChanged(Network.Local.Client.CurrentRoom.CustomProperties);
+    }
+
+    private void OnPropsChanged(Hashtable changes) {
+        string key;
+        for (int i = 0; i < _settings.learnings.Length; i++) {
+            key = GetLearningStateKey(i);
+
+            if (changes.ContainsKey(key)) {
+                LearningDescription.State s;
+                if (changes[key] == null) {
+                    s = LearningDescription.State.Open;
+                }
+                else {
+                    s = (LearningDescription.State)changes[key];
+                }
+                
+                SetLearningState(i, s);
+            }
+        }
     }
 }

@@ -1,13 +1,19 @@
+using Cohort.CustomAttributes;
 using Cohort.GameRunner.Interaction;
 using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 using ExitGames.Client.Photon;
 using UnityEngine;
 
+[DefaultExecutionOrder(0)] //Before learningManager
 public class LearningInteractable : Interactable {
     
     public string LocationDescription { get { return _locationDescription; } }
-    public bool HasLearning { get; private set; }
+    public bool HasLearning {
+        get { return _hasLearning;}
+        private set { _hasLearning = value; }
+    }
+    [ReadOnly, SerializeField] private bool _hasLearning;
     
     [SerializeField] private string _locationDescription = "At position";
     [SerializeField] private ObjIndicator _indicator;
@@ -16,10 +22,10 @@ public class LearningInteractable : Interactable {
     private LearningDescription _learning;
 
     protected override void Start() {
-        base.Start();
-
         _networked = _networked && LearningManager.Instance.LearningsNetworked;
-
+        
+        base.Start();
+        
         if (_networked) {
             Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
         }
@@ -35,7 +41,7 @@ public class LearningInteractable : Interactable {
 
     protected override void Activate(Hashtable changes, Hashtable expected = null) {
         if (!_networked) {
-            base.Activate(changes, expected);
+            base.Activate(null, null);
             return;
         }
         
@@ -53,7 +59,7 @@ public class LearningInteractable : Interactable {
     protected override void ActivateLocal() {
         _indicator.SetActive(false);
 
-        if (_actor == Player.Local.ActorNumber) {
+        if (!_networked || _actor == Player.Local.ActorNumber) {
             LearningManager.Instance.OnLearningStart(_learning, this);
         }
     }
@@ -80,13 +86,7 @@ public class LearningInteractable : Interactable {
         base.Deactivate(changes, expected);
     }
 
-    protected override void DeactivateLocal() {
-        ClearLearning();
-    }
-    
-    public void ClearLearning() {
-        _learning = null;    
-    }
+    protected override void DeactivateLocal() { }
 
     public void SetLearning(LearningDescription learning = null) {
         if (!_networked) {
@@ -105,13 +105,14 @@ public class LearningInteractable : Interactable {
         Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
     }
     
-    private void SetLearningLocal(int index) {
+    public void SetLearningLocal(int index) {
         HasLearning = index >= 0;
         
         if (HasLearning) {
             _learning = LearningManager.Instance[index];
             
             _indicator.SetActive(true);
+            LearningManager.Instance.SetLearningLog(_learning, this);
             return;
         }
         

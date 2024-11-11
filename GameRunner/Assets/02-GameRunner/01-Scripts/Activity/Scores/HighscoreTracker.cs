@@ -23,8 +23,6 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		
 		Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
-		//TODO_COHORT: learning finished call
-        //MinigameManager.Instance.onMinigameFinished += OnMinigameFinished;
 		
 		if (Network.Local.Client.InRoom) {
 			OnJoinedRoom();
@@ -71,7 +69,7 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		return _scores.Values.OrderBy(s => s.score).Reverse().ToArray();
 	}
 
-	public void OnMinigameFinished(float dec) {
+	public void OnLearningFinished(float dec) {
 		_local.score += Mathf.RoundToInt(dec * _multiplier);
 		
 		UpdateLocalPlayerScore(_local);

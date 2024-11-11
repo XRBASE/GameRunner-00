@@ -120,7 +120,8 @@ namespace Cohort.Networking.PhotonKeys {
 
         public enum Learning {
             Index = 0,
-            Actor = 1
+            Actor = 1,
+            State = 2,
         }
 
         public enum Time {

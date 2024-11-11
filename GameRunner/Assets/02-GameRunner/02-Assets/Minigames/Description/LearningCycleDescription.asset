@@ -13,14 +13,35 @@ MonoBehaviour:
   m_Name: LearningCycleDescription
   m_EditorClassIdentifier: 
   learnings:
-  - actionDescription: Press a button
+  - actionDescription: 'Solve 0 '
     sceneName: 00-Tester
     data: '-'
-    locations: 00000000010000000200000003000000
+    locations: 00000000
     state: 0
     index: 0
     log: {fileID: 0}
-  useTimer: 0
+  - actionDescription: 'Solve 1 '
+    sceneName: 00-Tester
+    data: '-'
+    locations: 01000000
+    state: 0
+    index: 1
+    log: {fileID: 0}
+  - actionDescription: 'Solve 2 '
+    sceneName: 00-Tester
+    data: '-'
+    locations: 02000000
+    state: 0
+    index: 2
+    log: {fileID: 0}
+  - actionDescription: Solve 3
+    sceneName: 00-Tester
+    data: '-'
+    locations: 03000000
+    state: 0
+    index: 3
+    log: {fileID: 0}
+  useTimer: 1
   linear: 0
-  complete: 0
-  networked: 1
+  complete: 1
+  networked: 0

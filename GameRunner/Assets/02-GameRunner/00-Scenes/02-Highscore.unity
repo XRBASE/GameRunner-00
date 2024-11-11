@@ -485,7 +485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
-      value: at the first computer
+      value: at 0
       objectReference: {fileID: 0}
     - target: {fileID: 3362825640608561748, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
@@ -497,7 +497,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole.2
+      value: PF_MinigameConsole.0
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -562,7 +562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
-      value: at the second computer
+      value: at 1
       objectReference: {fileID: 0}
     - target: {fileID: 3362825640608561748, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
@@ -639,7 +639,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
-      value: at the fourth computer
+      value: at 4
       objectReference: {fileID: 0}
     - target: {fileID: 3362825640608561748, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
@@ -716,7 +716,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
-      value: at the third computer.
+      value: at 3
       objectReference: {fileID: 0}
     - target: {fileID: 3362825640608561748, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
@@ -728,7 +728,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole
+      value: PF_MinigameConsole.2
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -785,8 +785,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 1291050635}
   - {fileID: 1376175249}
-  - {fileID: 2699343617401273203}
-  - {fileID: 1816406119}
   - {fileID: 1505390454}
+  - {fileID: 1816406119}
+  - {fileID: 2699343617401273203}
   - {fileID: 1912207594}
   - {fileID: 996727321}
