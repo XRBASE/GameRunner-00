@@ -12,7 +12,7 @@ using UnityEngine;
 [DefaultExecutionOrder(102)] // After playermanagement
 public class ActivityLoader : Singleton<ActivityLoader>
 {
-    public bool InGame { get; private set; }
+    public bool InActivity { get; private set; }
     public bool AllPlayersReady { get; private set; }
 
     public ActivityDefinition Activity {
@@ -49,10 +49,10 @@ public class ActivityLoader : Singleton<ActivityLoader>
     }
     
     public void StopActivity() {
-        if (!InGame)
+        if (!InActivity)
             return;
 
-        InGame = false;
+        InActivity = false;
         AllPlayersReady = false;
         
         onActivityStop?.Invoke();
@@ -143,15 +143,15 @@ public class ActivityLoader : Singleton<ActivityLoader>
     }
 
     private void StopActivityLocal() {
-        if (!InGame)
+        if (!InActivity)
             return;
         
-        InGame = false;
+        InActivity = false;
         _definition = null;
     }
 
     public void LoadActivity(ActivityDefinition definition) {
-        if (InGame)
+        if (InActivity)
             return;
         
         Hashtable changes = new Hashtable();
@@ -163,7 +163,7 @@ public class ActivityLoader : Singleton<ActivityLoader>
     }
 
     private void LoadActivityLocal() {
-        InGame = true;
+        InActivity = true;
         
         _score.Initialize(_definition, _session);
     }

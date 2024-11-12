@@ -44,4 +44,4 @@ MonoBehaviour:
   useTimer: 1
   linear: 0
   complete: 1
-  networked: 0
+  networked: 1

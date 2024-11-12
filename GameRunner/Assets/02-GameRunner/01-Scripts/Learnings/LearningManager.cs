@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 using Cohort.Patterns;
 using Cohort.UI.Generic;
@@ -11,8 +12,8 @@ using Random = UnityEngine.Random;
 
 [DefaultExecutionOrder(1)] //After LearningInteractable 
 public class LearningManager : Singleton<LearningManager> {
-    public const float MIN_TIME = 2;
-    public const float MAX_TIME = 10;
+    public const float MIN_TIME = 5;
+    public const float MAX_TIME = 6;
     
     public LearningDescription this[int index] {
         get { return _settings.learnings[index]; }
@@ -23,21 +24,25 @@ public class LearningManager : Singleton<LearningManager> {
     }
 
     [SerializeField] private LearningCycleDescription _settings;
-    [SerializeField] private NetworkedTimer _timer;
     
     private int _scoreMultiplier;
     private LearningInteractable[] _interactables;
-
-    private int _lastLearingIndex = -1;
     
     //this is the currently open interactable and learning for the local user. There should never be two minigames open at the same time.
     private LearningDescription _currenOpenLearning;
     private LearningInteractable _currentOpenInteractable;
 
+    private List<float> _learningTimers;
+    private float _refT = -1;
+    private int _refActor = -1;
+    
     private void Start() {
         ActivityLoader.Instance.onActivityStart += OnActivityStart;
         ActivityLoader.Instance.onActivityStop += OnActivityStop;
 
+        _learningTimers = new List<float>();
+        TimeManager.Instance.onRefTimeReset += OnTimeReset;
+        
         if (_settings.networked) {
             Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
             Network.Local.Callbacks.onRoomPropertiesChanged += OnPropsChanged;
@@ -56,23 +61,80 @@ public class LearningManager : Singleton<LearningManager> {
         }
     }
 
+    private void FixedUpdate() {
+        if (_learningTimers.Count > 0 && _learningTimers[0] > 0 && _learningTimers[0] <= TimeManager.Instance.RefTime) {
+            OnTimerFin();
+        }
+    }
+
+    private void InitTimerNetworkData() {
+        Hashtable changes = new Hashtable();
+        changes.Add(GetTimerKey(), -1f);
+        changes.Add(GetActorKey(), -1);
+        Debug.LogWarning($"Init timer network data");
+        
+        Network.Local.Client.CurrentRoom.SetCustomProperties(changes); 
+    }
+    
+    private void PushNewTimer() {
+        if (_learningTimers.Count > 0)
+            return;
+        
+        Hashtable changes = new Hashtable();
+        float t = Random.Range(MIN_TIME, MAX_TIME);
+
+        t = TimeManager.Instance.RefTime + t;
+        changes.Add(GetTimerKey(), t);
+        changes.Add(GetActorKey(), Player.Local.ActorNumber);
+        
+        Hashtable exp = new Hashtable();
+        exp.Add(GetTimerKey(), _refT);
+        
+        Network.Local.Client.CurrentRoom.SetCustomProperties(changes, exp); 
+    }
+
+    private void OnTimeReset() {
+        for (int i = 0; i < _learningTimers.Count; i++) {
+            _learningTimers[i] %= TimeManager.RESET_VALUE;
+        }
+    }
+
+    private void OnTimerFin() {
+        _learningTimers.RemoveAt(0);
+
+        if (_refActor == Player.Local.ActorNumber) {
+            ActivateLearning();
+        }
+
+        if (ActivityLoader.Instance.InActivity) {
+            PushNewTimer();
+        }
+    }
+
     private void ResetLearnings() {
         for (int i = 0; i < _settings.learnings.Length; i++) {
             _settings.learnings[i].state = LearningDescription.State.Open;
         }
     }
 
-    public void OnActivityStart() {
+    private void OnActivityStart() {
         _scoreMultiplier = ActivityLoader.Instance.Activity.ScoreMultiplier;
         _interactables = FindObjectsOfType<LearningInteractable>().ToList().OrderBy((s) => s.Identifier).ToArray();
-
-        _timer.onFinish += OnTimerFinished;
+        
         if (_settings.useTimer) {
-            StartTimer();
+            if (_learningTimers.Count == 0)
+                PushNewTimer();
         }
         else if (!AnyLearningActive()) {
             ActivateLearning();
         }
+    }
+    
+    private void OnActivityStop() {
+        _learningTimers.Clear();
+        _refT = -1;
+        
+        ResetLearnings();
     }
 
     private bool AnyLearningActive() {
@@ -85,25 +147,7 @@ public class LearningManager : Singleton<LearningManager> {
         return false;
     }
 
-    public void OnActivityStop() {
-        _timer.onFinish -= OnTimerFinished;
-        _lastLearingIndex = -1;
-        
-        ResetLearnings();
-    }
     
-    private void StartTimer() {
-        float duration = Random.Range(MIN_TIME, MAX_TIME);
-        _timer.StartTimer(duration);
-    }
-
-    private void OnTimerFinished() {
-        ActivateLearning();
-
-        if (_settings.useTimer) {
-            StartTimer();
-        }
-    }
 
     private void ActivateLearning() {
         if (TryGetNextLearning(out LearningDescription learning) &&
@@ -144,14 +188,10 @@ public class LearningManager : Singleton<LearningManager> {
             }
 
             if (!found) {
-                Debug.LogError("No available learnings anymore");
-                learning = null;
-                return false;
+                throw new Exception("All learnings finished!");
             }
         }
         
-        Debug.LogError($"Picked next learning: {learningId}");
-        _lastLearingIndex = learningId;
         learning = _settings.learnings[learningId];
         return true;
     }
@@ -165,10 +205,6 @@ public class LearningManager : Singleton<LearningManager> {
                     break;
                 }
             }
-        }
-
-        if (options.Count != learning.locations.Length) {
-            Debug.LogError("Options do not match locations: This should not happen!");
         }
 
         if (options.Count == 0) {
@@ -190,7 +226,7 @@ public class LearningManager : Singleton<LearningManager> {
         }
 
         if (!found) {
-            Debug.LogError($"No available interactable for learning {learning.index}!");
+            Debug.LogWarning($"No available interactable for learning {learning.index}!");
             
             interactable = null;
             return false;
@@ -269,15 +305,15 @@ public class LearningManager : Singleton<LearningManager> {
     public void InitializeLearning(Learning learning) {
         learning.Initialize(_currenOpenLearning.data, _scoreMultiplier, OnLearningFinished);
     }
-
-    private string GetLearningStateKey(int learningId) {
-        return Keys.Concatenate(
-            Keys.Concatenate(Keys.Room.Learning, Keys.Learning.State), 
-            learningId.ToString());
-    }
-
+    
     private void OnJoinedRoom() {
         OnPropsChanged(Network.Local.Client.CurrentRoom.CustomProperties);
+
+        string key = GetTimerKey();
+        if (!Network.Local.Client.CurrentRoom.CustomProperties.ContainsKey(key) ||
+            (TimeManager.Instance.RefTime - (float)Network.Local.Client.CurrentRoom.CustomProperties[key]) > MAX_TIME) {
+            InitTimerNetworkData();
+        }
     }
 
     private void OnPropsChanged(Hashtable changes) {
@@ -297,5 +333,40 @@ public class LearningManager : Singleton<LearningManager> {
                 SetLearningState(i, s);
             }
         }
+        
+        key = GetTimerKey();
+        if (changes.ContainsKey(key)) {
+            if (changes[key] != null) {
+                _refT = (float)changes[key];
+                _refActor = (int)changes[GetActorKey()];
+
+                if (_refT < 0) {
+                    if (ActivityLoader.Instance.InActivity)
+                        PushNewTimer();
+                }
+                else {
+                    _learningTimers.Add(_refT);
+                }
+            }
+            else {
+                InitTimerNetworkData();
+            }
+        }
+    }
+    
+    private string GetLearningStateKey(int learningId) {
+        return Keys.Concatenate(
+            Keys.Concatenate(Keys.Room.Learning, Keys.Learning.State), 
+            learningId.ToString());
+    }
+    
+    private string GetTimerKey() {
+        return Keys.Concatenate(
+            Keys.Concatenate(Keys.Room.Learning, Keys.Learning.ManagerTimer));
+    }
+    
+    private string GetActorKey() {
+        return Keys.Concatenate(
+            Keys.Concatenate(Keys.Room.Learning, Keys.Learning.ManagerActor));
     }
 }
