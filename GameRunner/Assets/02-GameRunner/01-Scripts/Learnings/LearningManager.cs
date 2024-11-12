@@ -32,7 +32,7 @@ public class LearningManager : Singleton<LearningManager> {
     private LearningDescription _currenOpenLearning;
     private LearningInteractable _currentOpenInteractable;
 
-    private List<float> _learningTimers;
+    [SerializeField] private List<float> _learningTimers;
     private float _refT = -1;
     private int _refActor = -1;
     
@@ -80,10 +80,15 @@ public class LearningManager : Singleton<LearningManager> {
         if (_learningTimers.Count > 0)
             return;
         
-        Hashtable changes = new Hashtable();
         float t = Random.Range(MIN_TIME, MAX_TIME);
-
         t = TimeManager.Instance.RefTime + t;
+        
+        if (!_settings.networked) {
+            _learningTimers.Add(t);
+            return;
+        }
+        
+        Hashtable changes = new Hashtable();
         changes.Add(GetTimerKey(), t);
         changes.Add(GetActorKey(), Player.Local.ActorNumber);
         
@@ -102,10 +107,10 @@ public class LearningManager : Singleton<LearningManager> {
     private void OnTimerFin() {
         _learningTimers.RemoveAt(0);
 
-        if (_refActor == Player.Local.ActorNumber) {
+        if (!_settings.networked || _refActor == Player.Local.ActorNumber) {
             ActivateLearning();
         }
-
+        
         if (ActivityLoader.Instance.InActivity) {
             PushNewTimer();
         }
@@ -127,6 +132,10 @@ public class LearningManager : Singleton<LearningManager> {
         }
         else if (!AnyLearningActive()) {
             ActivateLearning();
+        }
+
+        if (!_settings.networked) {
+            HighscoreTracker.Instance.ClearLocalScore();
         }
     }
     

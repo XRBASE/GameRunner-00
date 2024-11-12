@@ -49,6 +49,11 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 					if (uuid == Player.Local.UUID) {
 						_local = _scores[uuid];
 					}
+
+					if (_scores[uuid].score == 0) {
+						_scores.Remove(uuid);
+					}
+					
 					changed = true;
 				}
 			}
@@ -72,6 +77,11 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 	public void OnLearningFinished(float dec) {
 		_local.score += Mathf.RoundToInt(dec * _multiplier);
 		
+		UpdateLocalPlayerScore(_local);
+	}
+
+	public void ClearLocalScore() {
+		_local.score = 0;
 		UpdateLocalPlayerScore(_local);
 	}
 
