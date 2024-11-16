@@ -1,3 +1,4 @@
+//Old MoveState
 using Cohort.GameRunner.AvatarAnimations;
 using Cohort.Networking.PhotonKeys;
 using Cohort.GameRunner.Players;
@@ -32,8 +33,6 @@ namespace Cohort.GameRunner.LocoMovement {
 			Teleporting,
 		};
 
-		private const float MIN_FALL_VELOCITY = .1f;
-
 		//routine used for moving towards the cursor
 		private Coroutine _moveToRoutine;
 
@@ -58,9 +57,6 @@ namespace Cohort.GameRunner.LocoMovement {
 
 		//is the target falling
 		private bool _falling;
-
-		private bool _isLanding;
-
 
 
 		public MoveState(Rigidbody rb, Locomotion lm) : base(rb, lm) { }
@@ -244,20 +240,12 @@ namespace Cohort.GameRunner.LocoMovement {
 			float f = Mathf.Sqrt(-2.0f * Physics.gravity.y * Locomotion.JUMP_HEIGHT);
 			Vector3 v = new Vector3(_rb.velocity.x, f, _rb.velocity.z);
 			_rb.velocity = v;
-			bool hasLeftGround = false;
-			while (_rb.velocity.y > MIN_FALL_VELOCITY)
-			{
-				if (_lm.GroundCheck.Grounded == false)
-				{
-					hasLeftGround = true;
-				}
+
+			while (_rb.velocity.y > 0) {
 				yield return new WaitForFixedUpdate();
 			}
+
 			_rb.velocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
-			if (!hasLeftGround)
-			{
-				OnLand();
-			}
 			StopJumpRoutine();
 		}
 
@@ -310,6 +298,7 @@ namespace Cohort.GameRunner.LocoMovement {
 
 			_rb.MovePosition(position + Vector3.up * 0.05f);
 			//_target.transform.position = position + Vector3.up * 0.05f;
+			_lm.GroundCheck.ResetCheck();
 
 			_lm.Animator.SetState(CharAnimator.AnimationState.Teleport);
 		}
@@ -336,6 +325,7 @@ namespace Cohort.GameRunner.LocoMovement {
 			_rb.MovePosition(position);
 			//_target.position = position;
 			_target.rotation = rotation;
+			_lm.GroundCheck.ResetCheck();
 
 			_lm.Animator.SetState(CharAnimator.AnimationState.Teleport);
 		}
@@ -444,13 +434,10 @@ namespace Cohort.GameRunner.LocoMovement {
 			_numGoalReached?.Invoke();
 		}
 
-		
-
 		/// <summary>
 		/// Called whenever target lands on any surface.
 		/// </summary>
-		protected virtual void OnLand()
-		{
+		protected virtual void OnLand() {
 			_falling = false;
 			_jumpCounter = 0;
 
@@ -461,7 +448,6 @@ namespace Cohort.GameRunner.LocoMovement {
 			else {
 				_lm.Animator.ForceEnterState(CharAnimator.AnimationState.Land);
 			}
-
 		}
 
 		/// <summary>
@@ -505,8 +491,7 @@ namespace Cohort.GameRunner.LocoMovement {
 			_jumpRoutine = null;
 			_lm.GroundCheck.enabled = true;
 			//reset and fire in case there is a floor below you when stopping
-
-				
+			_lm.GroundCheck.ResetCheck(true);
 		}
 	}
 }

@@ -9,12 +9,13 @@ public class FloorCollision : MonoBehaviour
     private BoxCollider _boxCollider;
     private int _contacts;
 
-    public void Initialise(LayerMask mask)
+
+    public void Initialise(LayerMask mask, Vector3 size, Vector3 center)
     {
         _layerMask = mask;
         _boxCollider = gameObject.AddComponent<BoxCollider>();
-        _boxCollider.size = new Vector3(.3f, 1f, .3f);
-        _boxCollider.center = Vector3.down * .25f;
+        _boxCollider.size = size;
+        _boxCollider.center = center;
         _boxCollider.isTrigger = true;
     }
 
