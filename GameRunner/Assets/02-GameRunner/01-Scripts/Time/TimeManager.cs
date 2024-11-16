@@ -99,7 +99,8 @@ public class TimeManager : Singleton<TimeManager>
     {
         //if the timelord leaces the room, all players send a request to become timelord.
         string key = Keys.Concatenate(Keys.Room.Time, Keys.Time.TimeLord);
-        if ((int) Network.Local.Client.CurrentRoom.CustomProperties[key] == player.ActorNumber) {
+        if (Network.Local.Client.CurrentRoom.CustomProperties.ContainsKey(key) && 
+            (int) Network.Local.Client.CurrentRoom.CustomProperties[key] == player.ActorNumber) {
             //because the expected value is the actor nunmber of the player that has just left, only the first player
             //is made to be timelord.
             TrySetTimeLord(player.ActorNumber);

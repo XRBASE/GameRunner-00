@@ -12,8 +12,8 @@ using Random = UnityEngine.Random;
 
 [DefaultExecutionOrder(1)] //After LearningInteractable 
 public class LearningManager : Singleton<LearningManager> {
-    public const float MIN_TIME = 5;
-    public const float MAX_TIME = 6;
+    public const float MIN_TIME = 3f;
+    public const float MAX_TIME = 7f;
     
     public LearningDescription this[int index] {
         get { return _settings.learnings[index]; }
@@ -84,6 +84,7 @@ public class LearningManager : Singleton<LearningManager> {
         t = TimeManager.Instance.RefTime + t;
         
         if (!_settings.networked) {
+            _refActor = Player.Local.ActorNumber;
             _learningTimers.Add(t);
             return;
         }
@@ -106,8 +107,9 @@ public class LearningManager : Singleton<LearningManager> {
 
     private void OnTimerFin() {
         _learningTimers.RemoveAt(0);
+        Debug.LogError($"Timer fin actor {_refActor}");
 
-        if (!_settings.networked || _refActor == Player.Local.ActorNumber) {
+        if (_refActor == Player.Local.ActorNumber) {
             ActivateLearning();
         }
         
@@ -279,7 +281,7 @@ public class LearningManager : Singleton<LearningManager> {
         
         //TODO_COHORT: fix the double call thingie?
         _currentOpenInteractable.Deactivate();
-        _currentOpenInteractable.SetLearningLocal(-1);
+        //_currentOpenInteractable.SetLearningLocal(-1);
 
         _currenOpenLearning = null;
         _currentOpenInteractable = null;
@@ -352,8 +354,11 @@ public class LearningManager : Singleton<LearningManager> {
                 if (_refT < 0) {
                     if (ActivityLoader.Instance.InActivity)
                         PushNewTimer();
+                    else
+                        _learningTimers.Clear();
                 }
                 else {
+                    Debug.LogError($"Add timer {_refT - TimeManager.Instance.RefTime} actor: {_refActor}");
                     _learningTimers.Add(_refT);
                 }
             }
