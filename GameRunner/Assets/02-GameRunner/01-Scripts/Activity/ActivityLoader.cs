@@ -56,7 +56,6 @@ public class ActivityLoader : Singleton<ActivityLoader>
         AllPlayersReady = false;
         
         onActivityStop?.Invoke();
-        
         ClearPhotonRoomProperties();
     }
 
@@ -78,6 +77,8 @@ public class ActivityLoader : Singleton<ActivityLoader>
         if (AllPlayersReady)
             return;
         
+        //TODO_COHORT: there should be a from of start key, so this is skipped when reconnecting.
+        //If 3 people reconnect they all have to wait on eachother right now, but that shouldn't happen.
         string key;
         foreach (var kv_player in Network.Local.Client.CurrentRoom.Players) {
             if (kv_player.Value.IsInactive)
@@ -99,13 +100,7 @@ public class ActivityLoader : Singleton<ActivityLoader>
     }
     
     private void OnPropsChanged(Hashtable changes) {
-        string key = GetPlayerReadyKey();
-        foreach (var entry in changes) {
-            if (entry.Key.ToString().StartsWith(key)) {
-                OnPlayerReady();
-                break;
-            }
-        }
+        string key;
         
         key = GetActivitySessionKey();
         if (changes.ContainsKey(key)) {
@@ -126,6 +121,16 @@ public class ActivityLoader : Singleton<ActivityLoader>
 
             _definition = JsonUtility.FromJson<ActivityDefinition>((string)changes[key]);
             LoadActivityLocal();
+        }
+        
+        if (!AllPlayersReady) {
+            key = GetPlayerReadyKey();
+            foreach (var entry in changes) {
+                if (entry.Key.ToString().StartsWith(key)) {
+                    OnPlayerReady();
+                    break;
+                }
+            }
         }
     }
     

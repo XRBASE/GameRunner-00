@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-[DefaultExecutionOrder(1)] //After LearningInteractable 
+[DefaultExecutionOrder(1)] //After LearningInteractable
 public class LearningManager : Singleton<LearningManager> {
     public const float MIN_TIME = 3f;
     public const float MAX_TIME = 7f;
