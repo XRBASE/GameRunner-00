@@ -6,11 +6,27 @@ using UnityEngine;
 public class IdLocator : AssetModificationProcessor {
     public static void SetIds() {
 	    IUniqueId[] holders = GameObject.FindObjectsOfType<MonoBehaviour>(true).OfType<IUniqueId>().ToArray();
+	    bool[] taken = new bool[holders.Length];
 
 	    for (int i = 0; i < holders.Length; i++) {
-		    holders[i].Identifier = i + 1;
+		    if (holders[i].Identifier >= 0) {
+			    taken[holders[i].Identifier] = true;
+		    }
+	    }
+
+	    for (int i = 0; i < taken.Length; i++) {
+		    if (taken[i])
+			    continue;
 		    
-		    EditorUtility.SetDirty(holders[i] as MonoBehaviour);
+		    for (int j = 0; j < holders.Length; j++) {
+			    if (holders[j].Identifier >= 0) {
+				    continue;
+			    }
+
+			    holders[j].Identifier = i;
+			    EditorUtility.SetDirty(holders[i] as MonoBehaviour);
+			    break;
+		    }
 	    }
     }
 

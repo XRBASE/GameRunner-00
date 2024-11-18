@@ -53,6 +53,13 @@ namespace Cohort.GameRunner.Players {
         }
 
         protected void OnAvatarImported(Avatar avatar) {
+            if (!Application.isPlaying) {
+                Debug.LogWarning("Application has been stopped, destroying imported avatar!");
+
+                DestroyImmediate(avatar.gameObject);
+                return;
+            }
+            
             avatar.SetupHelpers(Avatar);
             
             if (Avatar != null) {

@@ -5,7 +5,7 @@ using ExitGames.Client.Photon;
 using Cohort.Patterns;
 
 namespace Cohort.Networking.Players {
-    [DefaultExecutionOrder(-1)] //after players
+    [DefaultExecutionOrder(-2)] //after players
     public abstract class PlayerManager : Singleton<PlayerManager> {
         /// <summary>
         /// Player dictionary indexed by their userId

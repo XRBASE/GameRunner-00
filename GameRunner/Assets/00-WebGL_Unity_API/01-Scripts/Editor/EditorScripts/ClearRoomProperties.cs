@@ -6,9 +6,6 @@ using UnityEditor;
 
 public static class ClearRoomProperties
 {
-    //should portals be deleted along with the photon room data?
-    public const bool DELETE_PORTALS = true;
-    
     [MenuItem("Cohort/ClearRoomProperties")]
     public static void ClearRoomPropsEditor()
     {
