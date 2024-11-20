@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3272456527787901154}
   - component: {fileID: 8075364810503028204}
+  - component: {fileID: 6950957296964562002}
   m_Layer: 0
   m_Name: PF_IndicatorUI
   m_TagString: Untagged
@@ -52,6 +53,29 @@ MonoBehaviour:
   _parent: {fileID: 866161055156661}
   _indicatorPrefab: {fileID: 8326037555785049478, guid: 904ad822f85936440afc1a08fa82a33c, type: 3}
   fallbackIco: {fileID: 21300000, guid: 8e340745b7e12e0458748b80abced9d2, type: 3}
+--- !u!223 &6950957296964562002
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2854383938715635250}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &7809711133585429595
 GameObject:
   m_ObjectHideFlags: 0

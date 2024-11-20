@@ -8,17 +8,18 @@ using UnityEngine.Events;
 /// </summary>
 public class MonoTimer : MonoBehaviour
 {
-    [SerializeField] private float _duration;
+    [SerializeField] protected float _duration;
     [SerializeField] private bool _startOnAwake;
-    [SerializeField] private UnityEvent _onStart;
-    [SerializeField] private UnityEvent _onFinish;
+    
+    public UnityEvent onStart;
+    public UnityEvent onFinish;
 
-    private Timer _timer;
+    protected Timer _timer;
 
     private bool _hasCountdown;
     private Countdown _countdown;
 
-    private void Awake() {
+    protected virtual void Awake() {
         if (_startOnAwake) {
             StartTimer();
         }
@@ -27,43 +28,46 @@ public class MonoTimer : MonoBehaviour
     /// <summary>
     /// Starts the timer (restarts if already timing).
     /// </summary>
-    public void StartTimer() {
+    public virtual void StartTimer() {
         if (_timer == null) {
             _timer = new Timer(_duration, true, FinishTimer);
+        } else if (_timer.Active) {
+            Debug.LogWarning($"Timer was already started ({gameObject.name}).");
+            return;
         }
-        else {
-            _timer.Reset();
-            _timer.Start();
-        }
-
+        
+        _timer.duration = _duration;
+        _timer.Start();
+        Debug.LogError($"Started timer {_timer.duration} -> {_timer.Elapsed}");
+        
         if (_hasCountdown) {
             _countdown.StartCountdown();
         }
-        
-        _onStart?.Invoke();
+        onStart?.Invoke();
     }
 
     /// <summary>
     /// Resets the timer, so it's ready for use again (keeps running if it was already running, doesn't if it was already stopped).
     /// </summary>
-    public void ResetTimer() {
+    public virtual void ResetTimer() {
         _timer?.Reset();
     }
 
     /// <summary>
     /// Stop the timer from running without event invoke.
     /// </summary>
-    public void StopTimer() {
+    public virtual void StopTimer() {
         _timer?.Stop();
+        Debug.LogError($"Stopped timer");
     }
 
     /// <summary>
     /// Stops the timer from running and invokes the event.
     /// </summary>
-    public void FinishTimer() {
+    public virtual void FinishTimer() {
         if (!_timer.HasFinished)
             _timer?.Stop();
         
-        _onFinish?.Invoke();
+        onFinish?.Invoke();
     }
 }

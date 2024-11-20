@@ -1,8 +1,9 @@
-using System.IO;
-using Cohort.Ravel.BackendData.Images;
-using UnityEngine;
+using Cohort.BackendData.Images;
 
-namespace Cohort.Ravel.Networking.Spaces
+using UnityEngine;
+using System.IO;
+
+namespace Cohort.Networking.Spaces
 {
     public class AssetRequest : TokenWebRequest
     {

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Cohort.Ravel.Networking {
+namespace Cohort.Networking {
     /// <summary>
     /// Base class for response data. 
     /// </summary>

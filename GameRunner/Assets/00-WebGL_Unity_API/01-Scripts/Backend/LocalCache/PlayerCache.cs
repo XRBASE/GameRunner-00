@@ -1,6 +1,6 @@
+using Cohort.Networking.Authorization;
+
 using System.Collections.Generic;
-using Cohort.Ravel.Networking;
-using Cohort.Ravel.Networking.Authorization;
 using UnityEngine;
 
 /// <summary>

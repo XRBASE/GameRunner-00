@@ -16,14 +16,14 @@ namespace Cohort.GameRunner.Interaction {
             set { _index = value; }
         }
 
-        [ReadOnly, SerializeField] private int _index;
+        [ReadOnly, SerializeField] private int _index = -1;
 
         //all interactables always have a state. True will fire events, false will not.
         //event like interactions will fire and directly reset themselves, whereas more
         //permanent Interactables retain it.
 
         [Tooltip("Current state on/off"), SerializeField] private bool _value = false;
-        [SerializeField] private bool _networked = true;
+        [SerializeField] protected bool _networked = true;
         private bool _initial = true;
         
         protected virtual void Start() {
@@ -51,7 +51,7 @@ namespace Cohort.GameRunner.Interaction {
         public virtual void Activate() {
             Activate(null, null);
         }
-
+        
         public virtual void Deactivate() {
             Deactivate(null, null);
         }

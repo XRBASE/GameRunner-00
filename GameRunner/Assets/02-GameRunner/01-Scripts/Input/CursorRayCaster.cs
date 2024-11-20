@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Cohort.Config;
 using Cohort.CustomAttributes;
-using Cohort.Ravel.Users;
+using Cohort.Users;
 using MathBuddy.Flags;
 using UnityEngine;
 using UnityEngine.EventSystems;

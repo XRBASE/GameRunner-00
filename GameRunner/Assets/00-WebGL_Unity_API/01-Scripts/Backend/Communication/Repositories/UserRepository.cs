@@ -1,12 +1,11 @@
-using System;
+using Cohort.Networking.Users;
+using Cohort.Networking;
+using Cohort.Users;
+
 using System.Collections;
-using System.Net.Http.Headers;
-using Cohort.Ravel.BackendData.Images;
-using Cohort.Ravel.Networking;
-using Cohort.Ravel.Networking.Users;
-using Cohort.Ravel.Users;
-using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine;
+using System;
 
 public class UserRepository : DataRepository<User>
 {

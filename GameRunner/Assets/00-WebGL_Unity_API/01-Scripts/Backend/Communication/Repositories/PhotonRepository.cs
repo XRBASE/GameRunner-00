@@ -1,41 +1,42 @@
-using System;
-using System.Collections;
+using Cohort.Networking;
 using Cohort.Config;
-using Cohort.Ravel.Networking;
+
+using System.Collections;
+using System;
 
 public class PhotonRepository 
 {
     /// <summary>
     /// Connect to photon room with given id.
     /// </summary>
-    /// <param name="roomId">id(unique) of room to join.</param>
+    /// <param name="sessionId">id(unique) of room to join.</param>
     /// <param name="onComplete">Callback for when room join call has been completed.</param>
     /// <param name="onFailure">Callback for server error whilst retrieving room data.</param>
-    public IEnumerator ConnectToPhotonRoom(string roomId, Action onComplete, Action<string> onFailure) {
-        RavelWebRequest req = RoomRequest.GetRoom(roomId);
+    public IEnumerator ConnectToPhotonRoom(string sessionId, Action onComplete, Action<string> onFailure) {
+        RavelWebRequest req = SessionRequest.GetSession(sessionId);
         yield return req.Send();
 
-        RoomDetailResponse roomDetails;
+        SessionResponse session;
         RavelWebResponse res = new RavelWebResponse(req);
-        if (res.Success && res.TryGetData(out roomDetails)) {
-            yield return ConnectToPhotonRoom(roomDetails);
+        if (res.Success && res.TryGetData(out session)) {
+            yield return ConnectToPhotonRoom(session);
             onComplete?.Invoke();
         } else {
             onFailure?.Invoke(res.Error.FullMessage);
         }
     }
 
-    private IEnumerator ConnectToPhotonRoom(RoomDetailResponse room) {
+    private IEnumerator ConnectToPhotonRoom(SessionResponse session) {
         //prevent updates in data from causing errors while the application is not connected to photon
         DataServices.Assets.StopSlotUpdate();
         DataServices.Users.StopAutoUserUpdate();
             
-        AppConfig.Config.OverrideAppID(room.photonAppId);
-        Network.Local.UpdateAppId(room.photonAppId);
+        AppConfig.Config.OverrideAppID(session.photonAppId);
+        Network.Local.UpdateAppId(session.photonAppId);
         
         yield return Network.Local.Callbacks.WaitForConnectedAndReady();
-        if (!Network.Local.Client.InRoom && room.id != Network.Local.RoomManager.CurrentRoomId) {
-            Network.Local.RoomManager.GotoRoom(room.id, false, false);
+        if (!Network.Local.Client.InRoom && session.id != Network.Local.RoomManager.CurrentRoomId) {
+            Network.Local.RoomManager.GotoRoom(session.id, false, false);
         }
         
         DataServices.Assets.StartSlotUpdate();
@@ -52,13 +53,13 @@ public class PhotonRepository
     /// Response that is send back from the server when a user enters a specific space. 
     /// </summary>
     [Serializable]
-    private struct RoomDetailResponse
+    private struct SessionResponse
     {
         /// <summary>
         /// Debug constructor for testing purposes, assigns users default roles, and gives response with given key
         /// </summary>
         /// <param name="photonRoomId">id/key for room</param>
-        public RoomDetailResponse(string roomName)
+        public SessionResponse(string roomName)
         {
             id = $"{roomName}_{DataServices.Users.Local.id}";
 
@@ -69,9 +70,5 @@ public class PhotonRepository
         public string id;
         //App id to which photon will be connected.
         public string photonAppId;
-        
-        //(unused but available) Servername of photon room
-        //public string photonId; 
-        //public string spaceEntityId;
     }
 }

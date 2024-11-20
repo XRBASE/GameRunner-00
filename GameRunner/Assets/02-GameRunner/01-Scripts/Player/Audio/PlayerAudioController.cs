@@ -1,6 +1,7 @@
 using Cohort.GameRunner.AvatarAnimations;
 using UnityEngine;
 
+[DefaultExecutionOrder(0)] //Before CharAnimator
 public class PlayerAudioController : MonoBehaviour {
     [SerializeField] private AudioSet _audioSet;
     [SerializeField] private AudioSource _source;
@@ -18,7 +19,9 @@ public class PlayerAudioController : MonoBehaviour {
     }
 
     private void OnDestroy() {
-        _animator.onStateChange -= OnAnimationStateChanged;
+        if (_animator != null) {
+            _animator.onStateChange -= OnAnimationStateChanged;
+        }
     }
 
     private void OnAnimationStateChanged(CharAnimator.AnimationState state) {

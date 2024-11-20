@@ -15,6 +15,7 @@ namespace Cohort.GameRunner.AvatarAnimations {
 	/// Animator for character's this class animates all players remote, NPC and local. It steers the animation controller
 	/// and is bound by the character controller rules and states.
 	/// </summary>
+	[DefaultExecutionOrder(1)] //After PlayerAudioController
 	public class CharAnimator : MonoBehaviour {
 		//emote clip names
 		private const string FULL_BODY_EMOTE_NAME = "EM_Fullbody";

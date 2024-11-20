@@ -1,6 +1,6 @@
 using System;
 
-namespace Cohort.Ravel.BackendData.Data
+namespace Cohort.BackendData
 {
     /// <summary>
     /// This class ensures that all forms of backend data can always be overwritten and updated with new backend data, whilst

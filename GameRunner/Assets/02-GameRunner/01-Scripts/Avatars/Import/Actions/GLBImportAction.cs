@@ -1,8 +1,9 @@
-using System;
 using Cohort.GameRunner.AvatarAnimations;
 using Cohort.Import.GLB;
-using Cohort.Ravel.Assets;
+using Cohort.Assets;
+
 using UnityEngine;
+using System;
 
 namespace Cohort.GameRunner.Avatars {
     public class GLBImportAction : ImportAction {

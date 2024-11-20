@@ -1,9 +1,10 @@
-using System;
-using Cohort.Ravel.Assets;
-using Cohort.Ravel.BackendData.Data;
-using Cohort.Ravel.Permissions;
+using Cohort.BackendData;
+using Cohort.Permissions;
+using Cohort.Assets;
 
-namespace Cohort.Ravel.Users
+using System;
+
+namespace Cohort.Users
 {
     [Serializable]
     public class User : DataContainer

@@ -1,7 +1,7 @@
-using System;
 using UnityEngine;
+using System;
 
-namespace Cohort.Ravel.Networking.Users
+namespace Cohort.Networking.Users
 {
     /// <summary>
     /// Overlaying class to retrieve specific web requests from the user subset of the backend.

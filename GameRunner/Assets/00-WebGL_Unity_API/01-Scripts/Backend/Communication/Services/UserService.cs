@@ -1,10 +1,10 @@
 using System;
 using Cohort.Tools.Timers;
-using Cohort.Ravel.Users;
+using Cohort.Users;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Cohort.Ravel.BackendData.DataService
+namespace Cohort.BackendData.DataService
 {
     public class UserService : MonoBehaviour
     {

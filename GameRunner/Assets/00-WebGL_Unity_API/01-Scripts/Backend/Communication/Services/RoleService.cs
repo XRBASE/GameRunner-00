@@ -1,6 +1,6 @@
 using System;
-using Cohort.Ravel.Permissions;
-using Cohort.Ravel.Users;
+using Cohort.Permissions;
+using Cohort.Users;
 using UnityEngine;
 
 public class RoleService : MonoBehaviour

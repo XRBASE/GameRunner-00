@@ -1,8 +1,9 @@
-using System;
-using Cohort.Ravel.Assets;
-using Cohort.Ravel.BackendData.Data;
+using Cohort.BackendData;
+using Cohort.Assets;
 
-namespace Cohort.Ravel.Spaces
+using System;
+
+namespace Cohort.Spaces
 {
     //for now not with custom repo, but might be needed later
     [Serializable]

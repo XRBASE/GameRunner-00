@@ -1,8 +1,9 @@
-using System;
-using System.Collections;
-using Cohort.Ravel.Networking;
+using Cohort.Networking;
 
-namespace Cohort.Ravel.BackendData.Data {
+using System.Collections;
+using System;
+
+namespace Cohort.BackendData.Storage {
 
 	public class StorageRepository : DataRepository<StorageData> {
 		public StorageRepository() : base(false, new TimeSpan(0)) { }

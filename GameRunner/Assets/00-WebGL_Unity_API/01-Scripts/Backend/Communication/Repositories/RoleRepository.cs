@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Cohort.Ravel.Permissions
+namespace Cohort.Permissions
 {
 	public class RoleRepository
 	{

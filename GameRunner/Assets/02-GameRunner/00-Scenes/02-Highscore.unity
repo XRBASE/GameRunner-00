@@ -479,6 +479,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _index
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _locationDescription
+      value: at 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3362825640608561748, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
       value: 1
@@ -489,7 +497,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole.2
+      value: PF_MinigameConsole.0
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -548,6 +556,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _index
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _locationDescription
+      value: at 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3362825640608561748, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
       value: 3
@@ -617,6 +633,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _index
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _locationDescription
+      value: at 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3362825640608561748, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
       value: 4
@@ -686,6 +710,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _index
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _locationDescription
+      value: at 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3362825640608561748, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
       value: 2
@@ -696,7 +728,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole
+      value: PF_MinigameConsole.2
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -753,8 +785,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 1291050635}
   - {fileID: 1376175249}
-  - {fileID: 2699343617401273203}
-  - {fileID: 1816406119}
   - {fileID: 1505390454}
+  - {fileID: 1816406119}
+  - {fileID: 2699343617401273203}
   - {fileID: 1912207594}
   - {fileID: 996727321}

@@ -12,8 +12,12 @@ using UnityEngine;
 [DefaultExecutionOrder(102)] // After playermanagement
 public class ActivityLoader : Singleton<ActivityLoader>
 {
-    public bool InGame { get; private set; }
+    public bool InActivity { get; private set; }
     public bool AllPlayersReady { get; private set; }
+
+    public ActivityDefinition Activity {
+        get { return _definition; }
+    }
 
     public Action onActivityStart; 
     public Action onActivityStop; 
@@ -42,20 +46,16 @@ public class ActivityLoader : Singleton<ActivityLoader>
     
     private void StartActivity() {
         onActivityStart?.Invoke();
-        MinigameManager.Instance.StartMinigames(_definition.ScoreMultiplier);
     }
     
     public void StopActivity() {
-        if (!InGame)
+        if (!InActivity)
             return;
 
-        InGame = false;
+        InActivity = false;
         AllPlayersReady = false;
         
         onActivityStop?.Invoke();
-        MinigameManager.Instance.StopMinigames();
-        //TODO: publish minigames
-        
         ClearPhotonRoomProperties();
     }
 
@@ -77,6 +77,8 @@ public class ActivityLoader : Singleton<ActivityLoader>
         if (AllPlayersReady)
             return;
         
+        //TODO_COHORT: there should be a from of start key, so this is skipped when reconnecting.
+        //If 3 people reconnect they all have to wait on eachother right now, but that shouldn't happen.
         string key;
         foreach (var kv_player in Network.Local.Client.CurrentRoom.Players) {
             if (kv_player.Value.IsInactive)
@@ -98,13 +100,7 @@ public class ActivityLoader : Singleton<ActivityLoader>
     }
     
     private void OnPropsChanged(Hashtable changes) {
-        string key = GetPlayerReadyKey();
-        foreach (var entry in changes) {
-            if (entry.Key.ToString().StartsWith(key)) {
-                OnPlayerReady();
-                break;
-            }
-        }
+        string key;
         
         key = GetActivitySessionKey();
         if (changes.ContainsKey(key)) {
@@ -126,6 +122,16 @@ public class ActivityLoader : Singleton<ActivityLoader>
             _definition = JsonUtility.FromJson<ActivityDefinition>((string)changes[key]);
             LoadActivityLocal();
         }
+        
+        if (!AllPlayersReady) {
+            key = GetPlayerReadyKey();
+            foreach (var entry in changes) {
+                if (entry.Key.ToString().StartsWith(key)) {
+                    OnPlayerReady();
+                    break;
+                }
+            }
+        }
     }
     
     private void ClearPhotonRoomProperties() {
@@ -142,15 +148,15 @@ public class ActivityLoader : Singleton<ActivityLoader>
     }
 
     private void StopActivityLocal() {
-        if (!InGame)
+        if (!InActivity)
             return;
         
-        InGame = false;
+        InActivity = false;
         _definition = null;
     }
 
     public void LoadActivity(ActivityDefinition definition) {
-        if (InGame)
+        if (InActivity)
             return;
         
         Hashtable changes = new Hashtable();
@@ -162,7 +168,7 @@ public class ActivityLoader : Singleton<ActivityLoader>
     }
 
     private void LoadActivityLocal() {
-        InGame = true;
+        InActivity = true;
         
         _score.Initialize(_definition, _session);
     }

@@ -53,7 +53,7 @@ public class ObjIndicator : MonoBehaviour {
     public void SetActive(bool enabled, bool force = false) {
         if (!_initialized) {
             SetUp(enabled, _icon, _color, _size, _target);
-            return;                              
+            return;                            
         }
         
         if (force || _enabled != enabled) {

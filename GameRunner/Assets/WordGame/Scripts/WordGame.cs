@@ -7,12 +7,12 @@ using UnityEngine;
 using UnityEngine.Playables;
 using Random = UnityEngine.Random;
 
-public class WordGame : Minigame
+public class WordGame : Learning
 {
     private const float INVALID_FEEDBACK_TIMEOUT = 1f;
     private const float GAME_COMPLETE_FEEDBACK_TIMEOUT = 2f;
     private Word CurrentWord => _words[_entryIndex];
-    private bool CanPlay => IsPlaying && _entryIndex < _words.Count;
+    private bool CanPlay => _isPlaying && _entryIndex < _words.Count;
     
     public Word wordPrefab;
     public WordGameInput wordGameInput;
@@ -36,6 +36,7 @@ public class WordGame : Minigame
     private int _wordLength;
     private float _completionPercent;
     private float _scoreMultiplier;
+    private bool _isPlaying;
 
 
     public override void Initialize(string gameData, int scoreMultiplier, Action<float> onGameFinished)
@@ -73,7 +74,7 @@ public class WordGame : Minigame
         _chosenWord = _wordGameData.wordList[Random.Range(0, _wordGameData.wordList.Count)];
         hintText.text = _chosenWord.hint;
         _entryIndex = 0;
-        IsPlaying = true;
+        _isPlaying = true;
     }
 
     private void Submit()
@@ -139,7 +140,7 @@ public class WordGame : Minigame
     {
         _completionPercent = (_wordGameData.tries - _entryIndex) / (float) _wordGameData.tries;
         DisplayScore(_completionPercent);
-        IsPlaying = false;
+        _isPlaying = false;
         DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, GameFinished);
     }
 

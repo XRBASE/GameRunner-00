@@ -1,12 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Cohort.Networking.Authorization;
 using Cohort.Config;
-using Cohort.Ravel.Networking.Authorization;
-using UnityEngine;
-using UnityEngine.Networking;
 
-namespace Cohort.Ravel.Networking {
+using System.Collections.Generic;
+using UnityEngine.Networking;
+using UnityEngine;
+using System.Text;
+using System;
+
+namespace Cohort.Networking {
     
     /// <summary>
     /// Base class for overriding and creating web requests.
