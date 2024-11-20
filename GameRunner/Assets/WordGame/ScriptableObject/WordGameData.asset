@@ -16,8 +16,8 @@ MonoBehaviour:
     title: Guess the word
     tries: 5
     wordList:
-    - word: penis
-      hint: 49% van de wereld bevolking heeft het tussen hun benen
+    - word: Aarde
+      hint: Iedereen leeft hier op
     - word: moord
       hint: Jeffrey dahmer is er voor veroordeeld
     - word: pinda
@@ -31,7 +31,7 @@ MonoBehaviour:
     - word: einde
       hint: komt na de start
     - word: sport
-      hint: Dikke mensen doen het weinig
+      hint: Je wordt er sterk van
   wordDictionary:
   - Aafje
   - Aafke

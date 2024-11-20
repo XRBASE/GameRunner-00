@@ -14,29 +14,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   learnings:
   - actionDescription: 'Solve 0 '
-    sceneName: 00-Tester
-    data: '-'
+    sceneName: 02-Minigame-WordGame
+    data: "{\"title\":\"Guess the word\",\"tries\":5,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
+      leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt
+      veel gebruikt in thaise recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot
+      dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt
+      voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt na de start\"},{\"word\":\"sport\",\"hint\":\"Je
+      wordt er sterk van\"}]} "
     locations: 00000000
     state: 0
     index: 0
     log: {fileID: 0}
   - actionDescription: 'Solve 1 '
-    sceneName: 00-Tester
-    data: '-'
+    sceneName: 02-Minigame-WordGame
+    data: "{\"title\":\"Guess the word\",\"tries\":5,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
+      leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt
+      veel gebruikt in thaise recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot
+      dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt
+      voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt na de start\"},{\"word\":\"sport\",\"hint\":\"Je
+      wordt er sterk van\"}]} "
     locations: 01000000
     state: 0
     index: 1
     log: {fileID: 0}
   - actionDescription: 'Solve 2 '
-    sceneName: 00-Tester
-    data: '-'
+    sceneName: 02-Minigame-WordGame
+    data: "{\"title\":\"Guess the word\",\"tries\":5,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
+      leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt
+      veel gebruikt in thaise recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot
+      dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt
+      voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt na de start\"},{\"word\":\"sport\",\"hint\":\"Je
+      wordt er sterk van\"}]} "
     locations: 02000000
     state: 0
     index: 2
     log: {fileID: 0}
   - actionDescription: Solve 3
-    sceneName: 00-Tester
-    data: '-'
+    sceneName: 02-Minigame-WordGame
+    data: "{\"title\":\"Guess the word\",\"tries\":5,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
+      leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt
+      veel gebruikt in thaise recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot
+      dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt
+      voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt na de start\"},{\"word\":\"sport\",\"hint\":\"Je
+      wordt er sterk van\"}]} "
     locations: 03000000
     state: 0
     index: 3
