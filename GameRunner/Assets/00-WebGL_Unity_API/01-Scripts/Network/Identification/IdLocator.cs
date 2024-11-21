@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class IdLocator : AssetModificationProcessor {
     public static void SetIds() {
-	    IUniqueId[] holders = GameObject.FindObjectsOfType<MonoBehaviour>(true).OfType<IUniqueId>().ToArray();
+	    IUniqueId[] holders = GameObject.FindObjectsOfType<MonoBehaviour>(true).OfType<IUniqueId>().OrderBy(i => i.Name).ToArray();
 	    bool[] taken = new bool[holders.Length];
 
 	    for (int i = 0; i < holders.Length; i++) {

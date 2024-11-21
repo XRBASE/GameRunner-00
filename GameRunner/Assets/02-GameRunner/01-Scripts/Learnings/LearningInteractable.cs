@@ -86,11 +86,17 @@ public class LearningInteractable : Interactable {
         base.Deactivate(changes, expected);
     }
 
-    protected override void DeactivateLocal() { }
+    protected override void DeactivateLocal() {
+        SetLearningLocal(-1);
+    }
 
     public void SetLearning(LearningDescription learning = null) {
         if (!_networked) {
-            SetLearningLocal(learning?.index ?? -1);
+            if (learning == null)
+                SetLearningLocal(-1);
+            else
+                SetLearningLocal(learning.index);
+            
             return;
         }
         

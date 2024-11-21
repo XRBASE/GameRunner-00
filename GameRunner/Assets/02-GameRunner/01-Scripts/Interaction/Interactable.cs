@@ -16,6 +16,10 @@ namespace Cohort.GameRunner.Interaction {
             set { _index = value; }
         }
 
+        public string Name {
+            get { return gameObject.name; }
+        }
+
         [ReadOnly, SerializeField] private int _index = -1;
 
         //all interactables always have a state. True will fire events, false will not.
