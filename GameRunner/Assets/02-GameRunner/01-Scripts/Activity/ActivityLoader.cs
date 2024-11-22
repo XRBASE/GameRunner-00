@@ -65,7 +65,6 @@ public class ActivityLoader : Singleton<ActivityLoader>
 
     private void OnSceneLoaded(string name) {
         if (!InActivity) {
-            Debug.LogError("Check");
             return;
         }
         
