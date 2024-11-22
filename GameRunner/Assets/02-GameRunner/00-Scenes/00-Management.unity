@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -311,6 +311,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Management
       objectReference: {fileID: 0}
+    - target: {fileID: 2366807048163624429, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3372190018214959068, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -350,6 +354,10 @@ PrefabInstance:
     - target: {fileID: 3372190018214959068, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996755575360842569, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -406,7 +414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: _testInput
-      value: ' {"token":"46334A4F662B516E584635586452714C3135354552773D3D","baseUrl":"https://dev.cohort.games","sessionId":"88e4091e-551f-4bba-8816-9ce0a39af590"}'
+      value: '{"token":"736563626A4A6241687965795A747556354E444E59673D3D","baseUrl":"https://dev.cohort.games","sessionId":"88e4091e-551f-4bba-8816-9ce0a39af590"}'
       objectReference: {fileID: 0}
     - target: {fileID: 7509324001149410918, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: m_Name
@@ -497,10 +505,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 31294921608168221, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
-      propertyPath: m_IsOn
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1573840330068068681, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

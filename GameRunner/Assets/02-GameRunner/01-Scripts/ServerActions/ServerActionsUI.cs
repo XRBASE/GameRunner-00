@@ -10,7 +10,7 @@ public class ServerActionsUI : UIPanel
 
 	private bool Open { get; set; }
 
-	[SerializeField] private ActivityDefinition activityDef;
+	[SerializeField] private ActivityDescription activityDef;
 	[SerializeField] private Button _toggleBtn;
 	[SerializeField] private Button _startBtn;
 	[SerializeField] private Button _stopBtn;

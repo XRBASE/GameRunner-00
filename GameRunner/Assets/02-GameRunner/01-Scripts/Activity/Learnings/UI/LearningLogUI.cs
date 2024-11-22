@@ -14,20 +14,12 @@ public class LearningLogUI : UIPanel {
         _pool = new ObjectPool<string, LearningLogEntry>(_template);
     }
 
-    private void Start() {
-        ActivityLoader.Instance.onActivityStop += ClearLog;
-    }
-
-    private void OnDestroy() {
-        ActivityLoader.Instance.onActivityStop -= ClearLog;
-    }
-
     public void ClearLog() {
         _pool.SetAll(Array.Empty<string>());
     }
 
     public LearningLogEntry CreateLogEntry(string action, string location) {
-        LearningLogEntry entry = _pool.AddItem(action + location + "!");
+        LearningLogEntry entry = _pool.AddItem(action + " " + location);
         
         return entry;
     }

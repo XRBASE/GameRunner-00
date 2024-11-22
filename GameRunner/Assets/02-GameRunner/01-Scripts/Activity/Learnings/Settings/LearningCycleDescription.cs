@@ -1,8 +1,7 @@
 using System;
-using UnityEngine;
 
-[Serializable, CreateAssetMenu(menuName = "Cohort/Gamerunner/LearningCycle", fileName = "LearningCycleDescription")]
-public class LearningCycleDescription : ScriptableObject {
+[Serializable]
+public class LearningCycleDescription {
     public LearningDescription[] learnings;
     public bool useTimer;
     public bool linear;
