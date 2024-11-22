@@ -127,8 +127,11 @@ public class ActivityLoader : Singleton<ActivityLoader>
         
         key = GetActivityDefKey();
         if (changes.ContainsKey(key)) {
-            if (string.IsNullOrEmpty((string)changes[key]) && InActivity) {
-                StopActivity();
+            if (string.IsNullOrEmpty((string)changes[key])) {
+                if (InActivity)
+                {
+                    StopActivity();
+                }
                 return;
             }
             
