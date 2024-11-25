@@ -32,6 +32,10 @@ namespace Cohort.GameRunner.LocoMovement {
 			Running,
 			Teleporting,
 		};
+		
+		private float _fallMultiplier = 2f;
+		
+		private float FallDelta => _rb.velocity.y + (Vector3.up * (Physics.gravity.y * (_fallMultiplier - 1) * Time.deltaTime)).y;
 
 		//routine used for moving towards the cursor
 		private Coroutine _moveToRoutine;
@@ -49,7 +53,7 @@ namespace Cohort.GameRunner.LocoMovement {
 		//routine used for jumping.
 		private Coroutine _jumpRoutine;
 
-		//counts the amount of jumps to prevent tripple jumping, even when the animator does not register a jump properly.
+		//counts the amount of jumps to prevent triple jumping, even when the animator does not register a jump properly.
 		private int _jumpCounter;
 
 		//position at which the target started falling, used to track the distance that the target fell.
@@ -57,6 +61,9 @@ namespace Cohort.GameRunner.LocoMovement {
 
 		//is the target falling
 		private bool _falling;
+
+		//the factor in which we fall faster than standard gravity
+	
 
 
 		public MoveState(Rigidbody rb, Locomotion lm) : base(rb, lm) { }
@@ -110,7 +117,7 @@ namespace Cohort.GameRunner.LocoMovement {
 					MoveTo(Direction, false);
 				}
 				else {
-					_rb.velocity = new Vector3(0, _rb.velocity.y, 0);
+					_rb.velocity = new Vector3(0, FallDelta,0f);
 				}
 			}
 
@@ -192,7 +199,7 @@ namespace Cohort.GameRunner.LocoMovement {
 			}
 
 			Vector3 v = _target.TransformVector(Vector3.forward * magnitude);
-			v.y = _rb.velocity.y;
+			v.y = FallDelta;
 			_rb.velocity = v;
 		}
 
@@ -207,11 +214,13 @@ namespace Cohort.GameRunner.LocoMovement {
 		public void Jump() {
 			if (_lm.Seated)
 				return;
-
+			float jumpHeight = Locomotion.JUMP_HEIGHT;
 			if (_jumpCounter < 2) {
 				CharAnimator.AnimationState state;
 				if (_lm.Animator.State is CharAnimator.AnimationState.Jump or CharAnimator.AnimationState.Fall) {
+					
 					state = CharAnimator.AnimationState.DoubleJump;
+					jumpHeight = Locomotion.DOUBLE_JUMP_HEIGHT;
 				}
 				else {
 					state = CharAnimator.AnimationState.Jump;
@@ -228,16 +237,16 @@ namespace Cohort.GameRunner.LocoMovement {
 
 				StopJumpRoutine();
 				_lm.GroundCheck.enabled = false;
-
-				_jumpRoutine = _lm.StartCoroutine(DoJump());
+	
+				_jumpRoutine = _lm.StartCoroutine(DoJump(jumpHeight));
 			}
 		}
 
 		/// <summary>
 		/// Coroutine used for making the jump happen.
 		/// </summary>
-		private IEnumerator DoJump() {
-			float f = Mathf.Sqrt(-2.0f * Physics.gravity.y * Locomotion.JUMP_HEIGHT);
+		private IEnumerator DoJump(float jumpHeight) {
+			float f = Mathf.Sqrt(-2.0f * Physics.gravity.y * jumpHeight);
 			Vector3 v = new Vector3(_rb.velocity.x, f, _rb.velocity.z);
 			_rb.velocity = v;
 

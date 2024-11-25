@@ -26,8 +26,11 @@ namespace Cohort.GameRunner.LocoMovement {
         public const float REMOTE_DIFF = -0.5f;
         
         //height in meters of one singular jump
-        public const float JUMP_HEIGHT = 2f;
+        public const float JUMP_HEIGHT = 6f;
         
+        //height in meters of the double jump
+        public const float DOUBLE_JUMP_HEIGHT = 3f;
+
         //speeds in meters per second
         public const float WALK_SPEED = 3.5f;
         public const float RUN_SPEED = 6f;
