@@ -4,7 +4,6 @@ using MathBuddy.Strings;
 using Cohort.Patterns;
 using Cohort.Config;
 
-
 using System.Runtime.InteropServices;
 using System.Collections;
 using UnityEngine;
@@ -42,8 +41,10 @@ public class ServerHandle : Singleton<ServerHandle>
 
     [SerializeField] private bool _testData = false;
 
+    public ActivityDescription activityDef;
     [SerializeField] private string _testInput =
         "{\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhaS5zcGFjZXNoaWZ0LnBsYXRmb3JtLmNlbnRhdXIiLCJzdWIiOiJydXRnZXJ2ZDIxNyIsImV4cCI6MTcxMzM0NjY3MiwiaWF0IjoxNzEzMjYwMjcyLCJyb2xlcyI6WyJBRE1JTiIsIkdVRVNUIiwiTUFOQUdFUiIsIlNVUEVSIiwiVVNFUiJdfQ.fSKZtqa3yN_bZTVubN3Mj5UXuoRVld_pvFdQsL70qhM\",\"baseUrl\":\"https://dev.spaceshift.ai\",\"roomId\":\"58d6a142-e326-4d40-859a-3fa0d57540e2\",\"spaceId\":\"8d3d6c74-a2ce-4585-acad-b321ae6596bd\"}";
+    
     
     private void OnDestroy() {
         AppConfig.Config.OverrideAppID("");
@@ -87,7 +88,7 @@ public class ServerHandle : Singleton<ServerHandle>
 
     private LoginRequest.SimpleToken _token;
     
-    private string _roomId;
+    private string _sessionId;
     private bool _dataValid;
     
     public void InitData(string data) {
@@ -114,19 +115,18 @@ public class ServerHandle : Singleton<ServerHandle>
         LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Finish();
         
         LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Start();
-        _roomId = StringExtentions.PickFromJson<string>("roomId", _initData);
+        _sessionId = StringExtentions.PickFromJson<string>("sessionId", _initData);
         if (_dataValid)
-            _dataValid = !string.IsNullOrEmpty(_roomId);
+            _dataValid = !string.IsNullOrEmpty(_sessionId);
         
         if (!_dataValid) {
             Debug.LogError($"Stopping logging because of data error:" +
-                             $"roomid: {_roomId}, baseURL: {_baseUrl}, token: {_token.token}");
+                             $"sessionId: {_sessionId}, baseURL: {_baseUrl}, token: {_token.token}");
             yield break;
         }
         
         LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Increment("Connecting networking client");
-        DataServices.Photon.ConnectToPhotonRoom(_roomId, OnConnected, OnConnectionError);
-        //TODO: Connect to photon server
+        DataServices.Photon.ConnectToPhotonRoom(_sessionId, OnConnected, OnConnectionError);
     }
 
     private void OnConnected() {

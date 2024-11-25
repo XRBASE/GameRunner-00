@@ -9,8 +9,7 @@ public class ServerActionsUI : UIPanel
 	private const float ANIM_DURATION = 0.5f;
 
 	private bool Open { get; set; }
-
-	[SerializeField] private ActivityDefinition activityDef;
+	
 	[SerializeField] private Button _toggleBtn;
 	[SerializeField] private Button _startBtn;
 	[SerializeField] private Button _stopBtn;
@@ -42,7 +41,7 @@ public class ServerActionsUI : UIPanel
 	}
 
 	private void StartGame() { ;
-		ActivityLoader.Instance.LoadActivity(activityDef);
+		ActivityLoader.Instance.LoadActivity(ServerHandle.Instance.activityDef);
 	}
 
 	public void ToggleState() {

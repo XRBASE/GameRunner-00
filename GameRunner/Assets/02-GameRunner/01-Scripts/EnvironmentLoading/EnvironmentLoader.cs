@@ -6,17 +6,16 @@ using ExitGames.Client.Photon;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[DefaultExecutionOrder(99)] // before Gameloader
+[DefaultExecutionOrder(103)] // before ActivityLoader (99)
 public class EnvironmentLoader : Singleton<EnvironmentLoader> {
 	private const string LOBBY_SCENE = "01-Lobby";
 
-	public Action onEnvironmentLoaded;
+	public Action<string> onEnvironmentLoaded;
 
 	private bool _initial = true;
 	private string _activeScene;
 	
-    protected override void Awake() {
-	    base.Awake();
+    protected void Start() {
 	    SceneManager.sceneLoaded += OnSceneLoaded;
 	    
 	    Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
@@ -75,7 +74,7 @@ public class EnvironmentLoader : Singleton<EnvironmentLoader> {
 
 	    SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
 	    _activeScene = sceneName;
-	    onEnvironmentLoaded?.Invoke();
+	    onEnvironmentLoaded?.Invoke(sceneName);
     }
     
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {

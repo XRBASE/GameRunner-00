@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Cohort.Patterns
@@ -32,9 +31,10 @@ namespace Cohort.Patterns
 
             _template = template;
             _template.IsActive = false;
+            _template.Initialize(this);
             
             if (addTemplate) {
-                AddItem(_template);    
+                AddItem(_template);
             }
         }
 
@@ -66,6 +66,7 @@ namespace Cohort.Patterns
             }
             else {
                 item = _template.Copy();
+                item.Initialize(this);
             }
 
             item.UpdatePoolable(_active.Count, data);
@@ -174,9 +175,10 @@ namespace Cohort.Patterns
         public interface IPoolable
         {
             public bool IsActive { get; set; }
-            
-            public void UpdatePoolable(int index, TData data);
 
+            public void Initialize(ObjectPool<TData, TType> pool);
+            public void UpdatePoolable(int index, TData data);
+            
             public TType Copy();
         }
     }

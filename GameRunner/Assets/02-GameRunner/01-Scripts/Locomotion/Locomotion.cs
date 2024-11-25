@@ -168,7 +168,7 @@ namespace Cohort.GameRunner.LocoMovement {
                 //CameraState.Instance.PlayerFocusTransform = Animator.GetBone(HumanBodyBones.Head);
             }
             else if (!_initialized) {
-                InitLocomotion();
+                InitLocomotion("");
             }
         }
         
@@ -243,7 +243,7 @@ namespace Cohort.GameRunner.LocoMovement {
             }
         }
 
-        private void InitLocomotion() {
+        private void InitLocomotion(string sceneName) {
             if (Control == ControlType.Local) {
                 TeleportToSpawn();
             }
