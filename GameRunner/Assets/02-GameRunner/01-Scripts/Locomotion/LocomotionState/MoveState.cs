@@ -191,7 +191,7 @@ namespace Cohort.GameRunner.LocoMovement {
 
 				//all layers except ignore raycast and player layer
 				int mask = ~(1 << (Player.LAYER | 2));
-				if (Physics.Raycast(_target.position + Vector3.up * halfHeight, _target.forward,
+				if (Physics.Raycast(_target.position, _target.forward,
 				                    out RaycastHit hitinfo, 0.6f, mask,
 				                    QueryTriggerInteraction.Ignore)) {
 					magnitude = hitinfo.distance - .3f;
