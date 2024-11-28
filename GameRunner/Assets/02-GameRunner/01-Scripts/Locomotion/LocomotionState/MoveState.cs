@@ -170,7 +170,6 @@ namespace Cohort.GameRunner.LocoMovement {
 		/// <param name="speed">Speed value in metres per second.</param>
 		public override void OnSpeedChanged(float speed) {
 			base.OnSpeedChanged(speed);
-
 			if (_lm.Animator != null) {
 				_lm.Animator.SetSpeed(Speed / Locomotion.RUN_SPEED);
 			}
@@ -187,8 +186,6 @@ namespace Cohort.GameRunner.LocoMovement {
 
 			float magnitude = Speed;
 			if (_lm.Control == Locomotion.ControlType.Local) {
-				float halfHeight = (Player.Local.Avatar.Head.position.y - Player.Local.Avatar.Feet.position.y) / 2f;
-
 				//all layers except ignore raycast and player layer
 				int mask = ~(1 << (Player.LAYER | 2));
 				if (Physics.Raycast(_target.position, _target.forward,
