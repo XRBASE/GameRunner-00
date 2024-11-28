@@ -6,7 +6,7 @@ using ExitGames.Client.Photon;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[DefaultExecutionOrder(103)] // before ActivityLoader (99)
+[DefaultExecutionOrder(103)] // After ActivityLoader
 public class EnvironmentLoader : Singleton<EnvironmentLoader> {
 	private const string LOBBY_SCENE = "01-Lobby";
 
@@ -67,6 +67,10 @@ public class EnvironmentLoader : Singleton<EnvironmentLoader> {
     }
 
     private void LoadSceneLocal(string sceneName) {
+	    if (sceneName == _activeScene) {
+		    return;
+	    }
+	    
 	    //TODO_COHORT: assetbundles
 	    if (!string.IsNullOrEmpty(_activeScene)) {
 		    SceneManager.UnloadSceneAsync(_activeScene);

@@ -192,9 +192,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0095bd302e89d2b4e81f87fc813eca6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactable: 1
   _index: -1
+  _radius: 3
   _value: 0
   _networked: 1
+  _hasLearning: 0
   _locationDescription: At position
   _indicator: {fileID: 3668885425771106200}
 --- !u!65 &8248202958126296082
