@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using ExitGames.Client.Photon;
+using Unity.Properties;
 using UnityEngine;
 
 [DefaultExecutionOrder(102)] // After playermanagement
@@ -51,9 +52,18 @@ public class ActivityLoader : Singleton<ActivityLoader>
     }
     
     public void StopActivity() {
+        Hashtable props = new Hashtable();
+        props[GetActivityDefKey()] = JsonUtility.ToJson(ActivityDescription.EMPTY);
+        
+        Network.Local.Client.CurrentRoom.SetCustomProperties(props);
+        Debug.Log("Activity stop sent");
+    }
+
+    private void StopActivityLocal() {
         if (!InActivity)
             return;
         
+        Debug.Log("Activity stop local");
         InActivity = false;
         AllPlayersReady = false;
         
@@ -128,15 +138,20 @@ public class ActivityLoader : Singleton<ActivityLoader>
         key = GetActivityDefKey();
         if (changes.ContainsKey(key)) {
             if (string.IsNullOrEmpty((string)changes[key])) {
-                if (InActivity)
-                {
-                    StopActivity();
-                }
-                return;
+                _description = ActivityDescription.EMPTY;
             }
-            
-            _description = JsonUtility.FromJson<ActivityDescription>((string)changes[key]);
-            LoadActivityLocal();
+            else {
+                _description = JsonUtility.FromJson<ActivityDescription>((string)changes[key]);
+            }
+
+            if (_description.IsEmpty) {
+                if (InActivity) {
+                    StopActivityLocal();
+                }
+            }
+            else {
+                LoadActivityLocal();
+            }
         }
         
         if (!AllPlayersReady) {
@@ -158,11 +173,7 @@ public class ActivityLoader : Singleton<ActivityLoader>
             //set all properties to null (this should clear them out)
             props[key] = null;
         }
-
-        //set activity to emty string, so the change is actually pushed to other players
-        //null clears value, but is not pushed to the other players as a change.
-        props[GetActivityDefKey()] = "";
-
+        
         Network.Local.Client.CurrentRoom.SetCustomProperties(props);
         Debug.Log("Room properties cleared");
     }

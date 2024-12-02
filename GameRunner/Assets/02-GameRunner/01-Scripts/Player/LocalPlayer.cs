@@ -33,9 +33,7 @@ namespace Cohort.GameRunner.Players {
 
 			SetCustomProperties(changes);
 		}
-
-
-
+		
 #if UNITY_EDITOR
 		[CustomEditor(typeof(LocalPlayer))]
 		private class LocalPlayerEditor : Editor {

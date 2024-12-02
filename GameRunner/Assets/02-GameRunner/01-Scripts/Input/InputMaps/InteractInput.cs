@@ -6,24 +6,20 @@ namespace Cohort.GameRunner.Input.Maps {
     /// Input for interaction with objects (select and grab)
     /// </summary>
     public class InteractInput : InputMap {
-        public Action onProximityInteract;
-        public Action onInteract;
+        public Action onBtnInteract;
+        public Action onClickInteract;
+        
         private InputAction _clickInteractAction;
-        private InputAction _proximityInteractAction;
+        private InputAction _btnInteractAction;
 
         public InteractInput(InputActionAsset actions) : base(actions, "Interact") {
             _clickInteractAction = _map.FindAction("ClickInteract");
-            _proximityInteractAction = _map.FindAction("ProximityInteract");
-            _proximityInteractAction.performed += ProximityInteractAction;
+            _btnInteractAction = _map.FindAction("BtnInteract");
+            
             _clickInteractAction.canceled += OnClickInteract;
+            _btnInteractAction.canceled += OnBtnInteract;
         }
-
-        private void ProximityInteractAction(InputAction.CallbackContext context) {
-            if (!DataServices.Login.UserLoggedIn)
-                return;
-            onProximityInteract?.Invoke();
-        }
-
+        
         public override void Dispose() {
             _clickInteractAction.started -= OnClickInteract;
             _clickInteractAction.Dispose();
@@ -35,7 +31,14 @@ namespace Cohort.GameRunner.Input.Maps {
                 InputManager.Instance.Raycaster.HitState != CursorRayCaster.RCHitState.Interact)
                 return;
 
-            onInteract?.Invoke();
+            onClickInteract?.Invoke();
+        }
+
+        private void OnBtnInteract(InputAction.CallbackContext context) {
+            if (!DataServices.Login.UserLoggedIn || !InputManager.Instance.Cursor.ControlEnabled)
+                return;
+
+            onBtnInteract?.Invoke();
         }
     }
 }

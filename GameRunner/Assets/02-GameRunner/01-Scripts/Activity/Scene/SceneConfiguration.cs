@@ -1,7 +1,6 @@
-using Cohort.Patterns;
 using UnityEngine;
 
-public class SceneConfiguration : Singleton<SceneConfiguration> {
+public class SceneConfiguration : MonoBehaviour {
     public LearningCycleDescription Learning {
         get { return _learning; }
     }
@@ -10,10 +9,6 @@ public class SceneConfiguration : Singleton<SceneConfiguration> {
 
     private void Awake() {
         LearningManager.Instance.Setting = Learning;
-    }
-    
-    private void OnDestroy() {
-        Instance = null;
     }
     
 #if UNITY_EDITOR

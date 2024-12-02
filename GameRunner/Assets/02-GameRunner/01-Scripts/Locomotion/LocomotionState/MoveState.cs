@@ -180,7 +180,10 @@ namespace Cohort.GameRunner.LocoMovement {
 		/// <param name="direction">Direction in which to move the target.</param>
 		/// <param name="worldSpace">True/False is direction in world coordinates or should it be mapped using the camera alignment.</param>
 		protected void MoveTo(Vector3 direction, bool worldSpace) {
-			_lm.Animator.SetState(CharAnimator.AnimationState.Moving);
+			if (_lm.Animator != null) {
+				_lm.Animator.SetState(CharAnimator.AnimationState.Moving);
+			}
+			
 			LookInDirection(direction, worldSpace, true);
 			
 			Vector3 v = _target.TransformVector(Vector3.forward * Speed);
@@ -293,8 +296,9 @@ namespace Cohort.GameRunner.LocoMovement {
 			_rb.MovePosition(position + Vector3.up * 0.05f);
 			//_target.transform.position = position + Vector3.up * 0.05f;
 			_lm.GroundCheck.ResetCheck();
-
-			_lm.Animator.SetState(CharAnimator.AnimationState.Teleport);
+			
+			if (_lm.Animator != null)
+				_lm.Animator.SetState(CharAnimator.AnimationState.Teleport);
 		}
 
 		/// <summary>
