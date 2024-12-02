@@ -244,6 +244,8 @@ namespace Cohort.GameRunner.LocoMovement {
 
 			_rb.velocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
 			StopJumpRoutine();
+			//reset and fire in case there is a floor below you when stopping
+			_lm.GroundCheck.ResetCheck(true);
 		}
 
 		/// <summary>
@@ -488,8 +490,6 @@ namespace Cohort.GameRunner.LocoMovement {
 			_lm.StopCoroutine(_jumpRoutine);
 			_jumpRoutine = null;
 			_lm.GroundCheck.enabled = true;
-			//reset and fire in case there is a floor below you when stopping
-			_lm.GroundCheck.ResetCheck(true);
 		}
 	}
 }
