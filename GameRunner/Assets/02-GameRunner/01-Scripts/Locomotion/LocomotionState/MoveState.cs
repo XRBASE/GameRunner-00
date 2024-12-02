@@ -1,6 +1,6 @@
+//Old MoveState
 using Cohort.GameRunner.AvatarAnimations;
 using Cohort.Networking.PhotonKeys;
-using Cohort.GameRunner.Players;
 using Cohort.GameRunner.Input;
 using UnityEngine;
 using MathBuddy;
@@ -31,6 +31,10 @@ namespace Cohort.GameRunner.LocoMovement {
 			Running,
 			Teleporting,
 		};
+		
+		private float _fallMultiplier = 1.75f;
+		
+		private float FallDelta => _rb.velocity.y + (Vector3.up * (Physics.gravity.y * (_fallMultiplier - 1) * Time.deltaTime)).y;
 
 		//routine used for moving towards the cursor
 		private Coroutine _moveToRoutine;
@@ -48,7 +52,7 @@ namespace Cohort.GameRunner.LocoMovement {
 		//routine used for jumping.
 		private Coroutine _jumpRoutine;
 
-		//counts the amount of jumps to prevent tripple jumping, even when the animator does not register a jump properly.
+		//counts the amount of jumps to prevent triple jumping, even when the animator does not register a jump properly.
 		private int _jumpCounter;
 
 		//position at which the target started falling, used to track the distance that the target fell.
@@ -56,6 +60,9 @@ namespace Cohort.GameRunner.LocoMovement {
 
 		//is the target falling
 		private bool _falling;
+
+		//the factor in which we fall faster than standard gravity
+	
 
 
 		public MoveState(Rigidbody rb, Locomotion lm) : base(rb, lm) { }
@@ -109,7 +116,7 @@ namespace Cohort.GameRunner.LocoMovement {
 					MoveTo(Direction, false);
 				}
 				else {
-					_rb.velocity = new Vector3(0, _rb.velocity.y, 0);
+					_rb.velocity = new Vector3(0, FallDelta,0f);
 				}
 			}
 
@@ -162,7 +169,6 @@ namespace Cohort.GameRunner.LocoMovement {
 		/// <param name="speed">Speed value in metres per second.</param>
 		public override void OnSpeedChanged(float speed) {
 			base.OnSpeedChanged(speed);
-
 			if (_lm.Animator != null) {
 				_lm.Animator.SetSpeed(Speed / Locomotion.RUN_SPEED);
 			}
@@ -179,22 +185,9 @@ namespace Cohort.GameRunner.LocoMovement {
 			}
 			
 			LookInDirection(direction, worldSpace, true);
-
-			float magnitude = Speed;
-			if (_lm.Control == Locomotion.ControlType.Local) {
-				float halfHeight = (Player.Local.Avatar.Head.position.y - Player.Local.Avatar.Feet.position.y) / 2f;
-
-				//all layers except ignore raycast and player layer
-				int mask = ~(1 << (Player.LAYER | 2));
-				if (Physics.Raycast(_target.position + Vector3.up * halfHeight, _target.forward,
-				                    out RaycastHit hitinfo, 0.6f, mask,
-				                    QueryTriggerInteraction.Ignore)) {
-					magnitude = hitinfo.distance - .3f;
-				}
-			}
-
-			Vector3 v = _target.TransformVector(Vector3.forward * magnitude);
-			v.y = _rb.velocity.y;
+			
+			Vector3 v = _target.TransformVector(Vector3.forward * Speed);
+			v.y = FallDelta;
 			_rb.velocity = v;
 		}
 
@@ -209,11 +202,13 @@ namespace Cohort.GameRunner.LocoMovement {
 		public void Jump() {
 			if (_lm.Seated)
 				return;
-
+			float jumpHeight = Locomotion.JUMP_HEIGHT;
 			if (_jumpCounter < 2) {
 				CharAnimator.AnimationState state;
 				if (_lm.Animator.State is CharAnimator.AnimationState.Jump or CharAnimator.AnimationState.Fall) {
+					
 					state = CharAnimator.AnimationState.DoubleJump;
+					jumpHeight = Locomotion.DOUBLE_JUMP_HEIGHT;
 				}
 				else {
 					state = CharAnimator.AnimationState.Jump;
@@ -230,16 +225,16 @@ namespace Cohort.GameRunner.LocoMovement {
 
 				StopJumpRoutine();
 				_lm.GroundCheck.enabled = false;
-
-				_jumpRoutine = _lm.StartCoroutine(DoJump());
+	
+				_jumpRoutine = _lm.StartCoroutine(DoJump(jumpHeight));
 			}
 		}
 
 		/// <summary>
 		/// Coroutine used for making the jump happen.
 		/// </summary>
-		private IEnumerator DoJump() {
-			float f = Mathf.Sqrt(-2.0f * Physics.gravity.y * Locomotion.JUMP_HEIGHT);
+		private IEnumerator DoJump(float jumpHeight) {
+			float f = Mathf.Sqrt(-2.0f * Physics.gravity.y * jumpHeight);
 			Vector3 v = new Vector3(_rb.velocity.x, f, _rb.velocity.z);
 			_rb.velocity = v;
 
@@ -249,6 +244,8 @@ namespace Cohort.GameRunner.LocoMovement {
 
 			_rb.velocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
 			StopJumpRoutine();
+			//reset and fire in case there is a floor below you when stopping
+			_lm.GroundCheck.ResetCheck(true);
 		}
 
 		/// <summary>
@@ -493,8 +490,6 @@ namespace Cohort.GameRunner.LocoMovement {
 			_lm.StopCoroutine(_jumpRoutine);
 			_jumpRoutine = null;
 			_lm.GroundCheck.enabled = true;
-			//reset and fire in case there is a floor below you when stopping
-			_lm.GroundCheck.ResetCheck(true);
 		}
 	}
 }
