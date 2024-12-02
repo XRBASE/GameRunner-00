@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2256349187514070781}
   - component: {fileID: 2975891138786104875}
   - component: {fileID: 5354073674722310772}
+  - component: {fileID: 5507818325348342370}
   m_Layer: 3
   m_Name: PF_Player
   m_TagString: Untagged
@@ -111,3 +112,26 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!136 &5507818325348342370
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5077227709532830829}
+  m_Material: {fileID: 13400000, guid: 06bdb26c13b601249af6b7f5ab9b072f, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.35
+  m_Height: 1.7
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.95, z: 0}
