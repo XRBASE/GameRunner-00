@@ -5,7 +5,6 @@ using Cohort.GameRunner.Players;
 using Cohort.CustomAttributes;
 using Cohort.GameRunner.Input;
 using ExitGames.Client.Photon;
-using UnityEngine.SceneManagement;
 using UnityEngine;
 using System;
 
@@ -25,11 +24,11 @@ namespace Cohort.GameRunner.LocoMovement {
         //difference between speed of remote and local players
         public const float REMOTE_DIFF = -0.5f;
         
-        //height in meters of one singular jump
-        public const float JUMP_HEIGHT = 6f;
+        //Jump power
+        public const float JUMP_HEIGHT = 4f;
         
-        //height in meters of the double jump
-        public const float DOUBLE_JUMP_HEIGHT = 3f;
+        //Double jump power
+        public const float DOUBLE_JUMP_HEIGHT = 2.5f;
 
         //speeds in meters per second
         public const float WALK_SPEED = 3.5f;

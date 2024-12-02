@@ -29,8 +29,8 @@ namespace Cohort.GameRunner.LocoMovement {
         public void Initialize(Transform source, FloorCollision GroundChecker, FloorCollision FallChecker) {
             _mask = ~LayerMask.GetMask("Player");
             gameObject.layer = Player.LAYER;
-            GroundChecker.Initialise(_mask, new Vector3(.5f,.4f,.5f), Vector3.down* .1f );
-            FallChecker.Initialise(_mask, new Vector3(.5f,1f,.5f), Vector3.down* .4f);
+            GroundChecker.Initialise(_mask, Vector3.down* .1f, .15f,.4f);
+            FallChecker.Initialise(_mask, Vector3.down* .4f, .15f, 1f);
             GroundChecker.onFloorCollision += HandleGroundCheck;
             FallChecker.onFloorCollision += HandleFallCheck;
             Grounded = true;

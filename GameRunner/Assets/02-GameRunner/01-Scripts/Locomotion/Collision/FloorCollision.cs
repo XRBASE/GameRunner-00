@@ -6,17 +6,18 @@ public class FloorCollision : MonoBehaviour
 {
     public Action<bool> onFloorCollision;
     private LayerMask _layerMask;
-    private BoxCollider _boxCollider;
+    private CapsuleCollider _capsuleCollider;
     private int _contacts;
 
 
-    public void Initialise(LayerMask mask, Vector3 size, Vector3 center)
+    public void Initialise(LayerMask mask, Vector3 center, float radius, float height)
     {
         _layerMask = mask;
-        _boxCollider = gameObject.AddComponent<BoxCollider>();
-        _boxCollider.size = size;
-        _boxCollider.center = center;
-        _boxCollider.isTrigger = true;
+        _capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
+        _capsuleCollider.radius = radius;
+        _capsuleCollider.center = center;
+        _capsuleCollider.height = height;
+        _capsuleCollider.isTrigger = true;
     }
 
     private void OnTriggerEnter(Collider other)

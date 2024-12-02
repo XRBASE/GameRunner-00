@@ -1,7 +1,6 @@
 //Old MoveState
 using Cohort.GameRunner.AvatarAnimations;
 using Cohort.Networking.PhotonKeys;
-using Cohort.GameRunner.Players;
 using Cohort.GameRunner.Input;
 using UnityEngine;
 using MathBuddy;
@@ -33,7 +32,7 @@ namespace Cohort.GameRunner.LocoMovement {
 			Teleporting,
 		};
 		
-		private float _fallMultiplier = 2f;
+		private float _fallMultiplier = 1.75f;
 		
 		private float FallDelta => _rb.velocity.y + (Vector3.up * (Physics.gravity.y * (_fallMultiplier - 1) * Time.deltaTime)).y;
 
@@ -183,19 +182,8 @@ namespace Cohort.GameRunner.LocoMovement {
 		protected void MoveTo(Vector3 direction, bool worldSpace) {
 			_lm.Animator.SetState(CharAnimator.AnimationState.Moving);
 			LookInDirection(direction, worldSpace, true);
-
-			float magnitude = Speed;
-			if (_lm.Control == Locomotion.ControlType.Local) {
-				//all layers except ignore raycast and player layer
-				int mask = ~(1 << (Player.LAYER | 2));
-				if (Physics.Raycast(_target.position, _target.forward,
-				                    out RaycastHit hitinfo, 0.6f, mask,
-				                    QueryTriggerInteraction.Ignore)) {
-					magnitude = hitinfo.distance - .3f;
-				}
-			}
-
-			Vector3 v = _target.TransformVector(Vector3.forward * magnitude);
+			
+			Vector3 v = _target.TransformVector(Vector3.forward * Speed);
 			v.y = FallDelta;
 			_rb.velocity = v;
 		}

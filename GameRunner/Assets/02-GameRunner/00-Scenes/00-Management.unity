@@ -266,6 +266,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5737630204903229178, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 06bdb26c13b601249af6b7f5ab9b072f, type: 2}
     - target: {fileID: 8219063904684315801, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
       propertyPath: m_IsKinematic
       value: 1
@@ -275,7 +279,7 @@ PrefabInstance:
       value: LocalPlayer
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 3497593892897942149, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -494,6 +498,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1170715247519993080, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -36.99994
+      objectReference: {fileID: 0}
     - target: {fileID: 1573840330068068681, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
