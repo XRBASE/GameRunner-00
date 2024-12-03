@@ -5,7 +5,7 @@ using Cohort.Patterns;
 using UnityEngine;
 
 public class CameraController : Singleton<CameraController> {
-    private const float MAX_ZOOM = 10f;
+    private const float MAX_ZOOM = 20f;
     private const float MIN_ZOOM = 3f;
     private const float MOVE_ELA = 0.02f;
     private const float LOOK_ELA = 0.1f;

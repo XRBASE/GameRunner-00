@@ -28,6 +28,10 @@ public class ObjIndicatorUI : UIPanel {
         indicator.color = col;
         ((RectTransform)indicator.transform).sizeDelta = size;
         
+        /*((RectTransform)indicator.transform).pivot = Vector2.zero;
+        ((RectTransform)indicator.transform).anchorMin = Vector2.zero;
+        ((RectTransform)indicator.transform).anchorMax = Vector2.zero;*/
+        
         return indicator;
     }
 

@@ -1,40 +1,45 @@
 using Cohort.Networking.PhotonKeys;
 using Cohort.GameRunner.Players;
 using Cohort.Patterns;
-
 using System.Collections.Generic;
 using System.Linq;
 using System;
 using ExitGames.Client.Photon;
-using UnityEngine.SceneManagement;
+using Unity.Properties;
 using UnityEngine;
 
 [DefaultExecutionOrder(102)] // After playermanagement
 public class ActivityLoader : Singleton<ActivityLoader>
 {
-    public bool InGame { get; private set; }
+    public bool InActivity { get; private set; }
     public bool AllPlayersReady { get; private set; }
+
+    public ActivityDescription Activity {
+        get { return _description; }
+    }
 
     public Action onActivityStart; 
     public Action onActivityStop; 
 
     [SerializeField] private int _session = -1;
     [SerializeField] private HighscoreTracker _score; 
-    private ActivityDefinition _definition;
+    private ActivityDescription _description;
+
+    private bool _sceneLoaded, _activityLoaded;
 
     private void Start() {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        
         Network.Local.Callbacks.onJoinedRoom += OnJoinRoom;
         Network.Local.Callbacks.onRoomPropertiesChanged += OnPropsChanged;
 
         if (Network.Local.Client.InRoom) {
             OnJoinRoom();
         }
+        
+        EnvironmentLoader.Instance.onEnvironmentLoaded += OnSceneLoaded;
     }
 
     private void OnDestroy() {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        EnvironmentLoader.Instance.onEnvironmentLoaded -= OnSceneLoaded;
         
         Network.Local.Callbacks.onJoinedRoom -= OnJoinRoom;
         Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropsChanged;
@@ -42,26 +47,44 @@ public class ActivityLoader : Singleton<ActivityLoader>
     
     private void StartActivity() {
         onActivityStart?.Invoke();
-        MinigameManager.Instance.StartMinigames(_definition.ScoreMultiplier);
+        
+        LearningManager.Instance.OnActivityStart(Activity.ScoreMultiplier);
     }
     
     public void StopActivity() {
-        if (!InGame)
-            return;
+        Hashtable props = new Hashtable();
+        props[GetActivityDefKey()] = JsonUtility.ToJson(ActivityDescription.EMPTY);
+        
+        Network.Local.Client.CurrentRoom.SetCustomProperties(props);
+        Debug.Log("Activity stop sent");
+    }
 
-        InGame = false;
+    private void StopActivityLocal() {
+        if (!InActivity)
+            return;
+        
+        Debug.Log("Activity stop local");
+        InActivity = false;
         AllPlayersReady = false;
         
-        onActivityStop?.Invoke();
-        MinigameManager.Instance.StopMinigames();
-        //TODO: publish minigames
+        LearningManager.Instance.OnActivityStop();
         
+        onActivityStop?.Invoke();
         ClearPhotonRoomProperties();
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+    private void OnSceneLoaded(string name) {
+        if (!InActivity) {
+            return;
+        }
+        
+        if (_description == null) {
+            Debug.LogError("Missing game description\n Please reload the activity!");
+            return;
+        }
+        
         //TODO_COHORT: Assetbundles
-        if (_definition != null && scene.name == _definition.AssetRef) {
+        if (_description.AssetRef == name) {
             OnLocalPlayerReady();
         }
     }
@@ -77,6 +100,8 @@ public class ActivityLoader : Singleton<ActivityLoader>
         if (AllPlayersReady)
             return;
         
+        //TODO_COHORT: there should be a from of start key, so this is skipped when reconnecting.
+        //If 3 people reconnect they all have to wait on eachother right now, but that shouldn't happen.
         string key;
         foreach (var kv_player in Network.Local.Client.CurrentRoom.Players) {
             if (kv_player.Value.IsInactive)
@@ -98,13 +123,7 @@ public class ActivityLoader : Singleton<ActivityLoader>
     }
     
     private void OnPropsChanged(Hashtable changes) {
-        string key = GetPlayerReadyKey();
-        foreach (var entry in changes) {
-            if (entry.Key.ToString().StartsWith(key)) {
-                OnPlayerReady();
-                break;
-            }
-        }
+        string key;
         
         key = GetActivitySessionKey();
         if (changes.ContainsKey(key)) {
@@ -119,12 +138,30 @@ public class ActivityLoader : Singleton<ActivityLoader>
         key = GetActivityDefKey();
         if (changes.ContainsKey(key)) {
             if (string.IsNullOrEmpty((string)changes[key])) {
-                StopActivityLocal();
-                return;
+                _description = ActivityDescription.EMPTY;
+            }
+            else {
+                _description = JsonUtility.FromJson<ActivityDescription>((string)changes[key]);
             }
 
-            _definition = JsonUtility.FromJson<ActivityDefinition>((string)changes[key]);
-            LoadActivityLocal();
+            if (_description.IsEmpty) {
+                if (InActivity) {
+                    StopActivityLocal();
+                }
+            }
+            else {
+                LoadActivityLocal();
+            }
+        }
+        
+        if (!AllPlayersReady) {
+            key = GetPlayerReadyKey();
+            foreach (var entry in changes) {
+                if (entry.Key.ToString().StartsWith(key)) {
+                    OnPlayerReady();
+                    break;
+                }
+            }
         }
     }
     
@@ -136,35 +173,27 @@ public class ActivityLoader : Singleton<ActivityLoader>
             //set all properties to null (this should clear them out)
             props[key] = null;
         }
-
+        
         Network.Local.Client.CurrentRoom.SetCustomProperties(props);
         Debug.Log("Room properties cleared");
     }
 
-    private void StopActivityLocal() {
-        if (!InGame)
-            return;
-        
-        InGame = false;
-        _definition = null;
-    }
-
-    public void LoadActivity(ActivityDefinition definition) {
-        if (InGame)
+    public void LoadActivity(ActivityDescription description) {
+        if (InActivity)
             return;
         
         Hashtable changes = new Hashtable();
-        changes.Add(GetActivityDefKey(), JsonUtility.ToJson(definition));
+        changes.Add(GetActivityDefKey(), JsonUtility.ToJson(description));
         changes.Add(GetActivitySessionKey(), _session + 1);
-        changes.Add(GetSceneKey(), definition.AssetRef);
+        changes.Add(GetSceneKey(), description.AssetRef);
         
         Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
     }
 
     private void LoadActivityLocal() {
-        InGame = true;
+        InActivity = true;
         
-        _score.Initialize(_definition, _session);
+        _score.Initialize(_description, _session);
     }
 
     private string GetActivityDefKey() {

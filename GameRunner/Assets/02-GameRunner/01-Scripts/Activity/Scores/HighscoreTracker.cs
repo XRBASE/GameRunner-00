@@ -16,18 +16,28 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 	private PlayerScore _local;
 	private Dictionary<string, PlayerScore> _scores = new Dictionary<string, PlayerScore>();
 	
-	public void Initialize(ActivityDefinition _activity, int session) {
+	public void Initialize(ActivityDescription _activity, int session) {
 		_session = session;
 		_multiplier = _activity.ScoreMultiplier;
 		_local = new PlayerScore(0, Player.Local.Name);
 		
 		Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
-		MinigameManager.Instance.onMinigameFinished += OnMinigameFinished;
+
+		LearningManager.Instance.onScoreReset += ClearLocalScore;
+		LearningManager.Instance.onLearningFinished += OnLearningFinished;
 		
 		if (Network.Local.Client.InRoom) {
 			OnJoinedRoom();
 		}
+	}
+
+	private void OnDestroy() {
+		Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
+		Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoomPropertiesChanged;
+
+		LearningManager.Instance.onScoreReset -= ClearLocalScore;
+		LearningManager.Instance.onLearningFinished -= OnLearningFinished;
 	}
 
 	private void OnJoinedRoom() {
@@ -50,6 +60,11 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 					if (uuid == Player.Local.UUID) {
 						_local = _scores[uuid];
 					}
+
+					if (_scores[uuid].score == 0) {
+						_scores.Remove(uuid);
+					}
+					
 					changed = true;
 				}
 			}
@@ -70,9 +85,14 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		return _scores.Values.OrderBy(s => s.score).Reverse().ToArray();
 	}
 
-	public void OnMinigameFinished(float dec) {
+	public void OnLearningFinished(float dec) {
 		_local.score += Mathf.RoundToInt(dec * _multiplier);
 		
+		UpdateLocalPlayerScore(_local);
+	}
+
+	public void ClearLocalScore() {
+		_local.score = 0;
 		UpdateLocalPlayerScore(_local);
 	}
 

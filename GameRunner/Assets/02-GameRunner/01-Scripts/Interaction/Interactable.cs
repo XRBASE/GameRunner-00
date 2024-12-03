@@ -1,4 +1,5 @@
 using Cohort.CustomAttributes;
+using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 using ExitGames.Client.Photon;
 using UnityEngine;
@@ -16,14 +17,23 @@ namespace Cohort.GameRunner.Interaction {
             set { _index = value; }
         }
 
-        [ReadOnly, SerializeField] private int _index;
+        public string Name {
+            get { return gameObject.name; }
+        }
+        
+        protected bool InRange { get; private set; }
+        
+        public bool interactable = true;
 
+        [ReadOnly, SerializeField] private int _index = -1;
+        [Tooltip("Can only be activated within this radius"), SerializeField] private float _radius = 1;
+        
         //all interactables always have a state. True will fire events, false will not.
         //event like interactions will fire and directly reset themselves, whereas more
         //permanent Interactables retain it.
 
         [Tooltip("Current state on/off"), SerializeField] private bool _value = false;
-        [SerializeField] private bool _networked = true;
+        [SerializeField] protected bool _networked = true;
         private bool _initial = true;
         
         protected virtual void Start() {
@@ -46,12 +56,20 @@ namespace Cohort.GameRunner.Interaction {
             }
         }
 
+        public bool CheckInRange() {
+            return (transform.position - Player.Local.transform.position).magnitude <= _radius;
+        }
+
+        public virtual void SetInRange(bool value) {
+            InRange = value;
+        }
+
         public abstract void OnInteract();
 
         public virtual void Activate() {
             Activate(null, null);
         }
-
+        
         public virtual void Deactivate() {
             Deactivate(null, null);
         }
@@ -126,5 +144,11 @@ namespace Cohort.GameRunner.Interaction {
         protected string GetInteractableKey() {
             return Keys.GetUUID(Keys.Room.Interactable, _index.ToString());
         }
+
+#if UNITY_EDITOR
+        public void OnDrawGizmosSelected() {
+            Gizmos.DrawWireSphere(transform.position, _radius);
+        }
+#endif
     }
 }

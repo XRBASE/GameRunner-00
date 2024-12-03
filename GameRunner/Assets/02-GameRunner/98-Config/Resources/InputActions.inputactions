@@ -348,7 +348,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ProximityInteract",
+                    "name": "BtnInteract",
                     "type": "Button",
                     "id": "ddaec8f2-cc2c-4bdf-9a81-24e6891943cc",
                     "expectedControlType": "Button",
@@ -372,11 +372,11 @@
                 {
                     "name": "",
                     "id": "1d112937-443a-4491-9d16-3c8703e439a6",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "ProximityInteract",
+                    "groups": "Keyboard&Mouse",
+                    "action": "BtnInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

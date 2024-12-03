@@ -85,7 +85,6 @@ public class Network {
     
     public void ConnectToNetwork(string userName)
     {
-        
         if (string.IsNullOrEmpty(_appid)) {
             Debug.Log($"Missing appid, could not connect to Photon!");
             return;

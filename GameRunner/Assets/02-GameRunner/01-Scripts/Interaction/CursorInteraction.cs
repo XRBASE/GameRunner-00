@@ -1,4 +1,5 @@
 using Cohort.GameRunner.Input;
+using Cohort.GameRunner.Players;
 using UnityEngine;
 
 namespace Cohort.GameRunner.Interaction {
@@ -8,7 +9,7 @@ namespace Cohort.GameRunner.Interaction {
 
 		private void Start() {
 			_raycaster = InputManager.Instance.Raycaster;
-			InputManager.Instance.InteractInput.onInteract += OnInteract;
+			InputManager.Instance.InteractInput.onClickInteract += OnInteract;
 		}
 		
 		void OnInteract() {
@@ -19,8 +20,10 @@ namespace Cohort.GameRunner.Interaction {
 				_raycaster.HitState = CursorRayCaster.RCHitState.Navigate;
 				return;
 			}
-				
-			i.OnInteract();
+
+			if (i.CheckInRange()) {
+				i.OnInteract();
+			}
 		}
 	}
 }
