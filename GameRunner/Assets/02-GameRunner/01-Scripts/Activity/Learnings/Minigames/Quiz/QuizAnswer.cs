@@ -55,7 +55,7 @@ public class QuizAnswer : MonoBehaviour, ObjectPool<string, QuizAnswer>.IPoolabl
     public QuizAnswer Copy() {
         QuizAnswer a = Instantiate(this, transform.parent);
         a.onAnswerGiven = onAnswerGiven;
-        a.GetComponent<QuizBtnVisuals>().enabled = false;
+        //a.GetComponent<QuizBtnVisuals>().enabled = false;
         
         return a;
     }

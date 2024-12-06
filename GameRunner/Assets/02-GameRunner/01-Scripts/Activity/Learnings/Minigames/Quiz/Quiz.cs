@@ -19,6 +19,7 @@ public class Quiz : Learning {
 	private int _correctCount;
 
 	private ObjectPool<string, QuizAnswer> _pool;
+	[SerializeField] private CanvasGroup _answerGroup;
 	[SerializeField] private QuizAnswer _template;
 	[SerializeField] private TMP_Text _questionField;
 	
@@ -58,7 +59,9 @@ public class Quiz : Learning {
 	}
 
 	private IEnumerator GraphicTimeout() {
+		_answerGroup.interactable = false;
 		yield return new WaitForSeconds(_graphicTimeout);
+		_answerGroup.interactable = true;
 		ShowQuestion();
 	}
 
