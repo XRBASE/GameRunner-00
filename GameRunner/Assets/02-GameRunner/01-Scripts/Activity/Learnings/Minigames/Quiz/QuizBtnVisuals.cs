@@ -7,7 +7,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class QuizBtnVisuals : MonoBehaviour {
 	[SerializeField] private float _duration = 1f;
-	[SerializeField] private Graphic _graphic;
+	[SerializeField] private Graphic[] _graphics;
 	
 	[SerializeField] private Color _correctCol;
 	[SerializeField] private Color _incorrectCol;
@@ -25,6 +25,8 @@ public class QuizBtnVisuals : MonoBehaviour {
 	[SerializeField, ReadOnly] private State _state;
 	private StateData _startData;
 	private float _timer;
+
+	private Camera _cam;
 	
 	private void Awake() {
 		_rt = (RectTransform)transform;
@@ -32,9 +34,11 @@ public class QuizBtnVisuals : MonoBehaviour {
 		_btn = GetComponent<Button>();
 		_btn.onClick.AddListener(LeftUp);
 
-		_default = _graphic.color;
+		_default = _graphics[0].color;
 		_state = State.None;
 		_startData = GetData(_state);
+		
+		_cam = Camera.main;
 	}
 
 	private void Start() {
@@ -66,15 +70,19 @@ public class QuizBtnVisuals : MonoBehaviour {
 
 	private void ApplyVisuals(float t) {
 		StateData data = GetData(_state);
-		_graphic.color = Color.Lerp(_startData.col, data.col, t);
-		_graphic.transform.localScale = Vector3.Lerp(_startData.scale, data.scale, t);
+		
+		Color c = Color.Lerp(_startData.col, data.col, t);
+		for (int i = 0; i < _graphics.Length; i++) {
+			_graphics[i].color = c;
+			_graphics[i].transform.localScale = Vector3.Lerp(_startData.scale, data.scale, t);
+		}
 	}
 
 	private void SetState(State s) {
 		_state = s;
 		
 		_startData = new StateData();
-		_startData.col = _graphic.color;
+		_startData.col = _graphics[0].color;
 		_startData.scale = _btn.transform.localScale;
 		
 		_timer = 0f;
@@ -133,7 +141,9 @@ public class QuizBtnVisuals : MonoBehaviour {
 	}
 
 	private bool PointerOver() {
-		Vector2 localPos = _rt.InverseTransformPoint(InputManager.Instance.Cursor.ScreenPosition);
+		Vector2 localPos;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(_rt, InputManager.Instance.Cursor.ScreenPosition,
+		                                                        _cam, out localPos);
 		return _rt.rect.Contains(localPos);
 	}
 	

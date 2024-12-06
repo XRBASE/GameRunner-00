@@ -21,6 +21,14 @@ public class LearningManager : Singleton<LearningManager> {
         get { return Setting.learnings[index]; }
     }
 
+    public LearningDescription Current {
+        get { return _currenOpenLearning; }
+    }
+
+    public int ScoreMultiplier {
+        get { return _scoreMultiplier; }
+    }
+
     public bool LearningsNetworked {
         get { return Setting.networked; }
     }
@@ -278,11 +286,11 @@ public class LearningManager : Singleton<LearningManager> {
             PushLearningState(_currenOpenLearning);
         }
         
+        onLearningFinished?.Invoke(scorePercentage);
         
         _currenOpenLearning.log.CheckLogItem(s);
         _currenOpenLearning.log = null;
         
-        onLearningFinished?.Invoke(scorePercentage);
         SceneManager.UnloadSceneAsync(_currenOpenLearning.sceneName);
         
         //TODO_COHORT: fix the double call thingie?
