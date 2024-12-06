@@ -2,7 +2,8 @@
     "name": "AD_Objectives",
     "rootNamespace": "",
     "references": [
-        "GUID:29d60a27676928849996b191f2ccb5de"
+        "GUID:29d60a27676928849996b191f2ccb5de",
+        "GUID:388b518ec53dc634084ee3aa754b1f73"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

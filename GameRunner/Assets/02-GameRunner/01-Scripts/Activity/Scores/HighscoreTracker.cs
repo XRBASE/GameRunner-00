@@ -16,17 +16,28 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 	private PlayerScore _local;
 	private Dictionary<string, PlayerScore> _scores = new Dictionary<string, PlayerScore>();
 	
-	public void Initialize(ActivityDefinition _activity, int session) {
+	public void Initialize(ActivityDescription _activity, int session) {
 		_session = session;
 		_multiplier = _activity.ScoreMultiplier;
 		_local = new PlayerScore(0, Player.Local.Name);
 		
 		Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
+
+		LearningManager.Instance.onScoreReset += ClearLocalScore;
+		LearningManager.Instance.onLearningFinished += OnLearningFinished;
 		
 		if (Network.Local.Client.InRoom) {
 			OnJoinedRoom();
 		}
+	}
+
+	private void OnDestroy() {
+		Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
+		Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoomPropertiesChanged;
+
+		LearningManager.Instance.onScoreReset -= ClearLocalScore;
+		LearningManager.Instance.onLearningFinished -= OnLearningFinished;
 	}
 
 	private void OnJoinedRoom() {

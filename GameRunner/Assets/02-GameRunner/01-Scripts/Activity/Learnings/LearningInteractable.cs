@@ -1,9 +1,11 @@
+using System;
 using Cohort.CustomAttributes;
 using Cohort.GameRunner.Interaction;
 using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 using ExitGames.Client.Photon;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 [DefaultExecutionOrder(0)] //Before learningManager
 public class LearningInteractable : Interactable {
@@ -11,7 +13,10 @@ public class LearningInteractable : Interactable {
     public string LocationDescription { get { return _locationDescription; } }
     public bool HasLearning {
         get { return _hasLearning;}
-        private set { _hasLearning = value; }
+        private set {
+            interactable = value;
+            _hasLearning = value;
+        }
     }
     [ReadOnly, SerializeField] private bool _hasLearning;
     
@@ -20,6 +25,10 @@ public class LearningInteractable : Interactable {
     
     private int _actor = -1;
     private LearningDescription _learning;
+
+    private void Awake() {
+        interactable = false;
+    }
 
     protected override void Start() {
         _networked = _networked && LearningManager.Instance.LearningsNetworked;
@@ -30,7 +39,13 @@ public class LearningInteractable : Interactable {
             Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
         }
     }
-    
+
+    public override void SetInRange(bool value) {
+        base.SetInRange(value);
+        
+        _indicator.SetActive(!InRange && HasLearning);
+    }
+
     public override void OnInteract() {
         if (!HasLearning) {
             return;
@@ -86,11 +101,17 @@ public class LearningInteractable : Interactable {
         base.Deactivate(changes, expected);
     }
 
-    protected override void DeactivateLocal() { }
+    protected override void DeactivateLocal() {
+        SetLearningLocal(-1);
+    }
 
     public void SetLearning(LearningDescription learning = null) {
         if (!_networked) {
-            SetLearningLocal(learning?.index ?? -1);
+            if (learning == null)
+                SetLearningLocal(-1);
+            else
+                SetLearningLocal(learning.index);
+            
             return;
         }
         
@@ -111,7 +132,7 @@ public class LearningInteractable : Interactable {
         if (HasLearning) {
             _learning = LearningManager.Instance[index];
             
-            _indicator.SetActive(true);
+            _indicator.SetActive(!InRange && HasLearning);
             LearningManager.Instance.SetLearningLog(_learning, this);
             return;
         }

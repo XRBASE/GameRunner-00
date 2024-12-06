@@ -1,3 +1,4 @@
+using Cohort.GameRunner.Players;
 using Cohort.UI.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,13 +10,15 @@ public class ObjIndicator : MonoBehaviour {
     [SerializeField] private Color _color;
     [SerializeField] private Vector2 _size = new Vector2(75,75);
     [SerializeField] private bool _enabled = false;
+
+    [SerializeField] private Vector3 _check;
     
     private Image _rnd;
     private RectTransform _rt;
     private RectTransform _parentRt;
     private Camera _cam;
     
-    private Vector2 position;
+    private Vector3 position;
     private Vector2 hSize;
     private Vector2 hMargin;
 
@@ -77,21 +80,19 @@ public class ObjIndicator : MonoBehaviour {
         
         hSize = (_parentRt.rect.size + -_parentRt.sizeDelta)  / 2f;
         hMargin = _parentRt.rect.size  / 2f;
-        
         _rnd.enabled = true;
-        Vector3 delta = _cam.transform.InverseTransformPoint(_target.position);
+
+        position = _cam.transform.InverseTransformPoint(_target.position);
+        position.z = (_cam.transform.position - _target.position).magnitude;
         
-        position  = _cam.WorldToViewportPoint(_target.position);
-        if (delta.z <= 0f) {
-            position.y = 0f;
-        }
-
-        position = (position * 2) - new Vector2(1f, 1f);
-        position *= hSize;
-
+        position  = _cam.WorldToViewportPoint(_cam.transform.TransformPoint(position));
+        position = (position * 2f - Vector3.one) * hSize;
+        
+        _check = position;
+        
         position.x = Mathf.Clamp(position.x, -hMargin.x, hMargin.x);
         position.y = Mathf.Clamp(position.y, -hMargin.y, hMargin.y);
-
-        _rt.anchoredPosition = position;
+        
+        _rt.anchoredPosition = position; 
     }
 }

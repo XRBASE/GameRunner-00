@@ -8,4 +8,5 @@ public interface IUniqueId
 	/// objects indices are unique.
 	/// </summary>
 	public int Identifier { get; set; }
+	public string Name { get; }
 }
