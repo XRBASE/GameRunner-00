@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: WordGameData
   m_EditorClassIdentifier: 
   wordGameData:
-    title: Guess the word
+    wordGameMode: 0
+    title: Raad het woord
     tries: 5
+    puzzleAmount: 2
     wordList:
     - word: Aarde
       hint: Iedereen leeft hier op
