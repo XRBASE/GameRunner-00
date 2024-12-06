@@ -1,10 +1,15 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MatchElement : MonoBehaviour
 {
+    public int id;
     public MatchType matchType;
+    public TextMeshProUGUI title;
+    public Button button;
     private MatchPreview _matchPreview;
+    
     
     public enum MatchType{Image, Text}
     
@@ -20,6 +25,11 @@ public class MatchElement : MonoBehaviour
                 break;
         }
         _matchPreview = matchPreview;
+    }
+
+    public void Initialise()
+    {
+        
     }
 
 }
