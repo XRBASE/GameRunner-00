@@ -2,55 +2,64 @@ using System;
 using UnityEngine;
 using Cohort.GameRunner.Players;
 
-namespace Cohort.GameRunner.LocoMovement {
+namespace Cohort.GameRunner.LocoMovement
+{
     /// <summary>
     /// Used to track whether the player is on the ground.
     /// </summary>
-    public class GroundCheck : MonoBehaviour {
-        //how far down to check, before firing falling event.
-        public const float FALL_CHECK_DISTANCE = 1.0f;
-
-        //distance to determine that player is on the ground.
-        public const float GROUND_CHECK_DIST = 0.3f;
-
+    public class GroundCheck : MonoBehaviour
+    {
         //cast rays a bit higher, and then corrects the distance, so the raycast is not performed below the floor.
         public const float RAY_CORRECTION = 0.1f;
 
         public Action onGroundHit;
         public Action onFalling;
-        
+
         public bool Grounded;
         private LayerMask _mask;
+        private FloorCollision _floorCollision;
+        private bool _hasGroundCollision;
+        private bool _hasFallCollision;
 
-        /// <summary>   
-        /// Initializes check, parented to source object.
-        /// </summary>
-        public void Initialize(Transform source) {
-            Initialize(source, ~0);
-            Initialize(source, ~LayerMask.GetMask("Player"));
-        }
 
         /// <summary>
         /// Initializes check, parented to source object.
         /// </summary>
         /// <param name="source">parent object</param>
         /// <param name="mask">mask for filtering raycasts.</param>
-        public void Initialize(Transform source, LayerMask mask) {
-            _mask = mask;
+        public void Initialize(Transform source, FloorCollision GroundChecker, FloorCollision FallChecker)
+        {
+            _mask = ~LayerMask.GetMask("Player");
             gameObject.layer = Player.LAYER;
-
+            GroundChecker.Initialise(_mask, Vector3.down * .1f, .15f, .4f);
+            FallChecker.Initialise(_mask, Vector3.down * .4f, .15f, 1f);
+            GroundChecker.onFloorCollision += HandleGroundCheck;
+            FallChecker.onFloorCollision += HandleFallCheck;
             Grounded = true;
             transform.SetParent(source, false);
         }
 
-        private void Update() {
-            if (Grounded && GetFloorDist() > FALL_CHECK_DISTANCE) {
+        private void HandleGroundCheck(bool isColliding)
+        {
+            _hasGroundCollision = isColliding;
+        }
+
+        private void HandleFallCheck(bool isColliding)
+        {
+            _hasFallCollision = isColliding;
+        }
+
+        private void Update()
+        {
+            if (Grounded && !_hasFallCollision)
+            {
                 onFalling?.Invoke();
                 Grounded = false;
                 return;
             }
 
-            if (!Grounded && RaycastFloor(GROUND_CHECK_DIST)) {
+            if (!Grounded && _hasGroundCollision)
+            {
                 onGroundHit?.Invoke();
                 Grounded = true;
             }
@@ -59,40 +68,25 @@ namespace Cohort.GameRunner.LocoMovement {
         /// <summary>
         /// Resets check, so it is set to on ground state again.
         /// </summary>
-        public void ResetCheck(bool invoke = false) {
-            if (RaycastFloor(GROUND_CHECK_DIST)) {
+        public void ResetCheck(bool invoke = false)
+        {
+            if (_hasGroundCollision)
+            {
                 Grounded = true;
-
-                if (invoke) {
+                if (invoke)
+                {
                     onGroundHit?.Invoke();
                 }
+
                 return;
             }
-            
-            if (invoke) {
+
+            if (invoke)
+            {
                 onFalling?.Invoke();
             }
+
             Grounded = false;
-        }
-
-        /// <summary>
-        /// Raycast and retrieve distance to floor from current height. Infinity when no ground is found.
-        /// </summary>
-        public float GetFloorDist() {
-            if (RaycastFloor(out RaycastHit hit)) {
-                return hit.distance;
-            }
-
-            return Mathf.Infinity;
-        }
-
-        /// <summary>
-        /// Raycasts to the floor, to check if there is any.
-        /// </summary>
-        /// <param name="maxDist">maximum distance to check downwards for.</param>
-        /// <returns>True/False floor found within max distance.</returns>
-        public bool RaycastFloor(float maxDist = Mathf.Infinity) {
-            return RaycastFloor(out RaycastHit hit, maxDist);
         }
 
         /// <summary>
@@ -101,9 +95,11 @@ namespace Cohort.GameRunner.LocoMovement {
         /// <param name="hit">out variable for found raycast hit.</param>
         /// <param name="maxDist">maximum distance to cast downwards.</param>
         /// <returns>True/False floor found within max distance.</returns>
-        public bool RaycastFloor(out RaycastHit hit, float maxDist = Mathf.Infinity) {
+        public bool RaycastFloor(out RaycastHit hit, float maxDist = Mathf.Infinity)
+        {
             if (Physics.Raycast(transform.parent.position + Vector3.up * RAY_CORRECTION, Vector3.down, out hit, maxDist,
-                                _mask, QueryTriggerInteraction.Ignore)) {
+                _mask, QueryTriggerInteraction.Ignore))
+            {
                 hit.distance -= RAY_CORRECTION;
                 return true;
             }
