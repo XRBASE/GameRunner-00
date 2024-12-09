@@ -4,25 +4,34 @@ using UnityEngine;
 using Random = System.Random;
 
 
-public class MatchMinigame : Learning
+public class MatchGame : MiniGame
 {
     public AnswerElement answerElementPrefab;
     public QuestionElement questionElementPrefab;
-
     public Transform answerElementParent, questionElementParent;
     private int pairAmount = 5;
     private List<MatchPair> _matchPairs;
     private static Random _rng = new Random();
     private QuestionElement _selectedQuestionElement;
     private AnswerElement _selectedAnswerElement;
+    private MatchGameData _matchGameData; 
 
     public override void Initialize(string gameData, int scoreMultiplier, Action<float> onGameFinished)
     {
-        
+        _matchGameData = JsonUtility.FromJson<MatchGameData>(gameData);
+        _onGameFinished = onGameFinished;
+        _scoreMultiplier = scoreMultiplier;
+        _title.text = _matchGameData.title;
+        BuildGame();
     }
     
     protected override void Awake() {
-        base.Awake();
+        //base.Awake();
+
+    }
+    
+    protected override void BuildGame()
+    {
         _matchPairs = new List<MatchPair>();
         for (int i = 0; i < pairAmount; i++)
         {
@@ -34,6 +43,26 @@ public class MatchMinigame : Learning
             _matchPairs.Add(matchPair);
         }
         ShuffleMatches();
+    }
+
+    protected override void FinishGame()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void CorrectFeedback()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void IncorrectFeedback()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void GameFinishedFeedback()
+    {
+        throw new NotImplementedException();
     }
 
     private void ShuffleMatches()
@@ -90,6 +119,12 @@ public class MatchMinigame : Learning
         {
             
         }
+    }
+    
+    // Display the score after each puzzle or at the end
+    private void DisplayScore(float score)
+    {
+        scoreUI.PlayScore((int)(score * _scoreMultiplier));
     }
 }
 

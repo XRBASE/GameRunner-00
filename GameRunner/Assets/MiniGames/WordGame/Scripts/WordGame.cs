@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -7,14 +6,14 @@ using UnityEngine;
 using UnityEngine.Playables;
 using Random = UnityEngine.Random;
 
-public class WordGame : Learning
+public class WordGame : MiniGame
 {
     // Enum to define game modes: Random or Sequential word selection
     public enum WordGameMode
     {
         Random,
         Sequential
-    };
+    }
 
     // Constants for feedback timeout durations
     private const float INVALID_FEEDBACK_TIMEOUT = 1f;
@@ -30,10 +29,8 @@ public class WordGame : Learning
     public Word wordPrefab;
     public WordGameInput wordGameInput;
     public Transform gameParent;
-    public TextMeshProUGUI title;
     public AudioSource feedbackAudio;
     public AudioClip successAudioClip, failureAudioClip;
-    public ScoreUI scoreUI;
     public TextMeshProUGUI hintText;
     public PlayableDirector invalidWordFeedback;
 
@@ -41,14 +38,11 @@ public class WordGame : Learning
     private readonly List<Word> _words = new List<Word>();
     private List<string> _wordDictionary;
     private WordGameData _wordGameData;
-    private Action<float> _onGameFinished;
     private Action<float> _testOnGameFinished;
     private WordData _chosenWord;
-    private IEnumerator _feedBackTimeoutRoutine;
+
     private string _text = string.Empty;
     private int _entryIndex;
-    private float _completionPercent;
-    private float _scoreMultiplier;
     private bool _isPlaying;
     private int _currentPuzzle;
     private bool _pickRandomWord;
@@ -67,7 +61,7 @@ public class WordGame : Learning
         _wordGameMode = _wordGameData.wordGameMode;
         _onGameFinished = onGameFinished;
         _scoreMultiplier = scoreMultiplier;
-        title.text = _wordGameData.title;
+        _title.text = _wordGameData.title;
         BuildGame();
     }
 
@@ -77,6 +71,45 @@ public class WordGame : Learning
         base.Awake();
         wordGameInput.onKeyboardInput += ValueChanged;
         wordGameInput.remove += RemoveLastLetter;
+    }
+    
+    protected override void CorrectFeedback()
+    {
+        CurrentWord.DoCorrectFeedbackRoutine(); // Show correct feedback
+        feedbackAudio.PlayOneShot(successAudioClip); // Play success audio
+    }
+
+    protected override void IncorrectFeedback()
+    {
+        CurrentWord.InCorrectFeedback(); // Show incorrect feedback
+        feedbackAudio.PlayOneShot(failureAudioClip); // Play failure audio
+    }
+
+    protected override void GameFinishedFeedback()
+    {
+        _completionPercent = (_wordGameData.tries*_wordGameData.puzzleAmount -_attempts) / ((float) _wordGameData.tries*_wordGameData.puzzleAmount - _wordGameData.puzzleAmount); // Calculate completion percentage
+        DisplayScore(_completionPercent);
+        DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, FinishGame); 
+    }
+    
+    // Build the game by selecting a word and creating necessary UI components
+    protected override void BuildGame()
+    {
+        _chosenWord = GetWord();
+        _chosenWord.word = _chosenWord.word.ToLower(); 
+        _wordDictionary = WordDictionary.GetWordDictionary(_chosenWord.word.Length);
+
+        // Create multiple word objects for each try and initialize them
+        for (int i = 0; i < _wordGameData.tries; i++)
+        {
+            var word = Instantiate(wordPrefab, gameParent);
+            _words.Add(word);
+            word.Initialise(_chosenWord.word.Length, feedbackAudio);
+        }
+
+        hintText.text = _chosenWord.hint; 
+        _entryIndex = 0; 
+        _isPlaying = true; 
     }
 
     // Proceed to the next puzzle or complete the game if there are no more puzzles
@@ -99,32 +132,7 @@ public class WordGame : Learning
         ClearGame();
         BuildGame();
     }
-
-    // Display the score after each puzzle or at the end
-    private void DisplayScore(float score)
-    {
-        scoreUI.PlayScore((int)(score * _scoreMultiplier));
-    }
-
-    // Build the game by selecting a word and creating necessary UI components
-    private void BuildGame()
-    {
-        _chosenWord = GetWord();
-        _chosenWord.word = _chosenWord.word.ToLower(); 
-        _wordDictionary = WordDictionary.GetWordDictionary(_chosenWord.word.Length);
-
-        // Create multiple word objects for each try and initialize them
-        for (int i = 0; i < _wordGameData.tries; i++)
-        {
-            var word = Instantiate(wordPrefab, gameParent);
-            _words.Add(word);
-            word.Initialise(_chosenWord.word.Length, feedbackAudio);
-        }
-
-        hintText.text = _chosenWord.hint; 
-        _entryIndex = 0; 
-        _isPlaying = true; 
-    }
+    
 
     // Clear all game elements (words and UI) when resetting or finishing the game
     private void ClearGame()
@@ -172,8 +180,7 @@ public class WordGame : Learning
     // Handle invalid word input and give feedback
     private void HandleAnswerInvalid()
     {
-        CurrentWord.InCorrectFeedback(); 
-        feedbackAudio.PlayOneShot(failureAudioClip); 
+        IncorrectFeedback();
         PlayableDirectorFeedback(invalidWordFeedback); 
         wordGameInput.SetInputActive(false); 
         DoFeedbackTimeout(INVALID_FEEDBACK_TIMEOUT, FeedbackTimeout); 
@@ -201,14 +208,12 @@ public class WordGame : Learning
     {
         if (correct)
         {
-            CurrentWord.DoCorrectFeedbackRoutine(); // Show correct feedback
-            feedbackAudio.PlayOneShot(successAudioClip); // Play success audio
+            CorrectFeedback();
             NextPuzzle(); // Move to the next puzzle
         }
         else
         {
-            CurrentWord.InCorrectFeedback(); // Show incorrect feedback
-            feedbackAudio.PlayOneShot(failureAudioClip); // Play failure audio
+            IncorrectFeedback();
         }
 
         _text = string.Empty;
@@ -222,17 +227,16 @@ public class WordGame : Learning
     // Handle the completion of the game (show score and finish)
     private void HandleGameComplete()
     {
-        _completionPercent = (_wordGameData.tries*_wordGameData.puzzleAmount -_attempts) / ((float) _wordGameData.tries*_wordGameData.puzzleAmount - _wordGameData.puzzleAmount); // Calculate completion percentage
-        DisplayScore(_completionPercent);
-        _isPlaying = false; 
-        DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, GameFinished); 
+        GameFinishedFeedback();
+        _isPlaying = false;
     }
-
-    // Final callback after the game is finished
-    private void GameFinished()
+    
+    // Display the score after each puzzle or at the end
+    private void DisplayScore(float score)
     {
-        _onGameFinished?.Invoke(_completionPercent);
+        scoreUI.PlayScore((int)(score * _scoreMultiplier));
     }
+    
 
     // Handle the input of a single character from the keyboard
     private void ValueChanged(string text)
@@ -259,22 +263,5 @@ public class WordGame : Learning
         _text = _text.Substring(0, _text.Length - 1);
     }
 
-    private void DoFeedbackTimeout(float time, Action onFeedbackTimeout)
-    {
-        if (_feedBackTimeoutRoutine != null)
-        {
-            StopCoroutine(_feedBackTimeoutRoutine);
-        }
-    
-        _feedBackTimeoutRoutine = FeedbackTimeOutRoutine(time, onFeedbackTimeout);
-        StartCoroutine(_feedBackTimeoutRoutine);
-    }
 
-
-    // Coroutine to handle the timeout period
-    private IEnumerator FeedbackTimeOutRoutine(float time, Action onFeedbackTimeout)
-    {
-        yield return new WaitForSeconds(time); 
-        onFeedbackTimeout?.Invoke(); 
-    }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 /// Minigame and or learning base class, used for connecting to the manager classes when game is initialized.
 /// </summary>
 public abstract class Learning : MonoBehaviour {
+	
 	/// <summary>
 	/// Initializes the learning with given json data.
 	/// </summary>
