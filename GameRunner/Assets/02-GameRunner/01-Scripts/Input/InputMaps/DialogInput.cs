@@ -5,27 +5,17 @@ namespace Cohort.GameRunner.Input.Maps {
 	public class DialogInput : InputMap {
 		public Action onNext;
 		public Action onEscape;
-
-		private InputAction _nextAction;
-		//private InputAction _escapeAction;
-
+		
 		public DialogInput(InputActionAsset actions) : base(actions, "Dialog") {
-			_nextAction = _map.FindAction("NextMessage");
-			//_escapeAction = _map.FindAction("EscapeDialog");
-
-			_nextAction.started += OnNextAction;
-			//_escapeAction.started += OnEscapeAction;
+			_map["NextMessage"].started += OnNextAction;
 		}
 
 		public override void Dispose() {
 			if (!DataServices.Login.UserLoggedIn)
 				return;
 
-			_nextAction.canceled -= OnNextAction;
-			//_escapeAction.performed -= OnEscapeAction;
-
-			//_escapeAction.Dispose();
-			_nextAction.Dispose();
+			_map["NextMessage"].started -= OnNextAction;
+			
 			onNext = null;
 			onEscape = null;
 

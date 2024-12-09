@@ -37,7 +37,7 @@ namespace Cohort.GameRunner.Input.Maps {
         private InputAction _leftClick;
         private InputAction _rightClick;
 
-        public CursorInput(InputActionAsset actions) : base(actions, "Cursor") {
+        public CursorInput(InputActionAsset actions, bool isGameInput) : base(actions, isGameInput?"GameCursor":"LearningCursor") {
             _screenPosAction = _map.FindAction("ScreenPosition");
             _screenPosAction.performed += OnScreenPosChanged;
 
