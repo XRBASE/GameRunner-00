@@ -88,7 +88,7 @@ namespace Cohort.GameRunner.Input
         protected override void Awake()
         {
             base.Awake();
-            _inputActionAsset = Resources.Load<InputActionAsset>("InputActions");
+            _inputActionAsset = Resources.Load<InputActionAsset>("Input/InputActions");
             if (_inputActionAsset is null)
                 throw new Exception("Inputactions not found, check if the file is in the resource folder under the correct name");
             

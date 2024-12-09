@@ -325,18 +325,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1165619473697347985, guid: fc375d7a51a8fea439fc4022b8b8419f, type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1165619473697347985, guid: fc375d7a51a8fea439fc4022b8b8419f, type: 3}
-      propertyPath: m_Color.g
-      value: 0.8896128
-      objectReference: {fileID: 0}
-    - target: {fileID: 1165619473697347985, guid: fc375d7a51a8fea439fc4022b8b8419f, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3350681718103351962, guid: fc375d7a51a8fea439fc4022b8b8419f, type: 3}
       propertyPath: m_Name
       value: PF_PointsUI

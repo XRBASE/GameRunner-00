@@ -713,40 +713,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _learning:
     learnings:
-    - actionDescription: Do quiz
-      sceneName: 01-Quiz
-      data: '{"_questions":[{"question":"What was the original name of Micky Mouse?","answers":["Mortimer
-        Mouse","The rat","Marvin Mouse","Marshall Mouse"],"correctAnswerIndex":0},{"question":"What
-        does the license plate of the delorian say in Back to the future?","answers":["1Time","88timego","GoFuture","Outatime"],"correctAnswerIndex":3},{"question":"Which
-        of the following is the largest ocean in the world?","answers":["Atlantic
-        ocean","Pacific ocean","Arctic ocean","Indian ocean"],"correctAnswerIndex":1},{"question":"Which
-        star is the brightest star in the night sky?","answers":["Arcturus","North
-        star","Sirius A","None of these"],"correctAnswerIndex":2},{"question":"The
-        Aztecs even used cocoa beans as what?","answers":["Currency","Drugs","Stress
-        relievers","Weapon decorations"],"correctAnswerIndex":0},{"question":"\"Mamma
-        Mia\" is based on a song by which Swedish musical act?","answers":["Bee Gees","Queen","Elton
-        John","ABBA"],"correctAnswerIndex":3},{"question":"Who was the second president
-        of the USA?","answers":["Thomas Jefferson","John Adams","Benjamin Franklin","John
-        Quincy Adams"],"correctAnswerIndex":1},{"question":"Mr Pibb was a soft drink
-        created by the Coca-Cola Company to compete with what other soft drink?","answers":["Cherry
-        Cola","Mountain Dew","Dr. Pepper","Root beer"],"correctAnswerIndex":2},{"question":"True
-        or false? All spiders are carnivorous.","answers":["True","False"],"correctAnswerIndex":0},{"question":"Hicory
-        trees produce which types of nuts?","answers":["Walnuts","Pecans","Pistachios","Macadamia"],"correctAnswerIndex":1}]}'
-        locations: 00000000
-      onFinCinematic:
-        m_PersistentCalls:
-          m_Calls: []
-      onFinDirect:
-        m_PersistentCalls:
-          m_Calls: []
-      onReset:
-        m_PersistentCalls:
-          m_Calls: []
-      _state: 0
-      index: 0
-      log: {fileID: 0}
-    - actionDescription: WordGame
-      sceneName: 02-Minigame-WordGame
+    - actionDescription: Wordle
+      sceneName: 02-Wordle
       data: "{\"wordGameMode\":0,\"title\":\"Raad het woord\",\"tries\":5,\"puzzleAmount\":2,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
         leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor
         veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt veel gebruikt in thaise
@@ -766,7 +734,39 @@ MonoBehaviour:
       _state: 0
       index: 0
       log: {fileID: 0}
-    useTimer: 1
+    - actionDescription: Do quiz
+      sceneName: 01-Quiz
+      data: '{"_questions":[{"question":"What was the original name of Micky Mouse?","answers":["Mortimer
+        Mouse","The rat","Marvin Mouse","Marshall Mouse"],"correctAnswerIndex":0},{"question":"What
+        does the license plate of the delorian say in Back to the future?","answers":["1Time","88timego","GoFuture","Outatime"],"correctAnswerIndex":3},{"question":"Which
+        of the following is the largest ocean in the world?","answers":["Atlantic
+        ocean","Pacific ocean","Arctic ocean","Indian ocean"],"correctAnswerIndex":1},{"question":"Which
+        star is the brightest star in the night sky?","answers":["Arcturus","North
+        star","Sirius A","None of these"],"correctAnswerIndex":2},{"question":"The
+        Aztecs even used cocoa beans as what?","answers":["Currency","Drugs","Stress
+        relievers","Weapon decorations"],"correctAnswerIndex":0},{"question":"\"Mamma
+        Mia\" is based on a song by which Swedish musical act?","answers":["Bee Gees","Queen","Elton
+        John","ABBA"],"correctAnswerIndex":3},{"question":"Who was the second president
+        of the USA?","answers":["Thomas Jefferson","John Adams","Benjamin Franklin","John
+        Quincy Adams"],"correctAnswerIndex":1},{"question":"Mr Pibb was a soft drink
+        created by the Coca-Cola Company to compete with what other soft drink?","answers":["Cherry
+        Cola","Mountain Dew","Dr. Pepper","Root beer"],"correctAnswerIndex":2},{"question":"True
+        or false? All spiders are carnivorous.","answers":["True","False"],"correctAnswerIndex":0},{"question":"Hicory
+        trees produce which types of nuts?","answers":["Walnuts","Pecans","Pistachios","Macadamia"],"correctAnswerIndex":1}]}'
+      locations: 00000000
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      _state: 0
+      index: 1
+      log: {fileID: 0}
+    useTimer: 0
     linear: 1
     complete: 1
     networked: 0
