@@ -1,5 +1,3 @@
-//Old GroundCheck
-
 using System;
 using UnityEngine;
 using Cohort.GameRunner.Players;

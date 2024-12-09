@@ -61,8 +61,8 @@ namespace Cohort.GameRunner.LocoMovement {
         public GroundCheck GroundCheck { get; private set; }
         public StepRaycaster StepCaster { get; private set; }
         
-        public FloorCollision GroundChecker { get; private set; }
-        public FloorCollision FallChecker { get; private set; }
+        public FloorCollision GroundRangeCheck { get; private set; }
+        public FloorCollision FallRangeCheck { get; private set; }
 
         public Action onSitDown, onStandUp;
         public static Action<Player> onColliderDisable;
@@ -87,15 +87,15 @@ namespace Cohort.GameRunner.LocoMovement {
             if (_collider == null)
                 _collider = GetComponent<CapsuleCollider>();
             
-            GroundChecker = new GameObject("GroundChecker").AddComponent<FloorCollision>();
-            GroundChecker.transform.parent = transform;
+            GroundRangeCheck = new GameObject("GroundChecker").AddComponent<FloorCollision>();
+            GroundRangeCheck.transform.parent = transform;
             
-            FallChecker = new GameObject("FallChecker").AddComponent<FloorCollision>();
-            FallChecker.transform.parent = transform;
+            FallRangeCheck = new GameObject("FallChecker").AddComponent<FloorCollision>();
+            FallRangeCheck.transform.parent = transform;
 
             GroundCheck = new GameObject("GroundCheck").AddComponent<GroundCheck>();
             GroundCheck.gameObject.layer = gameObject.layer;
-            GroundCheck.Initialize(transform, GroundChecker, FallChecker);
+            GroundCheck.Initialize(transform, GroundRangeCheck, FallRangeCheck);
             
             StepCaster = new GameObject("StepCaster").AddComponent<StepRaycaster>();
             StepCaster.gameObject.layer = gameObject.layer;
