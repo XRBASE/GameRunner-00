@@ -1,20 +1,21 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using Random = System.Random;
 
 
 public class MatchGame : MiniGame
 {
-    public AnswerElement answerElementPrefab;
-    public QuestionElement questionElementPrefab;
+    public MatchElement matchElementPrefab;
     public Transform answerElementParent, questionElementParent;
-    private int pairAmount = 5;
+    private int _pairAmount = 5;
     private List<MatchPair> _matchPairs;
     private static Random _rng = new Random();
-    private QuestionElement _selectedQuestionElement;
-    private AnswerElement _selectedAnswerElement;
-    private MatchGameData _matchGameData; 
+    private MatchElement _questionElement;
+    private MatchElement _answerElement;
+    private MatchGameData _matchGameData;
 
     public override void Initialize(string gameData, int scoreMultiplier, Action<float> onGameFinished)
     {
@@ -24,24 +25,26 @@ public class MatchGame : MiniGame
         _title.text = _matchGameData.title;
         BuildGame();
     }
-    
-    protected override void Awake() {
-        //base.Awake();
 
+    protected override void Awake()
+    {
+        //base.Awake();
+        Initialize(JsonUtility.ToJson(new MatchGameData()), 1, delegate(float f) {Debug.LogError(f); });
     }
-    
+
     protected override void BuildGame()
     {
         _matchPairs = new List<MatchPair>();
-        for (int i = 0; i < pairAmount; i++)
+        for (int i = 0; i < _pairAmount; i++)
         {
-            var answerElement = Instantiate(answerElementPrefab, answerElementParent);
+            var answerElement = Instantiate(matchElementPrefab, answerElementParent);
             answerElement.onMatchSelected += SetSelectedAnswer;
-            var questionElement = Instantiate(questionElementPrefab, questionElementParent);
+            var questionElement = Instantiate(matchElementPrefab, questionElementParent);
             questionElement.onMatchSelected += SetSelectedQuestion;
-            var matchPair = new MatchPair(i,answerElement, questionElement);
+            var matchPair = new MatchPair(i, answerElement, questionElement);
             _matchPairs.Add(matchPair);
         }
+
         ShuffleMatches();
     }
 
@@ -52,12 +55,12 @@ public class MatchGame : MiniGame
 
     protected override void CorrectFeedback()
     {
-        throw new NotImplementedException();
+        Debug.LogError("Correct");
     }
 
     protected override void IncorrectFeedback()
     {
-        throw new NotImplementedException();
+        Debug.LogError("InCorrect");
     }
 
     protected override void GameFinishedFeedback()
@@ -68,77 +71,107 @@ public class MatchGame : MiniGame
     private void ShuffleMatches()
     {
         List<int> places = new List<int>();
-        for (int i = 0; i < pairAmount; i++)
+        for (int i = 0; i < _pairAmount; i++)
         {
             places.Add(i);
         }
+
         Shuffle(places);
         for (int i = 0; i < _matchPairs.Count; i++)
         {
             _matchPairs[i].answerElement.transform.SetSiblingIndex(places[i]);
         }
+
         Shuffle(places);
         for (int i = 0; i < _matchPairs.Count; i++)
         {
             _matchPairs[i].questionElement.transform.SetSiblingIndex(places[i]);
         }
-        
-        
-    }
-    public static void Shuffle<T>(IList<T> list)  
-    {  
-        int n = list.Count;  
-        while (n > 1) {  
-            n--;  
-            int k = _rng.Next(n + 1);  
-            T value = list[k];  
-            list[k] = list[n];  
-            list[n] = value;  
-        }  
     }
 
-    public void SetSelectedAnswer(MatchElement answerElement)
+    public static void Shuffle<T>(IList<T> list)
     {
-        if (_selectedAnswerElement != null)
-            _selectedAnswerElement.SetSelectState(false);
-        _selectedAnswerElement = (AnswerElement)answerElement;
-        _selectedAnswerElement.SetSelectState(true);
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = _rng.Next(n + 1);
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
     }
 
-    public void SetSelectedQuestion(MatchElement questionElement)
+    private void SetSelectedAnswer(MatchElement answerElement)
     {
-        if (_selectedQuestionElement != null)
-            _selectedQuestionElement.SetSelectState(false);
-        _selectedQuestionElement = (QuestionElement)questionElement;
-        _selectedQuestionElement.SetSelectState(true);
+        HandleSelect(_answerElement, answerElement);
+        _answerElement = answerElement;
+        Submit();
     }
+
+    private void SetSelectedQuestion(MatchElement questionElement)
+    {
+        HandleSelect(_questionElement, questionElement);
+        _questionElement = questionElement;
+        Submit();
+    }
+
+    private void HandleSelect(MatchElement oldMatchElement,MatchElement matchElement)
+    {
+        //Deselect old answer
+        if (oldMatchElement != null)
+            oldMatchElement.SetSelectState(false);
+        matchElement.SetSelectState(true);
+    }
+    
 
     public void Submit()
     {
-        if (_selectedAnswerElement.id == _selectedQuestionElement.id)
+        if(_answerElement == null || _questionElement == null)
+            return;
+        if (_answerElement.id == _questionElement.id)
         {
-            
+            CorrectFeedback();
         }
+        else
+        {
+            IncorrectFeedback();
+        }
+        
+        _questionElement.SetSelectState(false);
+        _answerElement.SetSelectState(false);
+        _questionElement = null;
+        _answerElement = null;
     }
-    
+
+    private void Reset()
+    {
+        for (int i = 0; i < _matchPairs.Count; i++)
+        {
+            Destroy(_matchPairs[i].answerElement.gameObject);
+            Destroy(_matchPairs[i].questionElement.gameObject);
+        }
+        _matchPairs.Clear();
+    }
+
     // Display the score after each puzzle or at the end
     private void DisplayScore(float score)
     {
-        scoreUI.PlayScore((int)(score * _scoreMultiplier));
+        scoreUI.PlayScore((int) (score * _scoreMultiplier));
     }
 }
 
 public class MatchPair
 {
-    public int id;
-    public AnswerElement answerElement;
-    public QuestionElement questionElement;
+    public MatchElement answerElement;
+    public MatchElement questionElement;
 
-    public MatchPair(int id, AnswerElement answerElement, QuestionElement questionElement)
+    public MatchPair(int id, MatchElement answerElement, MatchElement questionElement)
     {
-        this.id = id;
         this.answerElement = answerElement;
         this.questionElement = questionElement;
+        answerElement.id = id;
+        questionElement.id = id;
         answerElement.title.text = id.ToString();
         questionElement.title.text = id.ToString();
     }
