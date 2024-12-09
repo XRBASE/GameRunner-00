@@ -14,6 +14,6 @@ public abstract class Learning : MonoBehaviour {
 	public abstract void Initialize(string gameData, int scoreMultiplier, Action<float> onLearningFinished);
 
 	protected virtual void Awake() {
-		//LearningManager.Instance.InitializeLearning(this);
+		LearningManager.Instance.InitializeLearning(this);
 	}
 }
