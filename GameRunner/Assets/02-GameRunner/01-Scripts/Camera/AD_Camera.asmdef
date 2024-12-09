@@ -2,6 +2,7 @@
     "name": "AD_Camera",
     "rootNamespace": "",
     "references": [
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
         "GUID:47e4282a650095e4492c2d80a320cc49",
         "GUID:9f0995e706b816f418d9600d72c84a0a",
         "GUID:e5266252472ac85489b262fc37591755",
