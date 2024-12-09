@@ -27,14 +27,16 @@ public class MatchMinigame : Learning
         for (int i = 0; i < pairAmount; i++)
         {
             var answerElement = Instantiate(answerElementPrefab, answerElementParent);
+            answerElement.onMatchSelected += SetSelectedAnswer;
             var questionElement = Instantiate(questionElementPrefab, questionElementParent);
+            questionElement.onMatchSelected += SetSelectedQuestion;
             var matchPair = new MatchPair(i,answerElement, questionElement);
             _matchPairs.Add(matchPair);
         }
-        Shuffle();
+        ShuffleMatches();
     }
 
-    private void Shuffle()
+    private void ShuffleMatches()
     {
         List<int> places = new List<int>();
         for (int i = 0; i < pairAmount; i++)
@@ -66,14 +68,28 @@ public class MatchMinigame : Learning
         }  
     }
 
-    public void SetSelectedAnswer(AnswerElement answerElement)
+    public void SetSelectedAnswer(MatchElement answerElement)
     {
-        _selectedAnswerElement = answerElement;
+        if (_selectedAnswerElement != null)
+            _selectedAnswerElement.SetSelectState(false);
+        _selectedAnswerElement = (AnswerElement)answerElement;
+        _selectedAnswerElement.SetSelectState(true);
     }
 
-    public void SetSelectedQuestion(QuestionElement questionElement)
+    public void SetSelectedQuestion(MatchElement questionElement)
     {
-        _selectedQuestionElement = questionElement;
+        if (_selectedQuestionElement != null)
+            _selectedQuestionElement.SetSelectState(false);
+        _selectedQuestionElement = (QuestionElement)questionElement;
+        _selectedQuestionElement.SetSelectState(true);
+    }
+
+    public void Submit()
+    {
+        if (_selectedAnswerElement.id == _selectedQuestionElement.id)
+        {
+            
+        }
     }
 }
 
