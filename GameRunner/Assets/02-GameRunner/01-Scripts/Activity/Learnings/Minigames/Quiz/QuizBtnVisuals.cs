@@ -42,12 +42,12 @@ public class QuizBtnVisuals : MonoBehaviour {
 	}
 
 	private void Start() {
-		InputManager.Instance.Cursor.leftDown += LeftDown;
+		InputManager.Instance.LearningCursor.leftDown += LeftDown;
 	}
 
 	private void OnDestroy() {
 		if (!InputManager.Disposed)
-			InputManager.Instance.Cursor.leftDown -= LeftDown;
+			InputManager.Instance.LearningCursor.leftDown -= LeftDown;
 	}
 
 	private void Update() {
@@ -142,7 +142,7 @@ public class QuizBtnVisuals : MonoBehaviour {
 
 	private bool PointerOver() {
 		Vector2 localPos;
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(_rt, InputManager.Instance.Cursor.ScreenPosition,
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(_rt, InputManager.Instance.LearningCursor.ScreenPosition,
 		                                                        _cam, out localPos);
 		return _rt.rect.Contains(localPos);
 	}

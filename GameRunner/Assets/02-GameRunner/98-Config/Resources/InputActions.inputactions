@@ -214,7 +214,7 @@
             ]
         },
         {
-            "name": "Cursor",
+            "name": "GameCursor",
             "id": "35e860ad-728b-41b9-a388-91f1d85084b2",
             "actions": [
                 {
@@ -324,6 +324,127 @@
                 {
                     "name": "",
                     "id": "1acb2fd6-37b9-4632-a0fb-8ffd6ee24227",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "LearningCursor",
+            "id": "17beeabd-c2ea-47b1-bef0-2c2e2773eba7",
+            "actions": [
+                {
+                    "name": "ScreenPosition",
+                    "type": "Value",
+                    "id": "66aa15ee-7046-4468-8349-9aadeb03cdb4",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Drag",
+                    "type": "Button",
+                    "id": "65fed366-d775-493a-a9f8-3ae486afc89f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftClick",
+                    "type": "Button",
+                    "id": "5860df4e-ec69-4e20-8eae-be786b53771e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightClick",
+                    "type": "Button",
+                    "id": "394f030d-5e31-4d0d-9dd4-775a7c896278",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c5704f98-45c9-469c-a6ff-0bcbf10a5c0a",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ScreenPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Mouse Drag",
+                    "id": "1c99c9a7-b030-482d-b8b4-ccbac84efb18",
+                    "path": "MouseDrag",
+                    "interactions": "MouseDrag",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drag",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "button",
+                    "id": "86008d59-112a-405d-b795-3a90cb463128",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Drag",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "axis1",
+                    "id": "abbddddb-5294-489f-98c2-fb6b04cb9933",
+                    "path": "<Mouse>/delta/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Drag",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "axis2",
+                    "id": "0f613816-603f-498d-b6a9-9fe79ce97e26",
+                    "path": "<Mouse>/delta/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Drag",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "73184c58-e1ed-4260-af50-91508eb5c028",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "LeftClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7d96f1b0-d2d6-4aff-9caf-748c18da4063",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
@@ -612,42 +733,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "LeftMousePan",
-                    "type": "Button",
-                    "id": "b7ec2ce8-3938-4b0b-9b5e-92296f281530",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RightMousePan",
-                    "type": "Button",
-                    "id": "af127b80-8e6b-49d4-99d7-ad08380b0b78",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "GotoNum",
-                    "type": "Button",
-                    "id": "8fb5bbc2-e6b5-436f-abd2-9e88a8318808",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "GotoDefaultCamera",
-                    "type": "Button",
-                    "id": "fe91dc74-b1bb-4619-8f7f-8ef34aee6e56",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -659,215 +744,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "ZoomIn",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3ed40c4a-9e7f-40e3-ae8a-4e17e0e680b7",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "Scale",
-                    "groups": "",
-                    "action": "GotoNum",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "84adf74d-5ff2-49a9-91d1-ddff7fc8ab61",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "Scale(factor=2)",
-                    "groups": "",
-                    "action": "GotoNum",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "92c3a33c-33ed-4f51-8a43-c3223bc2c609",
-                    "path": "<Keyboard>/3",
-                    "interactions": "",
-                    "processors": "Scale(factor=3)",
-                    "groups": "",
-                    "action": "GotoNum",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a8c9a070-117b-4850-8c40-a781637fb3d4",
-                    "path": "<Keyboard>/4",
-                    "interactions": "",
-                    "processors": "Scale(factor=4)",
-                    "groups": "",
-                    "action": "GotoNum",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "229e08a2-2950-4504-99f0-bfa627401812",
-                    "path": "<Keyboard>/5",
-                    "interactions": "",
-                    "processors": "Scale(factor=5)",
-                    "groups": "",
-                    "action": "GotoNum",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7d987724-3250-4285-90ec-e750e8481090",
-                    "path": "<Keyboard>/6",
-                    "interactions": "",
-                    "processors": "Scale(factor=6)",
-                    "groups": "",
-                    "action": "GotoNum",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "728a02f7-9e86-4d3f-961c-8f83dd1d756c",
-                    "path": "<Keyboard>/7",
-                    "interactions": "",
-                    "processors": "Scale(factor=7)",
-                    "groups": "",
-                    "action": "GotoNum",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "55710ad3-2985-49aa-8694-bbb7e6e95852",
-                    "path": "<Keyboard>/8",
-                    "interactions": "",
-                    "processors": "Scale(factor=8)",
-                    "groups": "",
-                    "action": "GotoNum",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "de01da2e-dbd1-4656-a64f-5a3ea37fc791",
-                    "path": "<Keyboard>/9",
-                    "interactions": "",
-                    "processors": "Scale(factor=9)",
-                    "groups": "",
-                    "action": "GotoNum",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7a20c7a2-46a0-464e-9942-1a9c986b300e",
-                    "path": "<Keyboard>/0",
-                    "interactions": "",
-                    "processors": "Scale(factor=0)",
-                    "groups": "",
-                    "action": "GotoNum",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "Mouse Drag",
-                    "id": "da82e976-07c5-47d6-ac64-af16c860ff23",
-                    "path": "MouseDrag",
-                    "interactions": "MouseDrag",
-                    "processors": "",
-                    "groups": "",
-                    "action": "LeftMousePan",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "button",
-                    "id": "db6ef50a-ade5-4567-9957-a8a49bba855a",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "LeftMousePan",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "axis1",
-                    "id": "40427730-7167-410d-a77d-5e14005fcc11",
-                    "path": "<Mouse>/delta/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "LeftMousePan",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "axis2",
-                    "id": "e61173d4-7e06-4754-b247-a55782fd8c85",
-                    "path": "<Mouse>/delta/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "LeftMousePan",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Mouse Drag",
-                    "id": "e3026e22-0a0d-411e-83e4-a10fd30076cc",
-                    "path": "MouseDrag",
-                    "interactions": "MouseDrag",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RightMousePan",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "button",
-                    "id": "160f84c2-cf97-4772-b6ae-689aa5c6d060",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "RightMousePan",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "axis1",
-                    "id": "54833e61-e5e2-45b1-9f62-602cc54ed0a5",
-                    "path": "<Mouse>/delta/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "RightMousePan",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "axis2",
-                    "id": "6df625ed-17c9-4be4-a48c-85131f30c156",
-                    "path": "<Mouse>/delta/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "RightMousePan",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "0e429533-d1cd-45b1-96ac-a4b45fadc428",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "GotoDefaultCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

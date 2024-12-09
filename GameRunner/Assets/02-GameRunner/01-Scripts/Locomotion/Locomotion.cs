@@ -411,7 +411,7 @@ namespace Cohort.GameRunner.LocoMovement {
             if (Control == ControlType.Local) {
                 Vector3 dir;
                 float speed;
-                if (InputManager.Instance.Cursor.LeftDown || InputManager.Instance.Cursor.RightDown || ((TrackState)_sm[State.Track]).Track.autoWalk) {
+                if (InputManager.Instance.GameCursor.LeftDown || InputManager.Instance.GameCursor.RightDown || ((TrackState)_sm[State.Track]).Track.autoWalk) {
                     dir = Vector3.zero;
                     speed = 0f;
                 }
