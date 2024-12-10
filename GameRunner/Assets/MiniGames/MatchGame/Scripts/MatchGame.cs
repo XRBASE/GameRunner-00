@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using Random = System.Random;
 
 
 public class MatchGame : MiniGame
 {
+    public MatchGameDataSO MatchGameDataSo;
     public MatchElement matchElementPrefab;
     public Transform answerElementParent, questionElementParent;
-    private int _pairAmount = 5;
     private List<MatchPair> _matchPairs;
     private static Random _rng = new Random();
     private MatchElement _questionElement;
     private MatchElement _answerElement;
     private MatchGameData _matchGameData;
+    public List<MatchPairData> matches;
+    
 
     public override void Initialize(string gameData, int scoreMultiplier, Action<float> onGameFinished)
     {
@@ -29,17 +29,35 @@ public class MatchGame : MiniGame
     protected override void Awake()
     {
         //base.Awake();
-        Initialize(JsonUtility.ToJson(new MatchGameData()), 1, delegate(float f) {Debug.LogError(f); });
+        Initialize(JsonUtility.ToJson(MatchGameDataSo.matchGameData), 1, delegate(float f) {Debug.LogError(f); });
     }
 
     protected override void BuildGame()
     {
         _matchPairs = new List<MatchPair>();
-        for (int i = 0; i < _pairAmount; i++)
+        matches = _matchGameData.matches;
+        for (int i = 0; i < _matchGameData.pairAmount; i++)
         {
+            var match = matches[UnityEngine.Random.Range(0, matches.Count)];
+            matches.Remove(match);
             var answerElement = Instantiate(matchElementPrefab, answerElementParent);
+            if (match.originMatchType == MatchPairData.MatchType.Text)
+            {
+                answerElement.SetPreviewElement(match.originText);
+            } else if (match.originMatchType == MatchPairData.MatchType.Image)
+            {
+                answerElement.SetPreviewElement(match.originSprite);
+            }
             answerElement.onMatchSelected += SetSelectedAnswer;
             var questionElement = Instantiate(matchElementPrefab, questionElementParent);
+            
+            if (match.targetMatchType == MatchPairData.MatchType.Text)
+            {
+                questionElement.SetPreviewElement(match.targetText);
+            } else if (match.targetMatchType == MatchPairData.MatchType.Image)
+            {
+                questionElement.SetPreviewElement(match.targetSprite);
+            }
             questionElement.onMatchSelected += SetSelectedQuestion;
             var matchPair = new MatchPair(i, answerElement, questionElement);
             _matchPairs.Add(matchPair);
@@ -71,7 +89,7 @@ public class MatchGame : MiniGame
     private void ShuffleMatches()
     {
         List<int> places = new List<int>();
-        for (int i = 0; i < _pairAmount; i++)
+        for (int i = 0; i < _matchGameData.pairAmount; i++)
         {
             places.Add(i);
         }
@@ -172,7 +190,7 @@ public class MatchPair
         this.questionElement = questionElement;
         answerElement.id = id;
         questionElement.id = id;
-        answerElement.title.text = id.ToString();
-        questionElement.title.text = id.ToString();
+        answerElement.title.text = string.Empty;
+        questionElement.title.text = string.Empty;
     }
 }

@@ -5,18 +5,38 @@ using UnityEngine.UI;
 
 public class MatchElement : MonoBehaviour
 {
+    private MatchPairData.MatchType matchType
+    {
+        get { return _matchType;}
+        set
+        {
+            _matchType = value;
+            switch (value)
+            {
+                case MatchPairData.MatchType.Image:
+                    matchText.gameObject.SetActive(false);
+                    matchImage.gameObject.SetActive(true);
+                    break;
+                case MatchPairData.MatchType.Text:
+                    matchText.gameObject.SetActive(true);
+                    matchImage.gameObject.SetActive(false);
+                    break;
+            }
+        }
+    }
+
+    private MatchPairData.MatchType _matchType;
+
     public int id;
-    public MatchType matchType;
     public TextMeshProUGUI title;
+    public TextMeshProUGUI matchText;
+    public Image matchImage;
     public Button button;
     public Image highLight;
-    private MatchPreview _matchPreview;
     public Action<MatchElement> onMatchSelected;
-    private bool _selectState;
     private Color _originalColor;
     public Color highlightColor;
-    
-    public enum MatchType{Image, Text}
+
 
     protected virtual void Awake()
     {
@@ -24,18 +44,16 @@ public class MatchElement : MonoBehaviour
         button.onClick.AddListener(SelectMatch);
     }
 
-    public void SetPreviewElement(MatchPreview matchPreview)
+    public void SetPreviewElement(Sprite sprite)
     {
-        switch (matchPreview)
-        {
-            case ImagePreview:
-                matchType = MatchType.Image;
-                break;
-            case TextPreview:
-                matchType = MatchType.Text;
-                break;
-        }
-        _matchPreview = matchPreview;
+        matchType = MatchPairData.MatchType.Image;
+        matchImage.sprite = sprite;
+    }
+
+    public void SetPreviewElement(string text)
+    {
+        matchType = MatchPairData.MatchType.Text;
+        matchText.text = text;
     }
 
     private void SelectMatch()
@@ -45,7 +63,6 @@ public class MatchElement : MonoBehaviour
 
     public void SetSelectState(bool active)
     {
-        _selectState = active;
         if (active)
         {
             highLight.color = highlightColor;
@@ -54,9 +71,5 @@ public class MatchElement : MonoBehaviour
         {
             highLight.color = _originalColor;
         }
-        
     }
-
-
-
 }

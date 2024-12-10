@@ -8,8 +8,7 @@ using UnityEngine;
 public class WordGameDataSO : ScriptableObject
 {
     public WordGameData wordGameData;
-    public List<string> wordDictionary;
-    
+
     public string wordGameDataJson()
     {
         return JsonUtility.ToJson(wordGameData);
@@ -66,14 +65,6 @@ public class WordGameDataSO : ScriptableObject
 
 
                         csvData.Add(new List<string>(values));
-                    }
-                }
-                foreach (var row in csvData)
-                {
-                    foreach (var value in row)
-                    {
-                        if(value.Length == 5 && value.All(char.IsLetter))
-                            instance.wordDictionary.Add(value);
                     }
                 }
                 EditorUtility.SetDirty(instance);
