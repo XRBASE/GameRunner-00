@@ -271,35 +271,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8219063904684315801, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
-      propertyPath: m_UseGravity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8219063904684315801, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
-      propertyPath: m_AngularDrag
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8219063904684315801, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
-    - target: {fileID: 8219063904684315801, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
-      propertyPath: m_Interpolate
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 5737630204903229178, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 06bdb26c13b601249af6b7f5ab9b072f, type: 2}
     - target: {fileID: 8219063904684315801, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
       propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8219063904684315801, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
-      propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9094853435808748160, guid: 197da72279665904e9a4a29bd8e29a9b, type: 3}
       propertyPath: m_Name
       value: LocalPlayer
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
