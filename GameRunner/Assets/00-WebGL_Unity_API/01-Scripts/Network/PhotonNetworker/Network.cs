@@ -27,11 +27,9 @@ public class Network {
     private int _reconectCounter;
     
     private bool _disposed;
-    private bool _isLocal;
     
     public Network(bool isLocal, bool autoReconnect = true)
     {
-        _isLocal = isLocal;
         if (isLocal) {
             Local = this;
         }

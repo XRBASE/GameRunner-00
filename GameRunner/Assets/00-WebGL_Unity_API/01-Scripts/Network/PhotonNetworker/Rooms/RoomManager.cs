@@ -19,6 +19,8 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
             get { return _currentId; }
         }
         private string _currentId;
+        private bool _canRejoin;
+        private bool _createOrJoinFailed = false;
         
         private PhotonClient _client;
         
@@ -63,6 +65,7 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
         {
             //clear any room failure subscriptions, so old room joins are not shown as failed
             _onJoinRoomFailed = null;
+            _canRejoin = true;
         }
 
         private void OnJoinRoomFailed()
@@ -71,6 +74,7 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
             //call room failed subscriptions, then clear
             _onJoinRoomFailed?.Invoke("Join room failed!");
             _onJoinRoomFailed = null;
+            _canRejoin = false;
         }
 
         /// <summary>
@@ -78,11 +82,17 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
         /// </summary>
         public void OnReconnect()
         {
-            if (!string.IsNullOrEmpty(_currentId)) {
-                RejoinRoom(_currentId);
+            if (string.IsNullOrEmpty(_currentId)) {
+                Debug.LogError($"cannot connect to previous room, just connecting to the masterserver.");
                 return;
             }
-            Debug.LogWarning($"cannot connect to previous room, just connecting to the masterserver.");
+
+            if (_canRejoin) {
+                RejoinRoom(_currentId);
+            }
+            else {
+                JoinOrCreateRoom(_currentId);
+            }
         }
 
         /// <summary>
@@ -105,8 +115,6 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
 
             Networker.Instance.StartCoroutine(DoGotoRoom(roomId, rejoin));
         }
-
-        private bool _createOrJoinFailed = false;
 
         private void OnRoomCreateFailed() {
             _createOrJoinFailed = true;
@@ -165,6 +173,7 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
             
             _callbacks.onLeavingRoom?.Invoke();
             _currentId = "";
+            _canRejoin = false;
             
             _client.OpLeaveRoom(false);
         }
