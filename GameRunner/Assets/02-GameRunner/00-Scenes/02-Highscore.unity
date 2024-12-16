@@ -713,14 +713,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _learning:
     learnings:
-    - actionDescription: WordGame
-      sceneName: 02-Minigame-WordGame
-      data: "{\"wordGameMode\":0,\"title\":\"Raad het woord\",\"tries\":5,\"puzzleAmount\":2,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
-        leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor
-        veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt veel gebruikt in thaise
-        recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen
-        worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt
-        na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}]}"
+    - actionDescription: MatchGame
+      sceneName: 03-Minigame_MatchGame
+      data: '{"title":"Vind de matches","pairAmount":5,"matches":[{"instanceID":25064},{"instanceID":24882},{"instanceID":24860},{"instanceID":24896},{"instanceID":24910}]}'
       locations: 00000000
       onFinCinematic:
         m_PersistentCalls:
@@ -733,6 +728,54 @@ MonoBehaviour:
           m_Calls: []
       _state: 0
       index: 0
+      log: {fileID: 0}
+    - actionDescription: MatchGame
+      sceneName: 03-Minigame_MatchGame
+      data: '{"title":"Vind de matches","pairAmount":5,"matches":[{"instanceID":25064},{"instanceID":24882},{"instanceID":24860},{"instanceID":24896},{"instanceID":24910}]}'
+      locations: 00000000
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      _state: 0
+      index: 1
+      log: {fileID: 0}
+    - actionDescription: MatchGame
+      sceneName: 03-Minigame_MatchGame
+      data: '{"title":"Vind de matches","pairAmount":5,"matches":[{"instanceID":25064},{"instanceID":24882},{"instanceID":24860},{"instanceID":24896},{"instanceID":24910}]}'
+      locations: 00000000
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      _state: 0
+      index: 2
+      log: {fileID: 0}
+    - actionDescription: MatchGame
+      sceneName: 03-Minigame_MatchGame
+      data: '{"title":"Vind de matches","pairAmount":5,"matches":[{"instanceID":25064},{"instanceID":24882},{"instanceID":24860},{"instanceID":24896},{"instanceID":24910}]}'
+      locations: 00000000
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      _state: 0
+      index: 3
       log: {fileID: 0}
     useTimer: 1
     linear: 1

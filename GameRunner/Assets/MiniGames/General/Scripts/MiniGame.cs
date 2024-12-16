@@ -5,8 +5,10 @@ using UnityEngine;
 
 public abstract class MiniGame : Learning
 {
+    protected const float GAME_COMPLETE_FEEDBACK_TIMEOUT = 2f;
     public ScoreUI scoreUI;
     [SerializeField] protected TextMeshProUGUI _title;
+    public AudioSource feedbackAudio;
     protected Action<float> _onGameFinished;
     protected float _scoreMultiplier;
     protected float _completionPercent;

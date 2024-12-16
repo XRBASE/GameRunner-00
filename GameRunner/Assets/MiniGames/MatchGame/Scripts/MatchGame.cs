@@ -9,37 +9,40 @@ public class MatchGame : MiniGame
     public MatchGameDataSO MatchGameDataSo;
     public MatchElement matchElementPrefab;
     public Transform answerElementParent, questionElementParent;
+    public AudioClip gameCompleteAudioClip;
+    public AudioClip correctSoundEffect;
+    public AudioClip inCorrectSoundEffect;
+    public AudioClip selectSoundEffect;
+    
     private List<MatchPair> _matchPairs;
     private static Random _rng = new Random();
+    private List<MatchPairData> _matches;
     private MatchElement _questionElement;
     private MatchElement _answerElement;
     private MatchGameData _matchGameData;
-    public List<MatchPairData> matches;
+    private int _attempts;
+    private int _foundMatches;
     
 
     public override void Initialize(string gameData, int scoreMultiplier, Action<float> onGameFinished)
     {
-        _matchGameData = JsonUtility.FromJson<MatchGameData>(gameData);
+        //_matchGameData = JsonUtility.FromJson<MatchGameData>(gameData);
+        _matchGameData = MatchGameDataSo.matchGameData;
         _onGameFinished = onGameFinished;
         _scoreMultiplier = scoreMultiplier;
         _title.text = _matchGameData.title;
         BuildGame();
     }
-
-    protected override void Awake()
-    {
-        //base.Awake();
-        Initialize(JsonUtility.ToJson(MatchGameDataSo.matchGameData), 1, delegate(float f) {Debug.LogError(f); });
-    }
-
+    
     protected override void BuildGame()
     {
         _matchPairs = new List<MatchPair>();
-        matches = _matchGameData.matches;
-        for (int i = 0; i < _matchGameData.pairAmount; i++)
+        _matches = new List<MatchPairData>();
+        _matches.AddRange(_matchGameData.matches);
+        for (int i = 0; i < _matchGameData.pairAmount && _matches.Count >0; i++)
         {
-            var match = matches[UnityEngine.Random.Range(0, matches.Count)];
-            matches.Remove(match);
+            var match = _matches[UnityEngine.Random.Range(0, _matches.Count)];
+            _matches.Remove(match);
             var answerElement = Instantiate(matchElementPrefab, answerElementParent);
             if (match.originMatchType == MatchPairData.MatchType.Text)
             {
@@ -48,9 +51,8 @@ public class MatchGame : MiniGame
             {
                 answerElement.SetPreviewElement(match.originSprite);
             }
-            answerElement.onMatchSelected += SetSelectedAnswer;
+            answerElement.onMatchSelected = SetSelectedAnswer;
             var questionElement = Instantiate(matchElementPrefab, questionElementParent);
-            
             if (match.targetMatchType == MatchPairData.MatchType.Text)
             {
                 questionElement.SetPreviewElement(match.targetText);
@@ -58,32 +60,36 @@ public class MatchGame : MiniGame
             {
                 questionElement.SetPreviewElement(match.targetSprite);
             }
-            questionElement.onMatchSelected += SetSelectedQuestion;
+            questionElement.onMatchSelected = SetSelectedQuestion;
             var matchPair = new MatchPair(i, answerElement, questionElement);
             _matchPairs.Add(matchPair);
         }
 
         ShuffleMatches();
     }
-
-    protected override void FinishGame()
-    {
-        throw new NotImplementedException();
-    }
-
+    
+    
     protected override void CorrectFeedback()
     {
-        Debug.LogError("Correct");
+        _answerElement.Complete();
+        _questionElement.Complete();
+        feedbackAudio.PlayOneShot(correctSoundEffect);
     }
 
     protected override void IncorrectFeedback()
     {
-        Debug.LogError("InCorrect");
+        _questionElement.IncorrectFeedback();
+        _answerElement.IncorrectFeedback();
+        feedbackAudio.PlayOneShot(inCorrectSoundEffect);
     }
 
     protected override void GameFinishedFeedback()
     {
-        throw new NotImplementedException();
+        _completionPercent = (float) _matchGameData.pairAmount/_attempts;
+        DisplayScore(_completionPercent);
+        feedbackAudio.PlayOneShot(gameCompleteAudioClip);
+        DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, FinishGame); 
+        Debug.LogError("Game Finished Feedback");
     }
 
     private void ShuffleMatches()
@@ -122,44 +128,48 @@ public class MatchGame : MiniGame
 
     private void SetSelectedAnswer(MatchElement answerElement)
     {
-        HandleSelect(_answerElement, answerElement);
-        _answerElement = answerElement;
-        Submit();
+        HandleSelect(ref _answerElement, answerElement);
     }
 
     private void SetSelectedQuestion(MatchElement questionElement)
     {
-        HandleSelect(_questionElement, questionElement);
-        _questionElement = questionElement;
+        HandleSelect(ref _questionElement, questionElement);
+    }
+
+    private void HandleSelect(ref MatchElement matchElement, MatchElement newMatchElement)
+    {
+        feedbackAudio.PlayOneShot(selectSoundEffect);
+        //Deselect old answer
+        if (matchElement != null && matchElement != newMatchElement)
+            matchElement.Deselect();
+        matchElement = newMatchElement;
         Submit();
     }
-
-    private void HandleSelect(MatchElement oldMatchElement,MatchElement matchElement)
-    {
-        //Deselect old answer
-        if (oldMatchElement != null)
-            oldMatchElement.SetSelectState(false);
-        matchElement.SetSelectState(true);
-    }
     
-
     public void Submit()
     {
         if(_answerElement == null || _questionElement == null)
             return;
+        _attempts++;
         if (_answerElement.id == _questionElement.id)
         {
+            _foundMatches++;
             CorrectFeedback();
+            if (_foundMatches == _matchGameData.pairAmount)
+            {
+                GameFinishedFeedback();
+            }
         }
         else
         {
             IncorrectFeedback();
         }
         
-        _questionElement.SetSelectState(false);
-        _answerElement.SetSelectState(false);
+        _questionElement.Deselect();
+        _answerElement.Deselect();
         _questionElement = null;
         _answerElement = null;
+
     }
 
     private void Reset()

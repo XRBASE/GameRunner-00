@@ -145,6 +145,7 @@ GameObject:
   - component: {fileID: 1522135981127343455}
   - component: {fileID: 4713346405549538283}
   - component: {fileID: 8586130456299451871}
+  - component: {fileID: 2903574476146446849}
   m_Layer: 5
   m_Name: PF_MatchElement
   m_TagString: Untagged
@@ -212,6 +213,31 @@ MonoBehaviour:
   button: {fileID: 8775544129546455768}
   highLight: {fileID: 6439919374589842407}
   highlightColor: {r: 1, g: 1, b: 0, a: 0.5019608}
+  completedColor: {r: 0, g: 1, b: 0, a: 0.5019608}
+  playableDirector: {fileID: 2903574476146446849}
+  enlargePlayable: {fileID: 11400000, guid: ed3877b6816329d4e988a41fbe9a81ba, type: 2}
+  wobblePlayable: {fileID: 11400000, guid: f9d1c73fb212093409079f99b8f62c40, type: 2}
+--- !u!320 &2903574476146446849
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2917190536349893337}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: ae67cabfbdae6644ea8002a79e2196de, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 1682158435943990665, guid: ed3877b6816329d4e988a41fbe9a81ba, type: 2}
+    value: {fileID: 4694614660923041156}
+  - key: {fileID: -8086666348103664732, guid: ae67cabfbdae6644ea8002a79e2196de, type: 2}
+    value: {fileID: 4694614660923041156}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &3141054871602849434
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,8 +337,8 @@ MonoBehaviour:
   m_fontSizeMin: 17.33
   m_fontSizeMax: 40
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -470,6 +496,7 @@ GameObject:
   - component: {fileID: 7387591636773048877}
   - component: {fileID: 6439919374589842407}
   - component: {fileID: 8775544129546455768}
+  - component: {fileID: 4694614660923041156}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -579,3 +606,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!95 &4694614660923041156
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8364823332483732554}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

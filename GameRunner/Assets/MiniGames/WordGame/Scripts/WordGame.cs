@@ -17,7 +17,6 @@ public class WordGame : MiniGame
 
     // Constants for feedback timeout durations
     private const float INVALID_FEEDBACK_TIMEOUT = 1f;
-    private const float GAME_COMPLETE_FEEDBACK_TIMEOUT = 2f;
 
     // Property to get the current word to be played
     private Word CurrentWord => _words[_entryIndex];
@@ -29,7 +28,6 @@ public class WordGame : MiniGame
     public Word wordPrefab;
     public WordGameInput wordGameInput;
     public Transform gameParent;
-    public AudioSource feedbackAudio;
     public AudioClip successAudioClip, failureAudioClip;
     public TextMeshProUGUI hintText;
     public PlayableDirector invalidWordFeedback;

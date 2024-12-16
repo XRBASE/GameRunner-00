@@ -18,7 +18,7 @@ public class MatchPairData : ScriptableObject
     public Sprite targetSprite;
     public string targetText;
 }
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(MatchPairData))]
 public class MatchPairDataEditor : Editor
 {
@@ -69,3 +69,4 @@ public class MatchPairDataEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+#endif

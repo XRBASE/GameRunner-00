@@ -1,10 +1,18 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 public class MatchElement : MonoBehaviour
 {
+    public enum MatchState
+    {
+        Unselected,
+        Selected,
+        Completed
+    }
+
     private MatchPairData.MatchType matchType
     {
         get { return _matchType;}
@@ -26,6 +34,7 @@ public class MatchElement : MonoBehaviour
     }
 
     private MatchPairData.MatchType _matchType;
+    private MatchState _matchState;
 
     public int id;
     public TextMeshProUGUI title;
@@ -36,6 +45,10 @@ public class MatchElement : MonoBehaviour
     public Action<MatchElement> onMatchSelected;
     private Color _originalColor;
     public Color highlightColor;
+    public Color completedColor;
+	public PlayableDirector playableDirector;
+	public PlayableAsset enlargePlayable;
+    public PlayableAsset wobblePlayable;
 
 
     protected virtual void Awake()
@@ -56,20 +69,59 @@ public class MatchElement : MonoBehaviour
         matchText.text = text;
     }
 
-    private void SelectMatch()
+    public void IncorrectFeedback()
     {
+        StartPlayable(wobblePlayable);
+    }
+    
+    public void SelectMatch()
+    {
+        if (_matchState == MatchState.Completed)
+            return;
+
+        SetState(MatchState.Selected);
+        StartPlayable(enlargePlayable);
         onMatchSelected?.Invoke(this);
     }
 
-    public void SetSelectState(bool active)
+    public void Deselect()
     {
-        if (active)
+        if(_matchState == MatchState.Completed)
+            return;
+        SetState(MatchState.Unselected);
+    }
+
+    public void Complete()
+    {        
+        StartPlayable(enlargePlayable);
+        SetState(MatchState.Completed);
+    }
+
+    private void SetState(MatchState state)
+    {
+        _matchState = state;
+
+        switch (state)
         {
-            highLight.color = highlightColor;
+            case MatchState.Unselected:
+                highLight.color = _originalColor;
+                break;
+            case MatchState.Selected:
+                highLight.color  = highlightColor;
+                break;
+            case MatchState.Completed:
+                highLight.color = completedColor;
+                break;
+            
         }
-        else
-        {
-            highLight.color = _originalColor;
-        }
+    }
+    
+    private void StartPlayable(PlayableAsset playable)
+    {
+        playableDirector.time = 0;
+        playableDirector.Stop();
+        playableDirector.Evaluate();
+        playableDirector.playableAsset = playable;
+        playableDirector.Play();
     }
 }
