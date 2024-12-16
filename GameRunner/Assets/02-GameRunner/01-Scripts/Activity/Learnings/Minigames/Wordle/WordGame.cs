@@ -79,6 +79,11 @@ public class WordGame : Learning
         wordGameInput.remove += RemoveLastLetter;
     }
 
+    protected void OnDestroy() {
+        wordGameInput.onKeyboardInput -= ValueChanged;
+        wordGameInput.remove -= RemoveLastLetter;
+    }
+
     // Proceed to the next puzzle or complete the game if there are no more puzzles
     private void NextPuzzle()
     {
@@ -231,6 +236,10 @@ public class WordGame : Learning
     // Final callback after the game is finished
     private void GameFinished()
     {
+        _onGameFinished?.Invoke(_completionPercent);
+    }
+
+    public override void StopLearning() {
         _onGameFinished?.Invoke(_completionPercent);
     }
 

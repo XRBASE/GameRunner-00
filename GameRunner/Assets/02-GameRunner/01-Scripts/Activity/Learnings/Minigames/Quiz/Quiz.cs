@@ -75,4 +75,8 @@ public class Quiz : Learning {
 		
 		_onLearningFinished?.Invoke((float)_correctCount / _data._questions.Length);
 	}
+
+	public override void StopLearning() {
+		_onLearningFinished?.Invoke((float)_correctCount / _data._questions.Length);
+	}
 }
