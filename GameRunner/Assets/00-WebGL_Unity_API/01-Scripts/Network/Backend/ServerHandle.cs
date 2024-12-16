@@ -21,7 +21,7 @@ public class ServerHandle : Singleton<ServerHandle>
     [DllImport("__Internal")]
     private static extern void UnityPong();
     [DllImport("__Internal")]
-    private static extern void UnityProgress(float progression);
+    private static extern void UnityProgress(int percentage);
     [DllImport("__Internal")]
     private static extern void UnityLoaded(bool complete);
     [DllImport("__Internal")]
@@ -56,8 +56,8 @@ public class ServerHandle : Singleton<ServerHandle>
         //disable test for web builds
         _testData = false;
         
-        LoadingManager.Instance.onLoadingChanged += (f, s) => UnityProgress(f);
-        LoadingManager.Instance.onLoadingFinished += () => UnityLoaded(true);
+        LoadingManager.Instance.onLoadingChanged += OnLoading;
+        LoadingManager.Instance.onLoadingFinished += OnLoadingFinished;
 #endif
         
         if (_testData) {
@@ -192,11 +192,11 @@ public class ServerHandle : Singleton<ServerHandle>
 
 #region LOADING
 
-    private void OnLoading(int percentage, string message) {
+    private void OnLoading(float progression, string message) {
+        int percentage = Mathf.RoundToInt(progression * 100);
+        
 #if UNITY_WEBGL && !UNITY_EDITOR
         UnityProgress(percentage);
-#else
-        
 #endif
         Debug.Log($"Loading {message} ({percentage})");
     }
@@ -204,8 +204,6 @@ public class ServerHandle : Singleton<ServerHandle>
     private void OnLoadingFinished() {
 #if UNITY_WEBGL && !UNITY_EDITOR
         UnityLoaded(true);
-#else
-        
 #endif
         Debug.Log($"Loading finished");
     }

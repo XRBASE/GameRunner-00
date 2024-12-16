@@ -13,7 +13,7 @@ public class SampleServerHandle : Singleton<SampleServerHandle>
 	[DllImport("__Internal")]
 	private static extern void UnityPong();
 	[DllImport("__Internal")]
-	private static extern void UnityProgress(float progression);
+	private static extern void UnityProgress(int percentage);
 	[DllImport("__Internal")]
 	private static extern void UnityLoaded(bool complete);
     
@@ -81,7 +81,7 @@ public class SampleServerHandle : Singleton<SampleServerHandle>
             UnityLoaded(true);
         }
         else {
-            UnityProgress(Mathf.Round(dec * 100));
+            UnityProgress(Mathf.RoundToInt(dec * 100));
         }
 #else
 		Debug.Log($"Loading changed server call {(fin? "finished" : $"loading {action}: ({Mathf.Round(dec * 100)})")}");
