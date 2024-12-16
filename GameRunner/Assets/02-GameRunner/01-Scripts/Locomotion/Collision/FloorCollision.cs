@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MathBuddy.Flags;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class FloorCollision : MonoBehaviour
     public Action<bool> onFloorCollision;
     private LayerMask _layerMask;
     private CapsuleCollider _capsuleCollider;
-    private bool _hasContact;
+    private readonly List<Collider> _contacts = new List<Collider>();
 
     public void Initialise(LayerMask mask, Vector3 center, float radius, float height)
     {
@@ -25,9 +26,13 @@ public class FloorCollision : MonoBehaviour
     {
         if (_layerMask.MaskIncludes(other.gameObject.layer))
         {
-            if (!_hasContact)
+            _contacts.Add(other);
+            RemoveDestroyed();
+            if (_contacts.Count == 1)
+            {
                 onFloorCollision?.Invoke(true);
-            _hasContact = true;
+            }
+
         }
     }
 
@@ -35,11 +40,27 @@ public class FloorCollision : MonoBehaviour
     {
         if (_layerMask.MaskIncludes(other.gameObject.layer))
         {
-            if (_hasContact)
+            _contacts.Remove(other);
+            RemoveDestroyed();
+            if (_contacts.Count == 0)
             {
                 onFloorCollision?.Invoke(false);
             }
-            _hasContact = false;
+        }
+    }
+
+    private void RemoveDestroyed()
+    {
+        if (_contacts != null)
+        {
+            for (int i = 0; i < _contacts.Count; i++)
+            {
+                if (_contacts[i] == null)
+                {
+                    _contacts.Remove(_contacts[i]);
+                    i--;
+                }
+            }
         }
     }
 }
