@@ -87,7 +87,7 @@ namespace Cohort.GameRunner.Input.Maps
         }
         
         private void OnTrackDirCursorChanged(InputAction.CallbackContext context) {
-            if (!DataServices.Login.UserLoggedIn || !InputManager.Instance.Cursor.ControlEnabled || _isUsingKeyboard)
+            if (!DataServices.Login.UserLoggedIn || !InputManager.Instance.GameCursor.ControlEnabled || _isUsingKeyboard)
                 return;
             
             float direction = context.ReadValue<float>();

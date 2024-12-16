@@ -713,6 +713,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _learning:
     learnings:
+    - actionDescription: Wordle
+      sceneName: 02-Wordle
+      data: "{\"wordGameMode\":0,\"title\":\"Raad het woord\",\"tries\":5,\"puzzleAmount\":2,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
+        leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor
+        veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt veel gebruikt in thaise
+        recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen
+        worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt
+        na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}]}"
+      locations: 00000000
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      _state: 0
+      index: 0
+      log: {fileID: 0}
     - actionDescription: Do quiz
       sceneName: 01-Quiz
       data: '{"_questions":[{"question":"What was the original name of Micky Mouse?","answers":["Mortimer
@@ -743,55 +764,7 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       _state: 0
-      index: 0
-      log: {fileID: 0}
-    - actionDescription: Do action 1
-      sceneName: 00-Tester
-      data: '-'
-      locations: 01000000
-      onFinCinematic:
-        m_PersistentCalls:
-          m_Calls: []
-      onFinDirect:
-        m_PersistentCalls:
-          m_Calls: []
-      onReset:
-        m_PersistentCalls:
-          m_Calls: []
-      _state: 0
       index: 1
-      log: {fileID: 0}
-    - actionDescription: Do action 2
-      sceneName: 00-Tester
-      data: '-'
-      locations: 02000000
-      onFinCinematic:
-        m_PersistentCalls:
-          m_Calls: []
-      onFinDirect:
-        m_PersistentCalls:
-          m_Calls: []
-      onReset:
-        m_PersistentCalls:
-          m_Calls: []
-      _state: 0
-      index: 2
-      log: {fileID: 0}
-    - actionDescription: Do action 3
-      sceneName: 00-Tester
-      data: '-'
-      locations: 03000000
-      onFinCinematic:
-        m_PersistentCalls:
-          m_Calls: []
-      onFinDirect:
-        m_PersistentCalls:
-          m_Calls: []
-      onReset:
-        m_PersistentCalls:
-          m_Calls: []
-      _state: 0
-      index: 3
       log: {fileID: 0}
     useTimer: 0
     linear: 1
