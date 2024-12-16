@@ -26,8 +26,8 @@ namespace Cohort.GameRunner.Input.Maps {
         }
 
         private void OnClickInteract(InputAction.CallbackContext context) {
-            if (!DataServices.Login.UserLoggedIn || !InputManager.Instance.Cursor.ControlEnabled ||
-                InputManager.Instance.Cursor.Dragging ||
+            if (!DataServices.Login.UserLoggedIn || !InputManager.Instance.GameCursor.ControlEnabled ||
+                InputManager.Instance.GameCursor.Dragging ||
                 InputManager.Instance.Raycaster.HitState != CursorRayCaster.RCHitState.Interact)
                 return;
 
@@ -35,7 +35,7 @@ namespace Cohort.GameRunner.Input.Maps {
         }
 
         private void OnBtnInteract(InputAction.CallbackContext context) {
-            if (!DataServices.Login.UserLoggedIn || !InputManager.Instance.Cursor.ControlEnabled)
+            if (!DataServices.Login.UserLoggedIn || !InputManager.Instance.GameCursor.ControlEnabled)
                 return;
 
             onBtnInteract?.Invoke();

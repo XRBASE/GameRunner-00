@@ -13,7 +13,7 @@ public abstract class Learning : MonoBehaviour {
 	/// <param name="onLearningFinished">Range(0,1) decimal percentage of completeness.</param>
 	public abstract void Initialize(string gameData, int scoreMultiplier, Action<float> onLearningFinished);
 
-	protected void Awake() {
+	protected virtual void Awake() {
 		LearningManager.Instance.InitializeLearning(this);
 	}
 }

@@ -5,7 +5,6 @@ using Cohort.GameRunner.Players;
 using Cohort.CustomAttributes;
 using Cohort.GameRunner.Input;
 using ExitGames.Client.Photon;
-using UnityEngine.SceneManagement;
 using UnityEngine;
 using System;
 
@@ -25,9 +24,12 @@ namespace Cohort.GameRunner.LocoMovement {
         //difference between speed of remote and local players
         public const float REMOTE_DIFF = -0.5f;
         
-        //height in meters of one singular jump
-        public const float JUMP_HEIGHT = 2f;
+        //Jump power
+        public const float JUMP_HEIGHT = 4f;
         
+        //Double jump power
+        public const float DOUBLE_JUMP_HEIGHT = 2.5f;
+
         //speeds in meters per second
         public const float WALK_SPEED = 3.5f;
         public const float RUN_SPEED = 6f;
@@ -58,6 +60,9 @@ namespace Cohort.GameRunner.LocoMovement {
         public CharAnimator Animator { get; private set; }
         public GroundCheck GroundCheck { get; private set; }
         public StepRaycaster StepCaster { get; private set; }
+        
+        public FloorCollision GroundRangeCheck { get; private set; }
+        public FloorCollision FallRangeCheck { get; private set; }
 
         public Action onSitDown, onStandUp;
         public static Action<Player> onColliderDisable;
@@ -82,13 +87,20 @@ namespace Cohort.GameRunner.LocoMovement {
             if (_collider == null)
                 _collider = GetComponent<CapsuleCollider>();
             
+            GroundRangeCheck = new GameObject("GroundChecker").AddComponent<FloorCollision>();
+            GroundRangeCheck.transform.parent = transform;
+            
+            FallRangeCheck = new GameObject("FallChecker").AddComponent<FloorCollision>();
+            FallRangeCheck.transform.parent = transform;
+
             GroundCheck = new GameObject("GroundCheck").AddComponent<GroundCheck>();
             GroundCheck.gameObject.layer = gameObject.layer;
-            GroundCheck.Initialize(transform);
-
+            GroundCheck.Initialize(transform, GroundRangeCheck, FallRangeCheck);
+            
             StepCaster = new GameObject("StepCaster").AddComponent<StepRaycaster>();
             StepCaster.gameObject.layer = gameObject.layer;
             StepCaster.Initialize(_rb, this);
+            
             
             _sm = new StateMachine<State, LocomotionState>();
             _sm[State.Move] = new MoveState(_rb, this);
@@ -411,7 +423,7 @@ namespace Cohort.GameRunner.LocoMovement {
             if (Control == ControlType.Local) {
                 Vector3 dir;
                 float speed;
-                if (InputManager.Instance.Cursor.LeftDown || InputManager.Instance.Cursor.RightDown || ((TrackState)_sm[State.Track]).Track.autoWalk) {
+                if (InputManager.Instance.GameCursor.LeftDown || InputManager.Instance.GameCursor.RightDown || ((TrackState)_sm[State.Track]).Track.autoWalk) {
                     dir = Vector3.zero;
                     speed = 0f;
                 }

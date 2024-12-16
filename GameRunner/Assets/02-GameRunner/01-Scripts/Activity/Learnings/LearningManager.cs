@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cohort.GameRunner.Input;
 using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 using Cohort.Patterns;
@@ -263,6 +264,7 @@ public class LearningManager : Singleton<LearningManager> {
     }
 
     public void OnLearningStart(LearningDescription learning, LearningInteractable interactable) {
+        InputManager.Instance.SetLearningInput();
         _currenOpenLearning = learning;
         _currentOpenInteractable = interactable;
         
@@ -271,6 +273,7 @@ public class LearningManager : Singleton<LearningManager> {
     }
 
     private void OnLearningFinished(float scorePercentage) {
+        InputManager.Instance.SetGameInput();
         LearningDescription.State s = (scorePercentage > 0.001f)
             ? LearningDescription.State.Completed
             : LearningDescription.State.Failed;
