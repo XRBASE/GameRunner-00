@@ -604,7 +604,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: _testInput
-      value: '{"token":"6B4E31585865435A555255756F7965476E34436273413D3D","baseUrl":"https://dev.cohort.games","sessionId":"88e4091e-551f-4bba-8816-9ce0a39af590"}'
+      value: '{"token":"567249706E69745A536767384D434838664C6B3153513D3D","baseUrl":"https://dev.cohort.games","sessionId":"0c2d0b42-f397-410e-9b6e-996e408a4c60"}'
       objectReference: {fileID: 0}
     - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: activityDef._assetRef
@@ -717,7 +717,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1170715247519993080, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -36.99997
+      value: -37
       objectReference: {fileID: 0}
     - target: {fileID: 1573840330068068681, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchorMax.y

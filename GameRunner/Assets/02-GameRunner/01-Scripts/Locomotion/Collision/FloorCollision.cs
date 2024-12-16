@@ -8,7 +8,7 @@ public class FloorCollision : MonoBehaviour
     public Action<bool> onFloorCollision;
     private LayerMask _layerMask;
     private CapsuleCollider _capsuleCollider;
-    private int _contacts;
+    private bool _hasContact;
 
     public void Initialise(LayerMask mask, Vector3 center, float radius, float height)
     {
@@ -25,9 +25,9 @@ public class FloorCollision : MonoBehaviour
     {
         if (_layerMask.MaskIncludes(other.gameObject.layer))
         {
-            _contacts++;
-            if (_contacts == 1)
+            if (!_hasContact)
                 onFloorCollision?.Invoke(true);
+            _hasContact = true;
         }
     }
 
@@ -35,9 +35,11 @@ public class FloorCollision : MonoBehaviour
     {
         if (_layerMask.MaskIncludes(other.gameObject.layer))
         {
-            _contacts--;
-            if (_contacts == 0)
+            if (_hasContact)
+            {
                 onFloorCollision?.Invoke(false);
+            }
+            _hasContact = false;
         }
     }
 }
