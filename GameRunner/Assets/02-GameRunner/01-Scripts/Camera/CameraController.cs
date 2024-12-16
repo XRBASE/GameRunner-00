@@ -25,10 +25,14 @@ public class CameraController : Singleton<CameraController> {
         if (_zoom > MAX_ZOOM || _zoom < MIN_ZOOM) {
             OnZoom(0f);
         }
-        
-        Player.Local.onAvatarImported += SetUp;
-        
+
         enabled = false;
+        if (Player.Local.Avatar == null) {
+            Player.Local.onAvatarImported += SetUp;
+        }
+        else {
+            SetUp(Player.Local.Avatar);
+        }
     }
 
     private void SetUp(Avatar avatar) {
