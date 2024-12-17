@@ -50,7 +50,10 @@ namespace Cohort.Networking.Players {
             player.Initialize(photon);
             
             _players.Add(photon.UserId, player);
-            _propertyCallbacks.Add(photon.UserId, player.OnPropertiesChanged);
+            if (_propertyCallbacks.ContainsKey(photon.UserId)) {
+                Debug.LogWarning("Double player detected. On properties changed assigned to new player!");
+            }
+            _propertyCallbacks[photon.UserId] = player.OnPropertiesChanged;
         }
         
         private void RemovePlayer(Photon.Realtime.Player player) {
