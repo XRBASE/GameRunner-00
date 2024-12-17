@@ -71,8 +71,6 @@ public class ServerHandle : Singleton<ServerHandle>
     /// Called by server to check whether unity has started already. Response is a ping back.
     /// </summary>
     public void UnityPing() {
-        LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Start();
-        
         if (!ServerControlled) {
             ServerControlled = true;
 
@@ -100,6 +98,7 @@ public class ServerHandle : Singleton<ServerHandle>
 
     private IEnumerator Connect() {
         _dataValid = true;
+        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Start();
         
         LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Increment("loading network data");
         _baseUrl = StringExtentions.PickFromJson<string>("baseUrl", _initData) + "/";
@@ -110,11 +109,13 @@ public class ServerHandle : Singleton<ServerHandle>
         _token = JsonUtility.FromJson<LoginRequest.SimpleToken>(_initData);
         if (_dataValid)
             _dataValid = !string.IsNullOrEmpty(_token.token);
+        LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Start();
         DataServices.Login.OnSystemsTokenRecieved(_token);
+        LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Increment("Playerdata recieved");
         
         LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Finish();
         
-        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Start();
+        
         _sessionId = StringExtentions.PickFromJson<string>("sessionId", _initData);
         if (_dataValid)
             _dataValid = !string.IsNullOrEmpty(_sessionId);

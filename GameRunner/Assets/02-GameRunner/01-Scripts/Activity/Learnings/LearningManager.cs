@@ -23,7 +23,7 @@ public class LearningManager : Singleton<LearningManager> {
     }
 
     public LearningDescription Current {
-        get { return _currenOpenLearning; }
+        get { return _currenLearningDescription; }
     }
 
     public int ScoreMultiplier {
@@ -43,8 +43,9 @@ public class LearningManager : Singleton<LearningManager> {
     private LearningInteractable[] _interactables;
     
     //this is the currently open interactable and learning for the local user. There should never be two minigames open at the same time.
-    private LearningDescription _currenOpenLearning;
-    private LearningInteractable _currentOpenInteractable;
+    private LearningDescription _currenLearningDescription;
+    private Learning _currentLearning;
+    private LearningInteractable _currentInteractable;
     
     private float _refTime = -1;
     private int _refActor = -1;
@@ -145,7 +146,7 @@ public class LearningManager : Singleton<LearningManager> {
         if (Setting.useTimer) {
             PushNewTimer();
         }
-        else if (!AnyLearningActive()) {
+        else if (!AnyLearningOpen()) {
             ActivateLearning();
         }
 
@@ -155,6 +156,10 @@ public class LearningManager : Singleton<LearningManager> {
     }
     
     public void OnActivityStop() {
+        if (_currentLearning != null) {
+            _currentLearning.StopLearning();
+        }
+        
         _inActivity = false;
         UILocator.Get<LearningLogUI>().ClearLog();
         
@@ -164,7 +169,7 @@ public class LearningManager : Singleton<LearningManager> {
         ResetLearnings();
     }
 
-    private bool AnyLearningActive() {
+    private bool AnyLearningOpen() {
         for (int i = 0; i < _interactables.Length; i++) {
             if (_interactables[i].HasLearning) {
                 return true;
@@ -265,43 +270,44 @@ public class LearningManager : Singleton<LearningManager> {
 
     public void OnLearningStart(LearningDescription learning, LearningInteractable interactable) {
         InputManager.Instance.SetLearningInput();
-        _currenOpenLearning = learning;
-        _currentOpenInteractable = interactable;
+        _currenLearningDescription = learning;
+        _currentInteractable = interactable;
         
-        _currenOpenLearning.SetState(LearningDescription.State.Active, false);
-        SceneManager.LoadScene(_currenOpenLearning.sceneName, LoadSceneMode.Additive);
+        _currenLearningDescription.SetState(LearningDescription.State.Active, false);
+        SceneManager.LoadScene(_currenLearningDescription.sceneName, LoadSceneMode.Additive);
     }
 
     private void OnLearningFinished(float scorePercentage) {
+        _currentLearning = null;
         InputManager.Instance.SetGameInput();
         LearningDescription.State s = (scorePercentage > 0.001f)
             ? LearningDescription.State.Completed
             : LearningDescription.State.Failed;
         
         if (Setting.complete) {
-            _currenOpenLearning.SetState(s, false);
+            _currenLearningDescription.SetState(s, false);
         }
         else {
-            _currenOpenLearning.SetState(LearningDescription.State.Open, false, true);
+            _currenLearningDescription.SetState(LearningDescription.State.Open, false, true);
         }
 
         if (Setting.networked) {
-            PushLearningState(_currenOpenLearning);
+            PushLearningState(_currenLearningDescription);
         }
         
         onLearningFinished?.Invoke(scorePercentage);
         
-        _currenOpenLearning.log.CheckLogItem(s);
-        _currenOpenLearning.log = null;
+        _currenLearningDescription.log.CheckLogItem(s);
+        _currenLearningDescription.log = null;
         
-        SceneManager.UnloadSceneAsync(_currenOpenLearning.sceneName);
+        SceneManager.UnloadSceneAsync(_currenLearningDescription.sceneName);
         
         //TODO_COHORT: fix the double call thingie?
-        _currentOpenInteractable.Deactivate();
+        _currentInteractable.Deactivate();
         //_currentOpenInteractable.SetLearningLocal(-1);
 
-        _currenOpenLearning = null;
-        _currentOpenInteractable = null;
+        _currenLearningDescription = null;
+        _currentInteractable = null;
         
         if (!Setting.useTimer) {
             ActivateLearning();
@@ -331,7 +337,8 @@ public class LearningManager : Singleton<LearningManager> {
     }
     
     public void InitializeLearning(Learning learning) {
-        learning.Initialize(_currenOpenLearning.data, _scoreMultiplier, OnLearningFinished);
+        learning.Initialize(_currenLearningDescription.data, _scoreMultiplier, OnLearningFinished);
+        _currentLearning = learning;
     }
     
     private void OnJoinedRoom() {

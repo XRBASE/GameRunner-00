@@ -70,6 +70,10 @@ public class EnvironmentLoader : Singleton<EnvironmentLoader> {
 	    if (sceneName == _activeScene) {
 		    return;
 	    }
+
+	    if (_initial) {
+		    LoadingManager.Instance[LoadPhase.Lobby, LoadType.LoadLobbyScene].Increment("Loading initial scene");
+	    }
 	    
 	    //TODO_COHORT: assetbundles
 	    if (!string.IsNullOrEmpty(_activeScene)) {
