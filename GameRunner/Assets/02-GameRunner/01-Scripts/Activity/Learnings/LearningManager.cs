@@ -13,8 +13,11 @@ using Random = UnityEngine.Random;
 
 [DefaultExecutionOrder(1)] //After LearningInteractable
 public class LearningManager : Singleton<LearningManager> {
-    public const float MIN_TIME = 3f;
-    public const float MAX_TIME = 7f;
+    public const float FAILURE_THRESHOLD = 0.25f;
+    public const float AMAZING_THRESHOLD = 0.75f;
+    
+    private const float MIN_TIME = 3f;
+    private const float MAX_TIME = 7f;
     
     public LearningCycleDescription Setting { get; set; }
     

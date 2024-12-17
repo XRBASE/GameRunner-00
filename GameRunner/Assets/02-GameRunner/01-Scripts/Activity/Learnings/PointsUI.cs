@@ -11,17 +11,24 @@ public class PointsUI : UIPanel {
     [SerializeField] private Slider _scoreSlider;
     [SerializeField] private float _slideDuration;
     [SerializeField] private AnimationCurve _scoreSlideCurve;
-    [SerializeField] private TMP_Text _field;
     [SerializeField] private ParticleSystem _confetti;
+    
+    [SerializeField] private GameObject _successVisuals;
+    [SerializeField] private GameObject _failureVisuals;
+    [SerializeField] private TMP_Text[] _fields;
 
-    private string _templateInfo;
+    private string[] _fieldTemplates;
     private bool _animate;
     private float _timer;
     private float _score;
 
     private void Awake() {
         UILocator.Register(this);
-        _templateInfo = _field.text;
+        
+        _fieldTemplates = new string[_fields.Length];
+        for (int i = 0; i < _fields.Length; i++) {
+            _fieldTemplates[i] = _fields[i].text;
+        }
     }
 
     private void Start() {
@@ -59,24 +66,34 @@ public class PointsUI : UIPanel {
     }
 
     private void ShowScore(float score, int scoreMod, string learningName) {
+        bool success = score >= LearningManager.FAILURE_THRESHOLD;
+        bool amazing = score >= LearningManager.AMAZING_THRESHOLD;
+        
+        _successVisuals.gameObject.SetActive(success);
+        _failureVisuals.gameObject.SetActive(!success);
+        
+        for (int i = 0; i < _fields.Length; i++) {
+            _fields[i].text = GetInfoString(Mathf.RoundToInt(score * scoreMod), learningName, _fieldTemplates[i]);
+        }
+        
         _score = score;
-        _field.text = GetInfoString(Mathf.RoundToInt(score * scoreMod), learningName);
-        _confetti.Clear();
-        _confetti.Play();
+        if (amazing) {
+            _confetti.Clear();
+            _confetti.Play();
+        }
         
         AnimateSlider();
     }
 
-    private string GetInfoString(int score, string learning) {
-        string info = _templateInfo;
-        if (info.Contains(POINTS_KEYWORD)) {
-            info = info.Replace(POINTS_KEYWORD, score.ToString());
+    private string GetInfoString(int score, string learning, string template) {
+        if (template.Contains(POINTS_KEYWORD)) {
+            template = template.Replace(POINTS_KEYWORD, score.ToString());
         }
-        if (info.Contains(NAME_KEYWORD)) {
-            info = info.Replace(NAME_KEYWORD, learning);
+        if (template.Contains(NAME_KEYWORD)) {
+            template = template.Replace(NAME_KEYWORD, learning);
         }
 
-        return info;
+        return template;
     }
 
     private void AnimateSlider() {
