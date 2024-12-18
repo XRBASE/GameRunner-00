@@ -17,9 +17,9 @@ public class Letter : MonoBehaviour {
 
 
 	private AudioSource _audioSource;
-	private Color _correctColor = Color.green;
-	private Color _incorrectColor = Color.grey;
-	private Color _includedColor = Color.yellow;
+	[SerializeField] private Color _correctColor = Color.green;
+	[SerializeField] private Color _incorrectColor = Color.grey;
+	[SerializeField] private Color _includedColor = Color.yellow;
 	private int _index;
 	private char _letter;
 

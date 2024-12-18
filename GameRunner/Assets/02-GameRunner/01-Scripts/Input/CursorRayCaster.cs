@@ -109,7 +109,7 @@ namespace Cohort.GameRunner.Input {
                 return;
             }
 
-            CurRay = _mainCam.ScreenPointToRay(InputManager.Instance.Cursor.ScreenPosition);
+            CurRay = _mainCam.ScreenPointToRay(InputManager.Instance.GameCursor.ScreenPosition);
             if (Physics.Raycast(CurRay, out _curHit, MAX_DIST, MASK, QueryTriggerInteraction.Ignore)) {
                 curHitLayer = _curHit.collider.gameObject.layer;
                 if (InputConfig.Config.interactionLayerMask.MaskIncludes(curHitLayer)) {

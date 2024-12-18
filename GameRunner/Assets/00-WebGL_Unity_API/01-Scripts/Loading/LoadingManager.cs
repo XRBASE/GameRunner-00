@@ -24,9 +24,9 @@ namespace Cohort.GameRunner.Loading {
 		private void SetUpPhases() {
 			_phases = new Dictionary<LoadPhase, LoadingPhase>();
 			_phases.Add(LoadPhase.Lobby, new LoadingPhase(
-				            new LoadingAction(LoadType.RetrieveUserData, "Loading user data", 3),
-				            new LoadingAction(LoadType.ConnectToPhoton, "Connecting to server", 2),
-				            new LoadingAction(LoadType.LoadLobbyScene, "Loading lobby", 1)));
+				            new LoadingAction(LoadType.RetrieveUserData, "Loading user data", 2),
+				            new LoadingAction(LoadType.ConnectToPhoton, "Connecting to server", 4),
+				            new LoadingAction(LoadType.LoadLobbyScene, "Loading lobby", 2)));
 			
 			foreach (var kv_phase in _phases) {
 				kv_phase.Value.onLoadingStart += OnLoadingStart;

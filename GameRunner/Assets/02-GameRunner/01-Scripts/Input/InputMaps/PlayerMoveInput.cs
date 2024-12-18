@@ -33,8 +33,8 @@ namespace Cohort.GameRunner.Input.Maps {
 
         public PlayerMoveInput(InputActionAsset actions) : base(actions, "PlayerMove") {
             InputManager.Instance.TypingInput.onTyping += OnPlayerTyping;
-            InputManager.Instance.Cursor.leftUp += OnCursorUp;
-            InputManager.Instance.Cursor.rightUp += OnRightCursorUp;
+            InputManager.Instance.GameCursor.leftUp += OnCursorUp;
+            InputManager.Instance.GameCursor.rightUp += OnRightCursorUp;
 
             _map["Move"].started += OnChangeMoveDirection;
             _map["Move"].performed += OnChangeMoveDirection;
@@ -55,8 +55,8 @@ namespace Cohort.GameRunner.Input.Maps {
             if (InputManager.Disposed)
                 return;
             InputManager.Instance.TypingInput.onTyping -= OnPlayerTyping;
-            InputManager.Instance.Cursor.leftUp -= OnCursorUp;
-            InputManager.Instance.Cursor.rightUp -= OnRightCursorUp;
+            InputManager.Instance.GameCursor.leftUp -= OnCursorUp;
+            InputManager.Instance.GameCursor.rightUp -= OnRightCursorUp;
 
             _map["Move"].started -= OnChangeMoveDirection;
             _map["Move"].performed -= OnChangeMoveDirection;
@@ -101,7 +101,7 @@ namespace Cohort.GameRunner.Input.Maps {
 
         private void OnCursorUp() {
             //check if current raycast was a navigation hit, and invoke with world position of that hit.
-            if (!InputManager.Instance.Cursor.Dragging &&
+            if (!InputManager.Instance.GameCursor.Dragging &&
                 InputManager.Instance.Raycaster.HitState == CursorRayCaster.RCHitState.Navigate) {
                 moveToCursor?.Invoke(InputManager.Instance.Raycaster.CurHit.point);
             }

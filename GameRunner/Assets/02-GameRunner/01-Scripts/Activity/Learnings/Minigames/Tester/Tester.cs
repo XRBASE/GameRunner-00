@@ -11,6 +11,10 @@ public class Tester : Learning {
         _onLearningFinished += onLearningFinished;
     }
 
+    public override void StopLearning() {
+        _onLearningFinished?.Invoke(_score.value);
+    }
+
     public void Complete() {
         _onLearningFinished?.Invoke(_score.value);
     }

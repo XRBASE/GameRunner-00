@@ -110,6 +110,11 @@ public class WordGame : MiniGame
         _isPlaying = true; 
     }
 
+    protected void OnDestroy() {
+        wordGameInput.onKeyboardInput -= ValueChanged;
+        wordGameInput.remove -= RemoveLastLetter;
+    }
+
     // Proceed to the next puzzle or complete the game if there are no more puzzles
     private void NextPuzzle()
     {
@@ -235,6 +240,10 @@ public class WordGame : MiniGame
         scoreUI.PlayScore((int)(score * _scoreMultiplier));
     }
     
+
+    public override void StopLearning() {
+        _onGameFinished?.Invoke(_completionPercent);
+    }
 
     // Handle the input of a single character from the keyboard
     private void ValueChanged(string text)
