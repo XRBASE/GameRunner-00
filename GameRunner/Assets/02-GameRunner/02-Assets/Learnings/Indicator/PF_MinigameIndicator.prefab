@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _target: {fileID: 4282366917588652913}
   _icon: {fileID: 0}
-  _color: {r: 0.036493182, g: 1, b: 0, a: 1}
+  _color: {r: 1, g: 1, b: 1, a: 1}
   _size: {x: 75, y: 75}
   _enabled: 0
+  _check: {x: 0, y: 0, z: 0}

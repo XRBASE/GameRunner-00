@@ -711,9 +711,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14a84431c01bd74d8e553eaee1ed408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _learning:
-    learnings:
-    - actionDescription: Do quiz
+  minigame:
+    minigames:
+    - actionDescription: Solve quiz
       sceneName: 01-Quiz
       data: '{"_questions":[{"question":"What was the original name of Micky Mouse?","answers":["Mortimer
         Mouse","The rat","Marvin Mouse","Marshall Mouse"],"correctAnswerIndex":0},{"question":"What
@@ -745,7 +745,7 @@ MonoBehaviour:
       _state: 0
       index: 0
       log: {fileID: 0}
-    - actionDescription: Wordle
+    - actionDescription: Quess words
       sceneName: 02-Wordle
       data: "{\"wordGameMode\":0,\"title\":\"Raad het woord\",\"tries\":5,\"puzzleAmount\":2,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
         leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor
@@ -753,7 +753,7 @@ MonoBehaviour:
         recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen
         worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt
         na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}]}"
-      locations: 00000000
+      locations: 0000000001000000020000000300000004000000
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []

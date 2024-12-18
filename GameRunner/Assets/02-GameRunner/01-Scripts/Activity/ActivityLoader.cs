@@ -1,16 +1,16 @@
-using Cohort.Networking.PhotonKeys;
-using Cohort.GameRunner.Players;
-using Cohort.Patterns;
 using System.Collections.Generic;
 using System.Linq;
 using System;
 using ExitGames.Client.Photon;
-using Unity.Properties;
 using UnityEngine;
 
+using Cohort.Networking.PhotonKeys;
+using Cohort.GameRunner.Minigames;
+using Cohort.GameRunner.Players;
+using Cohort.Patterns;
+
 [DefaultExecutionOrder(102)] // After playermanagement
-public class ActivityLoader : Singleton<ActivityLoader>
-{
+public class ActivityLoader : Singleton<ActivityLoader> {
     public bool InActivity { get; private set; }
     public bool AllPlayersReady { get; private set; }
 
@@ -48,7 +48,7 @@ public class ActivityLoader : Singleton<ActivityLoader>
     private void StartActivity() {
         onActivityStart?.Invoke();
         
-        LearningManager.Instance.OnActivityStart(Activity.ScoreMultiplier);
+        MinigameManager.Instance.OnActivityStart(Activity.ScoreMultiplier);
     }
     
     public void StopActivity() {
@@ -67,7 +67,7 @@ public class ActivityLoader : Singleton<ActivityLoader>
         InActivity = false;
         AllPlayersReady = false;
         
-        LearningManager.Instance.OnActivityStop();
+        MinigameManager.Instance.OnActivityStop();
         
         onActivityStop?.Invoke();
         ClearPhotonRoomProperties();
@@ -170,6 +170,10 @@ public class ActivityLoader : Singleton<ActivityLoader>
         //clear old data
         List<object> keys = props.Keys.ToList();
         foreach (var key in keys) {
+            if (key.ToString().StartsWith(HighscoreTracker.Instance.GetPlayerSessionScoreKey())) {
+                continue;
+            }
+            
             //set all properties to null (this should clear them out)
             props[key] = null;
         }

@@ -1,6 +1,7 @@
-using Cohort.Patterns;
 using TMPro;
 using UnityEngine;
+
+using Cohort.Patterns;
 
 public class ScoreboardEntry : MonoBehaviour, ObjectPool<HighscoreTracker.PlayerScore, ScoreboardEntry>.IPoolable
 {
