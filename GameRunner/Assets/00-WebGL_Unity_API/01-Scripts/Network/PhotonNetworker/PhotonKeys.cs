@@ -108,7 +108,7 @@ namespace Cohort.Networking.PhotonKeys {
             RefTime = 2,
             Activity = 3,
             Scene = 4,
-            Learning = 5,
+            Minigame = 5,
         }
 
         public enum Activity {
@@ -118,7 +118,7 @@ namespace Cohort.Networking.PhotonKeys {
             Score = 4,
         }
 
-        public enum Learning {
+        public enum Minigame {
             Index = 0,
             Actor = 1,
             State = 2,

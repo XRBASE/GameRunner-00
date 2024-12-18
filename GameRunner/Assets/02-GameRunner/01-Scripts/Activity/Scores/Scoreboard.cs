@@ -1,6 +1,7 @@
-using Cohort.Patterns;
 using System.Linq;
 using UnityEngine;
+
+using Cohort.Patterns;
 
 public class Scoreboard : MonoBehaviour {
     [SerializeField] private ScoreboardEntry _templateEntry;

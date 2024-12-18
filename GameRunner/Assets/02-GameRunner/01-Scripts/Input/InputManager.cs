@@ -187,7 +187,7 @@ namespace Cohort.GameRunner.Input
                 _actionMapDictionary[actionMap].Disable();
         }
 
-        public void SetLearningInput() {
+        public void SetMinigameInput() {
             _actionMapDictionary[ActionMaps.UI].Enable();
             _actionMapDictionary[ActionMaps.LearningCursor].Enable();
             

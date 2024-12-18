@@ -1,11 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Cohort.GameRunner.Players;
-using Cohort.Networking.PhotonKeys;
-using Cohort.Patterns;
+using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using UnityEngine;
+
+using Cohort.Networking.PhotonKeys;
+using Cohort.GameRunner.Minigames;
+using Cohort.GameRunner.Players;
+using Cohort.Patterns;
 
 public class HighscoreTracker : Singleton<HighscoreTracker> {
 	public Action<PlayerScore[]> onScoresUpdated;
@@ -20,8 +22,8 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
 
-		LearningManager.Instance.onScoreReset += ClearLocalScore;
-		LearningManager.Instance.onLearningFinished += OnLearningFinished;
+		MinigameManager.Instance.onScoreReset += ClearLocalScore;
+		MinigameManager.Instance.onMinigameFinished += OnLearningFinished;
 	}
 	
 	public void Initialize(ActivityDescription _activity, int session) {
@@ -38,8 +40,8 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoomPropertiesChanged;
 
-		LearningManager.Instance.onScoreReset -= ClearLocalScore;
-		LearningManager.Instance.onLearningFinished -= OnLearningFinished;
+		MinigameManager.Instance.onScoreReset -= ClearLocalScore;
+		MinigameManager.Instance.onMinigameFinished -= OnLearningFinished;
 	}
 
 	private void OnJoinedRoom() {
