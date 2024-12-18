@@ -40,6 +40,7 @@ namespace Cohort.GameRunner.Minigames {
             get { return Setting.networked; }
         }
 
+        public Action<int> onAllMinigamesFinished;
         public Action<float> onMinigameFinished;
         public Action onScoreReset;
 
@@ -209,7 +210,11 @@ namespace Cohort.GameRunner.Minigames {
                 }
 
                 if (MinigameId == -1) {
-                    throw new Exception("All learnings finished!");
+                    onAllMinigamesFinished?.Invoke(HighscoreTracker.Instance.Local.score);
+                    Debug.Log("All minigames finished");
+                    
+                    minigame = null;
+                    return false;
                 }
             }
             else {
@@ -227,7 +232,11 @@ namespace Cohort.GameRunner.Minigames {
                 }
 
                 if (!found) {
-                    throw new Exception("All minigames finished!");
+                    onAllMinigamesFinished?.Invoke(HighscoreTracker.Instance.Local.score);
+                    Debug.Log("All minigames finished");
+                    
+                    minigame = null;
+                    return false;
                 }
             }
 
