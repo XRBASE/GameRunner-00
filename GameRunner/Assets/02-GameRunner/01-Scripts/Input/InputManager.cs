@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.InputSystem.UI;
 
 namespace Cohort.GameRunner.Input
 {
@@ -26,6 +27,7 @@ namespace Cohort.GameRunner.Input
         }
 
         [SerializeField] private CursorRayCaster _raycaster;
+        [SerializeField] private InputSystemUIInputModule _uiInputModule;
         
         /// <summary>
         /// Returns the input action asset or loads it if it is null
@@ -176,6 +178,11 @@ namespace Cohort.GameRunner.Input
                 _actionMapDictionary[actionMap].Enable();
             else
                 _actionMapDictionary[actionMap].Disable();
+        }
+
+        public void SetUIInputActive(bool active)
+        {
+            _uiInputModule.enabled = active;
         }
     }
 }

@@ -307,6 +307,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 392871915878105399, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _uiInputModule
+      value: 
+      objectReference: {fileID: 758808686}
     - target: {fileID: 1694045838604335278, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
       propertyPath: m_Name
       value: Management
@@ -513,6 +517,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1170715247519993080, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -36.999817
+      objectReference: {fileID: 0}
     - target: {fileID: 1573840330068068681, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

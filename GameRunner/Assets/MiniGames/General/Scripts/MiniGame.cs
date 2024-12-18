@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class MiniGame : Learning
 {
     protected const float GAME_COMPLETE_FEEDBACK_TIMEOUT = 2f;
+    protected const float INCORRECT_FEEDBACK_TIMEOUT = .5f;
     public ScoreUI scoreUI;
     [SerializeField] protected TextMeshProUGUI _title;
     public AudioSource feedbackAudio;

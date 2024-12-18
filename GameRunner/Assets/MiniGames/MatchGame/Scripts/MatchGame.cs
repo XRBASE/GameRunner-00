@@ -1,6 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using Cohort.GameRunner.Input;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using Random = System.Random;
 
 
@@ -9,11 +13,14 @@ public class MatchGame : MiniGame
     public MatchGameDataSO MatchGameDataSo;
     public MatchElement matchElementPrefab;
     public Transform answerElementParent, questionElementParent;
+    public AudioSource pitchedAudio;
     public AudioClip gameCompleteAudioClip;
     public AudioClip correctSoundEffect;
     public AudioClip inCorrectSoundEffect;
     public AudioClip selectSoundEffect;
-    
+    public AudioClip matchFoundSoundEffect;
+
+    private EventSystem _eventSystem;
     private List<MatchPair> _matchPairs;
     private static Random _rng = new Random();
     private List<MatchPairData> _matches;
@@ -33,13 +40,13 @@ public class MatchGame : MiniGame
         _title.text = _matchGameData.title;
         BuildGame();
     }
-    
+
     protected override void BuildGame()
     {
         _matchPairs = new List<MatchPair>();
         _matches = new List<MatchPairData>();
         _matches.AddRange(_matchGameData.matches);
-        for (int i = 0; i < _matchGameData.pairAmount && _matches.Count >0; i++)
+        for (int i = 0; i < _matchGameData.pairAmount && _matches.Count > 0; i++)
         {
             var match = _matches[UnityEngine.Random.Range(0, _matches.Count)];
             _matches.Remove(match);
@@ -47,19 +54,23 @@ public class MatchGame : MiniGame
             if (match.originMatchType == MatchPairData.MatchType.Text)
             {
                 answerElement.SetPreviewElement(match.originText);
-            } else if (match.originMatchType == MatchPairData.MatchType.Image)
+            }
+            else if (match.originMatchType == MatchPairData.MatchType.Image)
             {
                 answerElement.SetPreviewElement(match.originSprite);
             }
+
             answerElement.onMatchSelected = SetSelectedAnswer;
             var questionElement = Instantiate(matchElementPrefab, questionElementParent);
             if (match.targetMatchType == MatchPairData.MatchType.Text)
             {
                 questionElement.SetPreviewElement(match.targetText);
-            } else if (match.targetMatchType == MatchPairData.MatchType.Image)
+            }
+            else if (match.targetMatchType == MatchPairData.MatchType.Image)
             {
                 questionElement.SetPreviewElement(match.targetSprite);
             }
+
             questionElement.onMatchSelected = SetSelectedQuestion;
             var matchPair = new MatchPair(i, answerElement, questionElement);
             _matchPairs.Add(matchPair);
@@ -67,8 +78,8 @@ public class MatchGame : MiniGame
 
         ShuffleMatches();
     }
-    
-    
+
+
     protected override void CorrectFeedback()
     {
         _answerElement.Complete();
@@ -78,17 +89,20 @@ public class MatchGame : MiniGame
 
     protected override void IncorrectFeedback()
     {
-        _questionElement.IncorrectFeedback();
-        _answerElement.IncorrectFeedback();
+        _questionElement.WrongAnswer();
+        _answerElement.WrongAnswer();
         feedbackAudio.PlayOneShot(inCorrectSoundEffect);
+        InputManager.Instance.SetUIInputActive(false);
+        DoFeedbackTimeout(INCORRECT_FEEDBACK_TIMEOUT, Deselect);
     }
 
     protected override void GameFinishedFeedback()
     {
-        _completionPercent = (float) _matchGameData.pairAmount/_attempts;
+        _completionPercent = (float) _matchGameData.pairAmount / _attempts;
         DisplayScore(_completionPercent);
         feedbackAudio.PlayOneShot(gameCompleteAudioClip);
-        DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, FinishGame); 
+        DoGameFinishedFeedback();
+        DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, FinishGame);
         Debug.LogError("Game Finished Feedback");
     }
 
@@ -143,12 +157,13 @@ public class MatchGame : MiniGame
         if (matchElement != null && matchElement != newMatchElement)
             matchElement.Deselect();
         matchElement = newMatchElement;
+        matchElement.Select();
         Submit();
     }
-    
+
     public void Submit()
     {
-        if(_answerElement == null || _questionElement == null)
+        if (_answerElement == null || _questionElement == null)
             return;
         _attempts++;
         if (_answerElement.id == _questionElement.id)
@@ -163,13 +178,18 @@ public class MatchGame : MiniGame
         else
         {
             IncorrectFeedback();
+            return;
         }
-        
+        Deselect();
+    }
+
+    private void Deselect()
+    {
+        InputManager.Instance.SetUIInputActive(true);
         _questionElement.Deselect();
         _answerElement.Deselect();
         _questionElement = null;
         _answerElement = null;
-
     }
 
     private void Reset()
@@ -179,6 +199,7 @@ public class MatchGame : MiniGame
             Destroy(_matchPairs[i].answerElement.gameObject);
             Destroy(_matchPairs[i].questionElement.gameObject);
         }
+
         _matchPairs.Clear();
     }
 
@@ -186,6 +207,25 @@ public class MatchGame : MiniGame
     private void DisplayScore(float score)
     {
         scoreUI.PlayScore((int) (score * _scoreMultiplier));
+    }
+
+    private void DoGameFinishedFeedback()
+    {
+        StartCoroutine(GameFinishedFeedbackRoutine());
+    }
+
+    private IEnumerator GameFinishedFeedbackRoutine()
+    {
+        foreach (var matchPair in _matchPairs)
+        {
+            matchPair.answerElement.Flip();
+            matchPair.questionElement.Flip();
+            pitchedAudio.PlayOneShot(matchFoundSoundEffect);
+            pitchedAudio.pitch += .1f;
+            yield return new WaitForSeconds(.3f);
+        }
+
+        pitchedAudio.pitch = 1f;
     }
 }
 

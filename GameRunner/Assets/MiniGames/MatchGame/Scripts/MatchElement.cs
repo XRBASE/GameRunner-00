@@ -10,7 +10,8 @@ public class MatchElement : MonoBehaviour
     {
         Unselected,
         Selected,
-        Completed
+        Completed,
+        Wrong
     }
 
     private MatchPairData.MatchType matchType
@@ -46,9 +47,11 @@ public class MatchElement : MonoBehaviour
     private Color _originalColor;
     public Color highlightColor;
     public Color completedColor;
+    public Color wrongColor;
 	public PlayableDirector playableDirector;
 	public PlayableAsset enlargePlayable;
     public PlayableAsset wobblePlayable;
+    public PlayableAsset rotatePlayable;
 
 
     protected virtual void Awake()
@@ -69,21 +72,28 @@ public class MatchElement : MonoBehaviour
         matchText.text = text;
     }
 
-    public void IncorrectFeedback()
+    private void IncorrectFeedback()
     {
         StartPlayable(wobblePlayable);
     }
-    
-    public void SelectMatch()
+
+    public void Flip()
+    {
+        StartPlayable(rotatePlayable);
+    }
+
+    private void SelectMatch()
     {
         if (_matchState == MatchState.Completed)
             return;
-
-        SetState(MatchState.Selected);
-        StartPlayable(enlargePlayable);
         onMatchSelected?.Invoke(this);
     }
 
+    public void Select()
+    {
+        SetState(MatchState.Selected);
+    }
+    
     public void Deselect()
     {
         if(_matchState == MatchState.Completed)
@@ -92,24 +102,33 @@ public class MatchElement : MonoBehaviour
     }
 
     public void Complete()
-    {        
-        StartPlayable(enlargePlayable);
+    {
         SetState(MatchState.Completed);
+    }
+
+    public void WrongAnswer()
+    {
+        SetState(MatchState.Wrong);
     }
 
     private void SetState(MatchState state)
     {
         _matchState = state;
-
         switch (state)
         {
             case MatchState.Unselected:
                 highLight.color = _originalColor;
                 break;
             case MatchState.Selected:
+                StartPlayable(enlargePlayable);
                 highLight.color  = highlightColor;
                 break;
+            case MatchState.Wrong:
+                IncorrectFeedback();
+                highLight.color = wrongColor;
+                break;
             case MatchState.Completed:
+                StartPlayable(enlargePlayable);
                 highLight.color = completedColor;
                 break;
             
