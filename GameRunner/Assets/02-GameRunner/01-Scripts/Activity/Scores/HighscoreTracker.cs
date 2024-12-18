@@ -10,6 +10,10 @@ using Cohort.GameRunner.Players;
 using Cohort.Patterns;
 
 public class HighscoreTracker : Singleton<HighscoreTracker> {
+	public PlayerScore Local {
+		get { return _local; }
+	}
+
 	public Action<PlayerScore[]> onScoresUpdated;
 	
 	private int _session;
@@ -114,7 +118,7 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
 	}
 	
-	private string GetPlayerSessionScoreKey(string playerUuid = "") {
+	public string GetPlayerSessionScoreKey(string playerUuid = "") {
 		string key = Keys.Concatenate(Keys.Concatenate(Keys.Room.Activity, Keys.Activity.Score), _session.ToString());
 		if (!string.IsNullOrEmpty(playerUuid)) {
 			key = Keys.Concatenate(key, playerUuid);

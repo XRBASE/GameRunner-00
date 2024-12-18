@@ -10,8 +10,7 @@ using Cohort.GameRunner.Players;
 using Cohort.Patterns;
 
 [DefaultExecutionOrder(102)] // After playermanagement
-public class ActivityLoader : Singleton<ActivityLoader>
-{
+public class ActivityLoader : Singleton<ActivityLoader> {
     public bool InActivity { get; private set; }
     public bool AllPlayersReady { get; private set; }
 
@@ -171,6 +170,10 @@ public class ActivityLoader : Singleton<ActivityLoader>
         //clear old data
         List<object> keys = props.Keys.ToList();
         foreach (var key in keys) {
+            if (key.ToString().StartsWith(HighscoreTracker.Instance.GetPlayerSessionScoreKey())) {
+                continue;
+            }
+            
             //set all properties to null (this should clear them out)
             props[key] = null;
         }
