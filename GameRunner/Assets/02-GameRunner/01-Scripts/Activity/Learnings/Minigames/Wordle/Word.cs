@@ -46,22 +46,30 @@ public class Word : MonoBehaviour
         {
             SetLetter(i, _empty);
         }
-
-        _letters.First().RemoveFeedback();
     }
 
     public bool CheckWord(string word)
     {
-        bool correct = true;
-        foreach (var letter in _letters)
+        bool wordCorrect = true;
+        List<char> checkWord = word.ToList();
+        for (int i = 0; i < _letters.Count && i < word.Length; i++)
         {
-            if (!letter.CheckLetter(word))
+            var curLetter = _letters[i];
+            var curChar = curLetter.GetLetter();
+            if (curChar == word[i])
             {
-                correct = false;
+                curLetter.HandleLetterState(Letter.LetterState.Correct);
             }
+            else
+            {
+                wordCorrect = false;
+                curLetter.HandleLetterState(checkWord.Contains(curChar)
+                    ? Letter.LetterState.Contains
+                    : Letter.LetterState.Incorrect);
+            }
+            checkWord.Remove(curChar);
         }
-
-        return correct;
+        return wordCorrect;
     }
 
     public void InCorrectFeedback()

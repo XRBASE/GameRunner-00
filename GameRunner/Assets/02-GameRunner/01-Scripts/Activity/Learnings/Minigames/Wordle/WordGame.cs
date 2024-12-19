@@ -16,7 +16,7 @@ public class WordGame : MiniGame
     }
 
     // Constants for feedback timeout durations
-    private const float INVALID_FEEDBACK_TIMEOUT = 1f;
+    private const float INCORRECT_FEEDBACK_TIMEOUT = 1f;
 
     // Property to get the current word to be played
     private Word CurrentWord => _words[_entryIndex];
@@ -31,6 +31,7 @@ public class WordGame : MiniGame
     public AudioClip successAudioClip, failureAudioClip;
     public TextMeshProUGUI hintText;
     public PlayableDirector invalidWordFeedback;
+    public bool useDictionary;
 
     // Private variables to store game data
     private readonly List<Word> _words = new List<Word>();
@@ -79,6 +80,8 @@ public class WordGame : MiniGame
 
     protected override void IncorrectFeedback()
     {
+        wordGameInput.SetInputActive(false); 
+        DoFeedbackTimeout(INCORRECT_FEEDBACK_TIMEOUT, FeedbackTimeout); 
         CurrentWord.InCorrectFeedback(); // Show incorrect feedback
         feedbackAudio.PlayOneShot(failureAudioClip); // Play failure audio
     }
@@ -94,9 +97,12 @@ public class WordGame : MiniGame
     protected override void BuildGame()
     {
         _chosenWord = GetWord();
-        _chosenWord.word = _chosenWord.word.ToLower(); 
-        _wordDictionary = WordDictionary.GetWordDictionary(_chosenWord.word.Length);
-
+        _chosenWord.word = _chosenWord.word.ToLower();
+        if (useDictionary)
+        {
+            _wordDictionary = WordDictionary.GetWordDictionary(_chosenWord.word.Length);
+        }
+        
         // Create multiple word objects for each try and initialize them
         for (int i = 0; i < _wordGameData.tries; i++)
         {
@@ -108,6 +114,7 @@ public class WordGame : MiniGame
         hintText.text = _chosenWord.hint; 
         _entryIndex = 0; 
         _isPlaying = true; 
+        wordGameInput.SetInputActive(true); 
     }
 
     protected void OnDestroy() {
@@ -127,6 +134,7 @@ public class WordGame : MiniGame
         {
             HandleGameComplete(); 
         }
+        wordGameInput.SetInputActive(false); 
     }
 
     // Reset the game by clearing the current state and building it again
@@ -169,24 +177,20 @@ public class WordGame : MiniGame
     {
         if (!CanPlay || _text.Length < _chosenWord.word.Length)
             return;
-        
-        if (!_wordDictionary.Contains(_text))
+        if (useDictionary && !_wordDictionary.Contains(_text))
         {
             HandleAnswerInvalid();
             return;
         }
         _attempts++; 
         HandleAnswer(CurrentWord.CheckWord(_chosenWord.word));
-
     }
 
     // Handle invalid word input and give feedback
     private void HandleAnswerInvalid()
     {
         IncorrectFeedback();
-        PlayableDirectorFeedback(invalidWordFeedback); 
-        wordGameInput.SetInputActive(false); 
-        DoFeedbackTimeout(INVALID_FEEDBACK_TIMEOUT, FeedbackTimeout); 
+        PlayableDirectorFeedback(invalidWordFeedback);
     }
 
     // Play an animation feedback using a PlayableDirector
@@ -212,7 +216,6 @@ public class WordGame : MiniGame
         if (correct)
         {
             CorrectFeedback();
-            NextPuzzle(); // Move to the next puzzle
         }
         else
         {
@@ -221,9 +224,9 @@ public class WordGame : MiniGame
 
         _text = string.Empty;
         _entryIndex += 1;
-        if (_entryIndex >= _words.Count)
+        if (_entryIndex >= _words.Count || correct)
         {
-            NextPuzzle(); 
+            NextPuzzle(); //move to the next puzzle
         }
     }
 

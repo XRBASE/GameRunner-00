@@ -30,11 +30,6 @@ public abstract class MiniGame : Learning
 
     protected void DoFeedbackTimeout(float time, Action onFeedbackTimeout)
     {
-        if (_feedBackTimeoutRoutine != null)
-        {
-            StopCoroutine(_feedBackTimeoutRoutine);
-        }
-
         _feedBackTimeoutRoutine = FeedbackTimeOutRoutine(time, onFeedbackTimeout);
         StartCoroutine(_feedBackTimeoutRoutine);
     }

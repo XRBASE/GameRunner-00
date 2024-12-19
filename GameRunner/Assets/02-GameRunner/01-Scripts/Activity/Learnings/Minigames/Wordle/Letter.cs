@@ -32,6 +32,11 @@ public class Letter : MonoBehaviour {
 		textMeshPro.text = $"{_letter}";
 	}
 
+	public char GetLetter()
+	{
+		return _letter;
+	}
+
 	public void SetAudioSource(AudioSource audioSource)
 	{
 		_audioSource = audioSource;
@@ -66,25 +71,9 @@ public class Letter : MonoBehaviour {
 		playableDirector.playableAsset = playable;
 		playableDirector.Play();
 	}
+	
 
-	public bool CheckLetter(string correctWord) {
-		if (correctWord.Contains(_letter)) {
-			if (correctWord[_index] == _letter) {
-				HandleLetterState(LetterState.Correct);
-				return true;
-			}
-			else {
-				HandleLetterState(LetterState.Contains);
-			}
-		}
-		else {
-			HandleLetterState(LetterState.Incorrect);
-		}
-		return false;
-
-	}
-
-	private void HandleLetterState(LetterState letterState) {
+	public void HandleLetterState(LetterState letterState) {
 		switch (letterState) {
 			case LetterState.Incorrect:
 				image.color = _incorrectColor;
@@ -97,4 +86,5 @@ public class Letter : MonoBehaviour {
 				break;
 		}
 	}
+	
 }
