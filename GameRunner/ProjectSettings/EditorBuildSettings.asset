@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/02-GameRunner/00-Scenes/Minigames/02-Wordle.unity
     guid: 391cd0a9b046d374981af2ecc8eb1191
+  - enabled: 1
+    path: Assets/02-GameRunner/00-Scenes/Minigames/03-Minigame_MatchGame.unity
+    guid: 62d9581c50e1df54a842291fc60ae119
   m_configObjects: {}

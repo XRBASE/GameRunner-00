@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Cohort.GameRunner.Input;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
 using Random = System.Random;
 
 
@@ -39,6 +38,11 @@ public class MatchGame : MiniGame
         _scoreMultiplier = scoreMultiplier;
         _title.text = _matchGameData.title;
         BuildGame();
+    }
+
+    public override void StopLearning()
+    {
+        
     }
 
     protected override void BuildGame()
