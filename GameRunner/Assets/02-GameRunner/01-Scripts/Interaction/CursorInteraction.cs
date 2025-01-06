@@ -1,5 +1,4 @@
 using Cohort.GameRunner.Input;
-using Cohort.GameRunner.Players;
 using UnityEngine;
 
 namespace Cohort.GameRunner.Interaction {

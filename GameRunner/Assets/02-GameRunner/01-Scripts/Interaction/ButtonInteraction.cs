@@ -1,6 +1,5 @@
 using Cohort.GameRunner.Input;
 using Cohort.GameRunner.Interaction;
-using Cohort.GameRunner.Players;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

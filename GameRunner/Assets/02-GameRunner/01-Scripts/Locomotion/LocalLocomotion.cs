@@ -52,7 +52,7 @@ namespace Cohort.GameRunner.LocoMovement {
 
         protected override void OnJoinedRoom() { }
 
-        protected override void FixedUpdate() {
+        protected override void UpdateNetwork() {
             if ((transform.position - _prevTrans.GetPosition()).magnitude >= POS_UPDATE_THRE) {
                 SendPosition();
             }
@@ -61,7 +61,7 @@ namespace Cohort.GameRunner.LocoMovement {
                 SendRotation();
             }
             
-            base.FixedUpdate();
+            base.UpdateNetwork();
         }
 
         /// <summary>

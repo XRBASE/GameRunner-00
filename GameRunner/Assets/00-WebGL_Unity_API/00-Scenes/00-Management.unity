@@ -426,6 +426,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
+      propertyPath: _testInput
+      value: '{"token":"31355A2B323935325942634155634B596E6E4D7937413D3D","baseUrl":"https://dev.cohort.games","sessionId":"88e4091e-551f-4bba-8816-9ce0a39af590"}'
+      objectReference: {fileID: 0}
     - target: {fileID: 7509324001149410918, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: m_Name
       value: ServerHandle

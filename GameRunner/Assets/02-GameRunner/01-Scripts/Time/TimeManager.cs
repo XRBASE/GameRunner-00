@@ -48,6 +48,7 @@ public class TimeManager : Singleton<TimeManager>
         Network.Local.Callbacks.onLeftRoom += OnLeftRoom;
         Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
         Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropsChanged;
+        Network.Local.Callbacks.onService += UpdateNetwork;
         
         _timeKey = Keys.Get(Keys.Room.RefTime);
     }
@@ -58,6 +59,7 @@ public class TimeManager : Singleton<TimeManager>
         Network.Local.Callbacks.onLeftRoom -= OnLeftRoom;
         Network.Local.Callbacks.onPlayerLeftRoom -= OnPlayerLeftRoom;
         Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoomPropsChanged;
+        Network.Local.Callbacks.onService -= UpdateNetwork;
     }
 
     private void OnLeftRoom()
@@ -79,7 +81,7 @@ public class TimeManager : Singleton<TimeManager>
         }
     }
 
-    private void FixedUpdate()
+    private void UpdateNetwork()
     {
         if (_timeReset) {
             _timeReset = false;

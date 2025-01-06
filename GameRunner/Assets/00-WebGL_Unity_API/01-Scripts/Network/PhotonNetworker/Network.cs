@@ -77,6 +77,8 @@ public class Network {
     /// </summary>
     public void Service()
     {
+        Callbacks.onService?.Invoke();
+        
         if(Client.IsConnected)
             Client.Service();
     }

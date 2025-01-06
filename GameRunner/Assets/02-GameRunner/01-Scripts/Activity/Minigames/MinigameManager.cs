@@ -66,10 +66,11 @@ namespace Cohort.GameRunner.Minigames {
             if (Setting != null && Setting.networked) {
                 Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
                 Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropsChanged;
+                Network.Local.Callbacks.onService -= UpdateNetwork;
             }
         }
 
-        private void FixedUpdate() {
+        private void UpdateNetwork() {
             if (_minigameTimers.Count > 0 && _minigameTimers[0] > 0 &&
                 _minigameTimers[0] <= TimeManager.Instance.RefTime) {
                 OnTimerFin();
@@ -142,6 +143,7 @@ namespace Cohort.GameRunner.Minigames {
             if (Setting.networked) {
                 Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
                 Network.Local.Callbacks.onRoomPropertiesChanged += OnPropsChanged;
+                Network.Local.Callbacks.onService += UpdateNetwork;
 
                 if (Network.Local.Client.InRoom) {
                     OnJoinedRoom();
@@ -186,8 +188,6 @@ namespace Cohort.GameRunner.Minigames {
 
             return false;
         }
-
-
 
         private void ActivateMinigame() {
             if (TryGetNextMinigame(out MinigameDescription minigameDesc) &&

@@ -1,7 +1,6 @@
 using Cohort.GameRunner.AvatarAnimations;
 using Cohort.Networking.PhotonKeys;
 using ExitGames.Client.Photon;
-using UnityEngine;
 
 namespace Cohort.GameRunner.LocoMovement {
 	/// <summary>
