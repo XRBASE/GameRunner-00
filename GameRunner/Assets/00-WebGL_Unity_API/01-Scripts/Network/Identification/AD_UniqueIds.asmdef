@@ -1,7 +1,9 @@
 {
     "name": "AD_UniqueIds",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:d43bb8b9e37ef1546a0fe44e2074489a"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
