@@ -1362,10 +1362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8a6f9c2ef65ce4a8fcae80890407af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activityDef:
-    _isBundle: 0
-    _assetRef: 02-Highscore
-    _scoreMultiplier: 100
   _toggleBtn: {fileID: 7981190717749460828}
   _startBtn: {fileID: 1262440306734110686}
   _stopBtn: {fileID: 2932356247804981048}
@@ -2394,7 +2390,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5895069566713989195
 RectTransform:
   m_ObjectHideFlags: 0
