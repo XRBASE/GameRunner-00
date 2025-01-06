@@ -4,13 +4,29 @@ using UnityEditor;
 using UnityEngine;
 
 public class IdLocator : AssetModificationProcessor {
-    public static void SetIds() {
-	    IUniqueId[] holders = GameObject.FindObjectsOfType<MonoBehaviour>(true).OfType<IUniqueId>().OrderBy(i => i.Name).ToArray();
+	[MenuItem("Cohort/ClearIds")]
+	public static void ClearIds()
+	{
+		UniqueId[] holders = Object.FindObjectsOfType<UniqueId>(true).ToArray();
+		for (int i = 0; i < holders.Length; i++) {
+			if (!holders[i].IdentifierSet)
+				continue;
+			
+			holders[i].Identifier = -1;
+			EditorUtility.SetDirty(holders[i]);
+		}
+	}
+	
+	public static void SetIds() {
+	    UniqueId[] holders = Object.FindObjectsOfType<UniqueId>(true).OrderBy(i => i.Name).ToArray();
 	    bool[] taken = new bool[holders.Length];
 
 	    for (int i = 0; i < holders.Length; i++) {
-		    if (holders[i].Identifier >= 0) {
+		    if (holders[i].Identifier >= 0 && holders[i].IdentifierSet) {
 			    taken[holders[i].Identifier] = true;
+		    }
+		    else {
+			    holders[i].Identifier = -1;
 		    }
 	    }
 
@@ -19,12 +35,12 @@ public class IdLocator : AssetModificationProcessor {
 			    continue;
 		    
 		    for (int j = 0; j < holders.Length; j++) {
-			    if (holders[j].Identifier >= 0) {
+			    if (holders[j].IdentifierSet) {
 				    continue;
 			    }
 
 			    holders[j].Identifier = i;
-			    EditorUtility.SetDirty(holders[i] as MonoBehaviour);
+			    EditorUtility.SetDirty(holders[i]);
 			    break;
 		    }
 	    }
