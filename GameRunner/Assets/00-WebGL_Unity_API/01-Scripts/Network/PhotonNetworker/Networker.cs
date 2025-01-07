@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Cohort.Patterns;
 using Photon.Realtime;
@@ -12,24 +13,34 @@ using UnityEditor;
 public class Networker : Singleton<Networker>
 {
     private const string LOCAL_ID = "local";
+    private const float NETWORK_UPDATE_INTERVAL = 0.1f;
     
     /// <summary>
     /// True if class has been cleared and networks do not exist anymore.
     /// </summary>
     public bool Disposed { get; private set; }
     public Dictionary<string, Network> Networks { get; private set; }
+    
     private List<string> _toRemoveIds;
+    private bool _networkUpdates;
     
     protected override void Awake()
     {
         base.Awake();
         Networks = new Dictionary<string, Network>();
         _toRemoveIds = new List<string>();
+
+        _networkUpdates = true;
+        StartCoroutine(NetworkServiceUpdate());
+        
         AddNetwork(LOCAL_ID, true);
     }
 
     protected void OnDestroy()
     {
+        _networkUpdates = false;
+        StopAllCoroutines();
+        
         foreach (var kv_network in Networks) {
             kv_network.Value.Dispose();
         }
@@ -61,31 +72,23 @@ public class Networker : Singleton<Networker>
         _toRemoveIds.Add(id);
     }
     
-    /// <summary>
-    /// Connect local network to photon masterserver
-    /// </summary>
-    /// <param name="userName">Nickname of the local user.</param>
-    public void ConnectLocal(string userName)
-    {
-        if (!Networks.ContainsKey(LOCAL_ID)) {
-            AddNetwork(LOCAL_ID, true);
-        }
-        
-        Network.Local.ConnectToNetwork(userName);
-    }
-    
-    private void FixedUpdate()
-    {
-        foreach (var kv_network in Networks)
-        {
-            kv_network.Value.Service();
-        }
+    private IEnumerator NetworkServiceUpdate() {
+        while (_networkUpdates) {
+            foreach (var kv_network in Networks)
+            {
+                if (kv_network.Value.Client.IsConnected) {
+                    kv_network.Value.Service();
+                }
+            }
 
-        //prevent enumerator changes from happening in the loop above this.
-        foreach (var id in _toRemoveIds) {
-            Networks.Remove(id);
+            //prevent enumerator changes from happening in the loop above this.
+            foreach (var id in _toRemoveIds) {
+                Networks.Remove(id);
+            }
+            _toRemoveIds.Clear();
+
+            yield return new WaitForSeconds(NETWORK_UPDATE_INTERVAL);
         }
-        _toRemoveIds.Clear();
     }
     
 #if UNITY_EDITOR

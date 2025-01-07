@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Cohort.Patterns;
-using UnityEngine;
 
 namespace Cohort.GameRunner.Loading {
 	public sealed class LoadingManager : Singleton<LoadingManager> {

@@ -1,7 +1,6 @@
 using Cohort.Networking.PhotonKeys;
 using Cohort.Networking.Players;
 using ExitGames.Client.Photon;
-using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
