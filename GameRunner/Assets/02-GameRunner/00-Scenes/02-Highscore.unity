@@ -461,7 +461,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _id
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
@@ -481,7 +481,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole.0
+      value: 00-MinigameConsole
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -542,7 +542,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _id
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
@@ -562,7 +562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole.1
+      value: 01-MinigameConsole
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -623,7 +623,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _id
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
@@ -647,7 +647,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole.3
+      value: 03-MinigameConsole
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -769,7 +769,7 @@ MonoBehaviour:
         recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen
         worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt
         na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}]}"
-      locations: 0000000001000000020000000300000004000000
+      locations: 010000000200000003000000
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -919,7 +919,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
       propertyPath: m_Name
-      value: PF_InfoConsole.0
+      value: 04-InfoConsole
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
       propertyPath: m_Layer
@@ -965,7 +965,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03de165941ebf154d83da23cc8727c37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 0
+  _id: 4
+  _subscribed: 0
   interactable: 1
   _radius: 3
   _value: 0
@@ -985,7 +986,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _id
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
@@ -1009,7 +1010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole.2
+      value: 02-MinigameConsole
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive

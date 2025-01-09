@@ -9,6 +9,11 @@ using Random = UnityEngine.Random;
 
 namespace Cohort.GameRunner.Minigames.Wordle {
     public class WordGame : Minigame {
+        public override float Score {
+            get { return _completionPercent;}
+            set { _completionPercent = value; }
+        }
+        
         // Enum to define game modes: Random or Sequential word selection
         public enum WordGameMode {
             Random,
@@ -40,8 +45,6 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private readonly List<Word> _words = new List<Word>();
         private List<string> _wordDictionary;
         private WordGameData _wordGameData;
-        private Action<float> _onGameFinished;
-        private Action<float> _testOnGameFinished;
         private WordData _chosenWord;
         private IEnumerator _feedBackTimeoutRoutine;
         private string _text = string.Empty;
@@ -55,7 +58,9 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private WordGameMode _wordGameMode;
 
         // Method to initialize the game with data, score multiplier, and callback on game finish
-        public override void Initialize(string gameData, int scoreMultiplier, Action<float> onGameFinished) {
+        public override void Initialize(string gameData, int scoreMultiplier, Action<float> onFinished, Action onExit) {
+            base.Initialize(gameData, scoreMultiplier, onFinished, onExit);
+            
             _wordGameData = JsonUtility.FromJson<WordGameData>(gameData);
             if (_wordGameData == null || _wordGameData.wordList == null || _wordGameData.wordList.Count == 0) {
                 Debug.LogError("Invalid game data!");
@@ -63,7 +68,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
             }
 
             _wordGameMode = _wordGameData.wordGameMode;
-            _onGameFinished = onGameFinished;
+            
             _scoreMultiplier = scoreMultiplier;
             title.text = _wordGameData.title;
             BuildGame();
@@ -209,16 +214,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
                                   _wordGameData.puzzleAmount); // Calculate completion percentage
             DisplayScore(_completionPercent);
             _isPlaying = false;
-            DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, GameFinished);
-        }
-
-        // Final callback after the game is finished
-        private void GameFinished() {
-            _onGameFinished?.Invoke(_completionPercent);
-        }
-
-        public override void StopMinigame() {
-            _onGameFinished?.Invoke(_completionPercent);
+            DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, FinishMinigame);
         }
 
         // Handle the input of a single character from the keyboard

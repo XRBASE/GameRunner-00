@@ -167,7 +167,7 @@ namespace Cohort.GameRunner.Minigames {
 
         public void OnActivityStop() {
             if (_currentMinigame != null) {
-                _currentMinigame.StopMinigame();
+                _currentMinigame.FinishMinigame();
             }
 
             _inActivity = false;
@@ -193,7 +193,7 @@ namespace Cohort.GameRunner.Minigames {
             if (TryGetNextMinigame(out MinigameDescription minigameDesc) &&
                 TryGetInteractable(minigameDesc, out MinigameInteractable interactable)) {
 
-                interactable.SetMinigame(minigameDesc);
+                interactable.SetMinigame(minigameDesc.index);
             }
         }
 
@@ -293,6 +293,20 @@ namespace Cohort.GameRunner.Minigames {
             SceneManager.LoadScene(_currenMinigameDescription.sceneName, LoadSceneMode.Additive);
         }
 
+        private void OnExitMinigame() {
+            InputManager.Instance.SetGameInput();
+            
+            _currenMinigameDescription.SetState(MinigameDescription.State.Open, false);
+            SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
+            
+            _currentInteractable.Deactivate();
+            
+            _currenMinigameDescription = null;
+            _currentInteractable = null;
+            
+            //throw new NotImplementedException("Mwaap");
+        }
+        
         private void OnMinigameFinished(float scorePercentage) {
             _currentMinigame = null;
             InputManager.Instance.SetGameInput();
@@ -318,9 +332,9 @@ namespace Cohort.GameRunner.Minigames {
 
             SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
 
-            //TODO_COHORT: fix the double call thingie?
+            //TODO_COHORT: this doesn't work yet when the game is networked, as the interactable is not cleared instantly
             _currentInteractable.Deactivate();
-            //_currentInteractable.SetMinigameLocal(-1);
+            _currentInteractable.SetMinigame(-1);
 
             _currenMinigameDescription = null;
             _currentInteractable = null;
@@ -354,7 +368,7 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         public void InitializeMinigame(Minigame minigame) {
-            minigame.Initialize(_currenMinigameDescription.data, _scoreMultiplier, OnMinigameFinished);
+            minigame.Initialize(_currenMinigameDescription.data, _scoreMultiplier, OnMinigameFinished, OnExitMinigame);
             _currentMinigame = minigame;
         }
 

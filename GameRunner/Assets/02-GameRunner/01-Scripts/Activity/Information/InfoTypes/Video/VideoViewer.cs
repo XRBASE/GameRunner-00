@@ -46,7 +46,7 @@ public class VideoViewer : InfoViewer {
         _audioTgl.onValueChanged.AddListener(SetAudioEnabled);
         _volume.onValueChanged.AddListener(SetVolume);
         
-        _interactable = false;
+        Interactable = false;
         _player.prepareCompleted += OnPrep;
         
         base.Awake();
@@ -74,7 +74,6 @@ public class VideoViewer : InfoViewer {
     }
 
     private void OnPrep(VideoPlayer source) {
-        RenderTextureDescriptor desc = new RenderTextureDescriptor();
         _tex = new CustomRenderTexture((int) _player.width, (int) _player.height, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default);
         
         //set video player output to texture
@@ -86,13 +85,11 @@ public class VideoViewer : InfoViewer {
         _viewport.color = Color.white;
         
         _initialized = true;
-        _interactable = true;
+        Interactable = true;
 
         if (_playPause.isOn) {
-            Debug.Log("Mwap");
             _player.Play();
         }
-        Debug.Log("Mwep");
     }
 
     private void PlayPause(bool isPlaying) {
@@ -119,8 +116,6 @@ public class VideoViewer : InfoViewer {
     private void SetAudioEnabled(bool isEnabled) {
         _audioEnabled = isEnabled;
         _player.SetDirectAudioVolume(0, (_audioEnabled)?_vol * VOLUME_SCALAR : 0f);
-        
-        Debug.Log(isEnabled);
     }
 
     private void SetVolume(float volume) {

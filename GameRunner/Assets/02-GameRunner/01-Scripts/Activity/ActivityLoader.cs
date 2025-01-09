@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Cohort.CustomAttributes;
 using ExitGames.Client.Photon;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ public class ActivityLoader : Singleton<ActivityLoader> {
     public Action onActivityStart; 
     public Action onActivityStop; 
 
-    [SerializeField] private int _session = -1;
+    [SerializeField, ReadOnly] private int _session = -1;
     [SerializeField] private HighscoreTracker _score; 
     private ActivityDescription _description;
 
@@ -170,6 +171,9 @@ public class ActivityLoader : Singleton<ActivityLoader> {
         //clear old data
         List<object> keys = props.Keys.ToList();
         foreach (var key in keys) {
+            if (key.ToString() == Keys.Concatenate(Keys.Room.Activity, Keys.Activity.Session)) {
+                continue;
+            }
             if (key.ToString().StartsWith(HighscoreTracker.Instance.GetPlayerSessionScoreKey())) {
                 continue;
             }

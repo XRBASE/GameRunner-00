@@ -6,22 +6,13 @@ namespace Cohort.GameRunner.Minigames.Tester {
     public class Tester : Minigame {
         [SerializeField] private Slider _score;
 
-        private Action<float> _onLearningFinished;
-
-        public override void Initialize(string gameData, int scoreMultiplier, Action<float> onLearningFinished) {
-            _onLearningFinished += onLearningFinished;
-        }
-
-        public override void StopMinigame() {
-            _onLearningFinished?.Invoke(_score.value);
-        }
-
-        public void Complete() {
-            _onLearningFinished?.Invoke(_score.value);
+        public override float Score {
+            get { return _score.value;}
+            set { _score.value = value; }
         }
 
         public void Fail() {
-            _onLearningFinished?.Invoke(0f);
+            _onFinished?.Invoke(0f);
         }
     }
 }
