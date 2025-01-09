@@ -49,7 +49,7 @@ namespace Cohort.GameRunner.Interaction {
             }
         }
 
-        public bool CheckInRange() {
+        public virtual bool CheckInRange() {
             return (transform.position - Player.Local.transform.position).magnitude <= _radius;
         }
 
@@ -139,7 +139,7 @@ namespace Cohort.GameRunner.Interaction {
         }
 
 #if UNITY_EDITOR
-        public void OnDrawGizmosSelected() {
+        public virtual void OnDrawGizmosSelected() {
             Gizmos.DrawWireSphere(transform.position, _radius);
         }
 #endif
