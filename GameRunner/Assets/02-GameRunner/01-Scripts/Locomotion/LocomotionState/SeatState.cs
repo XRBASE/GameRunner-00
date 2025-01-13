@@ -21,7 +21,7 @@ namespace Cohort.GameRunner.LocoMovement {
         private readonly Vector3 BUTT_OFFSET = new Vector3(0, -0.6f, 0.6f);
         
         public override Locomotion.State State {
-            get { return Locomotion.State.Move; }
+            get { return Locomotion.State.Seat; }
         }
         
         public Transform Seat { get; set; }

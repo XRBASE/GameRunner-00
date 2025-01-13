@@ -9,14 +9,18 @@ using Cohort.Patterns;
 namespace Cohort.GameRunner.Minigames.Quiz {
 	public class Quiz : Minigame {
 
+		public override float Score {
+			get { return _score;}
+			set { _score = value; }
+		}
+
+		private float _score;
+		
 		public UnityEvent onCorrect;
 		public UnityEvent onIncorrect;
 		[SerializeField] private float _graphicTimeout = 2f;
-
-		private Action<float> _onLearningFinished;
-
+		
 		private QuizData _data;
-		private int _scoreMultiplier;
 		private int _questionIndex = 0;
 		private int _correctCount;
 
@@ -24,11 +28,11 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 		[SerializeField] private CanvasGroup _answerGroup;
 		[SerializeField] private QuizAnswer _template;
 		[SerializeField] private TMP_Text _questionField;
-
-		public override void Initialize(string gameData, int scoreMultiplier, Action<float> onLearningFinished) {
+		
+		public override void Initialize(string gameData, int scoreMultiplier, Action<float> onFinished, Action onExit) {
+			base.Initialize(gameData, scoreMultiplier, onFinished, onExit);
+			
 			_data = JsonUtility.FromJson<QuizData>(gameData);
-			_scoreMultiplier = scoreMultiplier;
-			_onLearningFinished = onLearningFinished;
 
 			_template.onAnswerGiven = OnAnswerChanged;
 			_pool = new ObjectPool<string, QuizAnswer>(_template);
@@ -43,6 +47,7 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 			
 			if (index == _data._questions[_questionIndex].correctAnswerIndex) {
 				_correctCount++;
+				_score = (float) _correctCount / _data._questions.Length;
 
 				onCorrect?.Invoke();
 			}
@@ -79,11 +84,7 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 		private IEnumerator OnQuizFinished() {
 			yield return new WaitForSeconds(_graphicTimeout);
 
-			_onLearningFinished?.Invoke((float)_correctCount / _data._questions.Length);
-		}
-
-		public override void StopMinigame() {
-			_onLearningFinished?.Invoke((float)_correctCount / _data._questions.Length);
+			FinishMinigame();
 		}
 	}
 }

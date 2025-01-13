@@ -93,7 +93,6 @@ namespace Cohort.GameRunner.Minigames {
                 changes = new Hashtable();
 
             changes.Add(GetActorKey(), null);
-            changes.Add(GetLearningKey(), -1);
 
             //if there is an actor this item can only be deactivated by that actor.
             if (_actor != -1) {
@@ -107,26 +106,17 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         protected override void DeactivateLocal() {
-            SetMinigameLocal(-1);
+            //SetMinigameLocal(-1);
         }
 
-        public void SetMinigame(MinigameDescription minigame = null) {
+        public void SetMinigame(int index = -1) {
             if (!_networked) {
-                if (minigame == null)
-                    SetMinigameLocal(-1);
-                else
-                    SetMinigameLocal(minigame.index);
-
+                SetMinigameLocal(index);
                 return;
             }
 
             Hashtable changes = new Hashtable();
-            if (minigame != null) {
-                changes.Add(GetLearningKey(), minigame.index);
-            }
-            else {
-                changes.Add(GetLearningKey(), -1);
-            }
+            changes.Add(GetMinigameKey(), index);
 
             Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
         }
@@ -167,7 +157,7 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         protected override void OnPropertiesChanged(Hashtable changes) {
-            string key = GetLearningKey();
+            string key = GetMinigameKey();
             if (changes.ContainsKey(key)) {
                 if (changes[key] == null) {
                     SetMinigameLocal(-1);
@@ -196,7 +186,7 @@ namespace Cohort.GameRunner.Minigames {
                 Identifier.ToString());
         }
 
-        private string GetLearningKey() {
+        private string GetMinigameKey() {
             return Keys.Concatenate(
                 Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.Index),
                 Identifier.ToString());

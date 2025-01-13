@@ -1,11 +1,7 @@
 {
     "name": "AD_UIGeneric",
     "rootNamespace": "",
-    "references": [
-        "GUID:9910411941313bd488963aec7b627989",
-        "GUID:d43bb8b9e37ef1546a0fe44e2074489a",
-        "GUID:9f0995e706b816f418d9600d72c84a0a"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
