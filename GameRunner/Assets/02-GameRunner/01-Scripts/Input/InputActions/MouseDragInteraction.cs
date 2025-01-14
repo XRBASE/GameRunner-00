@@ -9,7 +9,7 @@ using UnityEngine.InputSystem.Layouts;
 using UnityEditor;
 #endif
 
-namespace Base.Ravel.Input.Actions
+namespace Cohort.Input.Actions
 {
 #if UNITY_EDITOR
     [InitializeOnLoad]
