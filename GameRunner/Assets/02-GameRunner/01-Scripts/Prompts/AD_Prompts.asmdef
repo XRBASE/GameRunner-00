@@ -1,0 +1,17 @@
+{
+    "name": "AD_Prompts",
+    "rootNamespace": "",
+    "references": [
+        "GUID:29d60a27676928849996b191f2ccb5de",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

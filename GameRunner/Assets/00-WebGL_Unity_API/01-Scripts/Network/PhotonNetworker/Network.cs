@@ -151,7 +151,11 @@ public class Network {
         _reconectCounter = MAX_RECONNECT_TRIES;
     }
 
-    public void Disconnect(DisconnectCause cause = DisconnectCause.DisconnectByClientLogic)
+    public void Disconnect() {
+        Disconnect(DisconnectCause.DisconnectByClientLogic);
+    }
+    
+    public void Disconnect(DisconnectCause cause)
     {
         if (Client != null && Client.IsConnected) {
             Client.Disconnect(cause);    

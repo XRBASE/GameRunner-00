@@ -28,6 +28,8 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
         //it cannot be temporary, because it is a photon callback, but is used as a temporary action.
         private Action<string> _onJoinRoomFailed;
         private RealtimeCallbackHandle _callbacks;
+
+        private bool _testin = true;
         
         public RoomManager(PhotonClient client, RealtimeCallbackHandle rtCallbacks)
         {
@@ -68,8 +70,7 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
             _canRejoin = true;
         }
 
-        private void OnJoinRoomFailed()
-        {
+        private void OnJoinRoomFailed() {
             _createOrJoinFailed = true;
             //call room failed subscriptions, then clear
             _onJoinRoomFailed?.Invoke("Join room failed!");
@@ -112,7 +113,8 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
             
             if (roomId == _currentId)
                 return;
-
+            _currentId = roomId;
+            
             Networker.Instance.StartCoroutine(DoGotoRoom(roomId, rejoin));
         }
 
@@ -151,7 +153,7 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
             while (!(_client.IsConnectedAndReady)) {
                 yield return null;
             }
-
+            
             if (rejoin) {
                 RejoinRoom(roomId);
             }
@@ -185,8 +187,6 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
         /// <returns>True/False initial part of creation succeeded (can still fail after this return though).</returns>
         private bool RejoinRoom(string roomId)
         {
-            _currentId = roomId;
-            
             return _client.OpRejoinRoom(roomId);
         }
         
@@ -207,7 +207,6 @@ namespace Cohort.Ravel.PhotonNetworking.Rooms
 
             };
             
-            _currentId = roomId;
             //return _client.OpCreateRoom(new EnterRoomParams() {RoomName = roomId, RoomOptions = options});
             return _client.OpJoinOrCreateRoom(new EnterRoomParams() {RoomName = roomId, RoomOptions = options});
         }
