@@ -1772,7 +1772,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 150}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8532650112550037191
 CanvasRenderer:
@@ -2075,7 +2075,6 @@ MonoBehaviour:
   _messageField: {fileID: 41064068206974092}
   _acceptBtn: {fileID: 7265967688952187728}
   _declineBtn: {fileID: 4553871458806067651}
-  _closeBtn: {fileID: 0}
   _scrollView: {fileID: 7379738652004861158}
   _contentParent: {fileID: 956601137858979256}
   _inputField: {fileID: 7074083211494077213}

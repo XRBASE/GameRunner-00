@@ -14,7 +14,7 @@ namespace Cohort.UserPrompts {
 
         private void OnJoinRoomFailed() {
             UILocator.Get<PromptPanel>().ThrowPrompt("Failed joining room",
-                                                     "Something whent wrong joining the photon room! Do you want to try to reconnect?",
+                                                     "You were not able to join the game, do you want to try again?",
                                                      Network.Local.RoomManager.OnReconnect);
         }
     }
