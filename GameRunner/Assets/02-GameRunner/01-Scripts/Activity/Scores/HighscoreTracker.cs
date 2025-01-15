@@ -1,13 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Cohort.GameRunner.Players;
-using Cohort.Networking.PhotonKeys;
-using Cohort.Patterns;
+using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using UnityEngine;
 
+using Cohort.Networking.PhotonKeys;
+using Cohort.GameRunner.Minigames;
+using Cohort.GameRunner.Players;
+using Cohort.Patterns;
+
 public class HighscoreTracker : Singleton<HighscoreTracker> {
+	public PlayerScore Local {
+		get { return _local; }
+	}
+
 	public Action<PlayerScore[]> onScoresUpdated;
 	
 	private int _session;
@@ -20,8 +26,8 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
 
-		LearningManager.Instance.onScoreReset += ClearLocalScore;
-		LearningManager.Instance.onLearningFinished += OnLearningFinished;
+		MinigameManager.Instance.onScoreReset += ClearLocalScore;
+		MinigameManager.Instance.onMinigameFinished += OnLearningFinished;
 	}
 	
 	public void Initialize(ActivityDescription _activity, int session) {
@@ -38,8 +44,8 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoomPropertiesChanged;
 
-		LearningManager.Instance.onScoreReset -= ClearLocalScore;
-		LearningManager.Instance.onLearningFinished -= OnLearningFinished;
+		MinigameManager.Instance.onScoreReset -= ClearLocalScore;
+		MinigameManager.Instance.onMinigameFinished -= OnLearningFinished;
 	}
 
 	private void OnJoinedRoom() {
@@ -112,7 +118,7 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
 	}
 	
-	private string GetPlayerSessionScoreKey(string playerUuid = "") {
+	public string GetPlayerSessionScoreKey(string playerUuid = "") {
 		string key = Keys.Concatenate(Keys.Concatenate(Keys.Room.Activity, Keys.Activity.Score), _session.ToString());
 		if (!string.IsNullOrEmpty(playerUuid)) {
 			key = Keys.Concatenate(key, playerUuid);

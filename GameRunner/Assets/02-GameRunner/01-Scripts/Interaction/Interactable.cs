@@ -1,31 +1,24 @@
-using Cohort.CustomAttributes;
 using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 using ExitGames.Client.Photon;
 using UnityEngine;
 
 namespace Cohort.GameRunner.Interaction {
-    public abstract class Interactable : MonoBehaviour, IUniqueId {
+    public abstract class Interactable : UniqueId {
         protected const int LAYER = 6;
 
         public bool Value {
             get { return _value; }
         }
 
-        public int Identifier {
-            get { return _index; }
-            set { _index = value; }
-        }
-
-        public string Name {
+        public override string Name {
             get { return gameObject.name; }
         }
         
         protected bool InRange { get; private set; }
         
         public bool interactable = true;
-
-        [ReadOnly, SerializeField] private int _index = -1;
+        
         [Tooltip("Can only be activated within this radius"), SerializeField] private float _radius = 1;
         
         //all interactables always have a state. True will fire events, false will not.
@@ -56,7 +49,7 @@ namespace Cohort.GameRunner.Interaction {
             }
         }
 
-        public bool CheckInRange() {
+        public virtual bool CheckInRange() {
             return (transform.position - Player.Local.transform.position).magnitude <= _radius;
         }
 
@@ -142,11 +135,11 @@ namespace Cohort.GameRunner.Interaction {
         }
 
         protected string GetInteractableKey() {
-            return Keys.GetUUID(Keys.Room.Interactable, _index.ToString());
+            return Keys.GetUUID(Keys.Room.Interactable, Identifier.ToString());
         }
 
 #if UNITY_EDITOR
-        public void OnDrawGizmosSelected() {
+        public virtual void OnDrawGizmosSelected() {
             Gizmos.DrawWireSphere(transform.position, _radius);
         }
 #endif

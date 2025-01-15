@@ -271,8 +271,7 @@ namespace Cohort.GameRunner.Input
             _uiInputModule.enabled = active;
         }
 
-        public void SetLearningInput()
-        {
+        public void SetMinigameInput() {
             _actionMapDictionary[ActionMaps.UI].Enable();
             _actionMapDictionary[ActionMaps.LearningCursor].Enable();
 

@@ -1,14 +1,16 @@
 using UnityEngine;
 
+using Cohort.GameRunner.Minigames;
+
 public class SceneConfiguration : MonoBehaviour {
-    public LearningCycleDescription Learning {
-        get { return _learning; }
+    public MinigameCycleDescription Minigame {
+        get { return minigame; }
     }
     
-    [SerializeField] private LearningCycleDescription _learning;
+    [SerializeField] private MinigameCycleDescription minigame;
 
     private void Awake() {
-        LearningManager.Instance.Setting = Learning;
+        MinigameManager.Instance.Setting = Minigame;
     }
     
 #if UNITY_EDITOR
@@ -24,7 +26,7 @@ public class SceneConfiguration : MonoBehaviour {
             Debug.LogError($"No two scene configurations can exist at the same time!\n configs found on {names}");
         }
         
-        _learning?.OnValidate();
+        minigame?.OnValidate();
     }
 
 #endif

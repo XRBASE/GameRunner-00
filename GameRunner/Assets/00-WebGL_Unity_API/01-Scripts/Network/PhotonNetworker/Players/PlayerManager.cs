@@ -49,8 +49,13 @@ namespace Cohort.Networking.Players {
             player = CreatePlayer(photon);
             player.Initialize(photon);
             
-            _players.Add(photon.UserId, player);
-            _propertyCallbacks.Add(photon.UserId, player.OnPropertiesChanged);
+            if (_players.ContainsKey(photon.UserId)) {
+                Debug.LogWarning("Double player detected. oldest player removed!");
+                _players[photon.UserId].Destroy();
+            }
+            
+            _players[photon.UserId] = player;
+            _propertyCallbacks[photon.UserId] = player.OnPropertiesChanged;
         }
         
         private void RemovePlayer(Photon.Realtime.Player player) {

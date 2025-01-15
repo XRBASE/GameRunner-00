@@ -123,6 +123,7 @@ namespace Cohort.GameRunner.LocoMovement {
         protected virtual void Start() {
             if (Networked) {
                 Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
+                Network.Local.Callbacks.onService += UpdateNetwork;
                 _player.onPropertiesChanged += OnCustomPropertiesChanged;
             }
 
@@ -147,6 +148,7 @@ namespace Cohort.GameRunner.LocoMovement {
             if (Networked) {
                 _player.onPropertiesChanged -= OnCustomPropertiesChanged;
                 Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
+                Network.Local.Callbacks.onService -= UpdateNetwork;
             }
             
             if (Control == ControlType.Local) {
@@ -275,7 +277,7 @@ namespace Cohort.GameRunner.LocoMovement {
             _sm.Update();
         }
 
-        protected virtual void FixedUpdate() {
+        protected virtual void UpdateNetwork() {
             //publish changes whenever there are new changes.
             if (Networked && _hasChanges && _player.Initialized && Network.Local.Client.IsConnectedAndReady) {
                 _player.SetCustomProperties(_changeTable);

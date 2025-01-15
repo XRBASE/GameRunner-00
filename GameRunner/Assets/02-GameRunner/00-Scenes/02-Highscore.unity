@@ -460,6 +460,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _id
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
       value: 0
       objectReference: {fileID: 0}
@@ -477,7 +481,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole.0
+      value: 00-MinigameConsole
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -537,6 +541,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _id
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
       value: 1
       objectReference: {fileID: 0}
@@ -554,7 +562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole.1
+      value: 01-MinigameConsole
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -614,7 +622,15 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _id
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _radius
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
@@ -631,7 +647,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole.3
+      value: 03-MinigameConsole
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -711,16 +727,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14a84431c01bd74d8e553eaee1ed408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _learning:
-    learnings:
-    - actionDescription: Wordle
-      sceneName: 02-Wordle
-      data: "{\"wordGameMode\":0,\"title\":\"Raad het woord\",\"tries\":5,\"puzzleAmount\":2,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
-        leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor
-        veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt veel gebruikt in thaise
-        recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen
-        worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt
-        na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}]}"
+  minigame:
+    minigames:
+    - actionDescription: Match pairs
+      sceneName: 03-Match
+      data: '{"title":"Vind de matches","pairAmount":5,"matches":[{"instanceID":10236},{"instanceID":10218},{"instanceID":10212},{"instanceID":10230},{"instanceID":10224}]}'
       locations: 00000000
       onFinCinematic:
         m_PersistentCalls:
@@ -734,57 +745,9 @@ MonoBehaviour:
       _state: 0
       index: 0
       log: {fileID: 0}
-    - actionDescription: Match
-      sceneName: 03-Minigame_MatchGame
-      data: '{"title":"Vind de matches","pairAmount":5,"matches":[{"instanceID":25074},{"instanceID":24884},{"instanceID":24862},{"instanceID":24900},{"instanceID":24914}]}'
-      locations: 00000000
-      onFinCinematic:
-        m_PersistentCalls:
-          m_Calls: []
-      onFinDirect:
-        m_PersistentCalls:
-          m_Calls: []
-      onReset:
-        m_PersistentCalls:
-          m_Calls: []
-      _state: 0
-      index: 1
-      log: {fileID: 0}
-    - actionDescription: Do quiz
-      sceneName: 01-Quiz
-      data: '{"_questions":[{"question":"What was the original name of Micky Mouse?","answers":["Mortimer
-        Mouse","The rat","Marvin Mouse","Marshall Mouse"],"correctAnswerIndex":0},{"question":"What
-        does the license plate of the delorian say in Back to the future?","answers":["1Time","88timego","GoFuture","Outatime"],"correctAnswerIndex":3},{"question":"Which
-        of the following is the largest ocean in the world?","answers":["Atlantic
-        ocean","Pacific ocean","Arctic ocean","Indian ocean"],"correctAnswerIndex":1},{"question":"Which
-        star is the brightest star in the night sky?","answers":["Arcturus","North
-        star","Sirius A","None of these"],"correctAnswerIndex":2},{"question":"The
-        Aztecs even used cocoa beans as what?","answers":["Currency","Drugs","Stress
-        relievers","Weapon decorations"],"correctAnswerIndex":0},{"question":"\"Mamma
-        Mia\" is based on a song by which Swedish musical act?","answers":["Bee Gees","Queen","Elton
-        John","ABBA"],"correctAnswerIndex":3},{"question":"Who was the second president
-        of the USA?","answers":["Thomas Jefferson","John Adams","Benjamin Franklin","John
-        Quincy Adams"],"correctAnswerIndex":1},{"question":"Mr Pibb was a soft drink
-        created by the Coca-Cola Company to compete with what other soft drink?","answers":["Cherry
-        Cola","Mountain Dew","Dr. Pepper","Root beer"],"correctAnswerIndex":2},{"question":"True
-        or false? All spiders are carnivorous.","answers":["True","False"],"correctAnswerIndex":0},{"question":"Hicory
-        trees produce which types of nuts?","answers":["Walnuts","Pecans","Pistachios","Macadamia"],"correctAnswerIndex":1}]}'
-      locations: 00000000
-      onFinCinematic:
-        m_PersistentCalls:
-          m_Calls: []
-      onFinDirect:
-        m_PersistentCalls:
-          m_Calls: []
-      onReset:
-        m_PersistentCalls:
-          m_Calls: []
-      _state: 0
-      index: 2
-      log: {fileID: 0}
     useTimer: 0
-    linear: 1
-    complete: 1
+    linear: 0
+    complete: 0
     networked: 0
 --- !u!4 &1957266246
 Transform:
@@ -801,6 +764,181 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &505538717280268369
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907216182953920792}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 0.8}
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!4 &1255544368150025194
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5524485226046239231}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.495, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1907216182953920793}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1907216182953920791
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.99
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.86602515
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.50000054
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7278758752282034971, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.076
+      objectReference: {fileID: 0}
+    - target: {fileID: -7278758752282034971, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.999
+      objectReference: {fileID: 0}
+    - target: {fileID: -7278758752282034971, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5049002605282693487, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -465744146151287668, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -465744146151287668, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -465744146151287668, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.006
+      objectReference: {fileID: 0}
+    - target: {fileID: 683044242465659679, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_Name
+      value: 04-InfoConsole
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1255544368150025194}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 505538717280268369}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1907216182953920794}
+  m_SourcePrefab: {fileID: 100100000, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+--- !u!1 &1907216182953920792 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+  m_PrefabInstance: {fileID: 1907216182953920791}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1907216182953920793 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 29cfb13dca1001f40a8fdcda42379cd9, type: 3}
+  m_PrefabInstance: {fileID: 1907216182953920791}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1907216182953920794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907216182953920792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03de165941ebf154d83da23cc8727c37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 4
+  _subscribed: 0
+  interactable: 1
+  _radius: 3
+  _value: 0
+  _networked: 0
+  description:
+    json: '{"uuid":"eccd8c4c-705b-42c1-b83d-5212e9f83d66"}'
+    sceneName: 01-InfoVi
+  _indicator: {fileID: 5159427460331344859}
+  _indicatorRadius: 6
 --- !u!1001 &2699343617401273203
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -810,8 +948,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _id
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _radius
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
@@ -827,7 +973,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_Name
-      value: PF_MinigameConsole.2
+      value: 02-MinigameConsole
       objectReference: {fileID: 0}
     - target: {fileID: 7189199632442238981, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: m_IsActive
@@ -878,6 +1024,41 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+--- !u!114 &5159427460331344859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5524485226046239231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 390ccedff52831a47a09a1e64a490131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 1255544368150025194}
+  _icon: {fileID: 21300000, guid: 19fc155f5f04d4050b46e6836d45e3f2, type: 3}
+  _color: {r: 1, g: 1, b: 1, a: 1}
+  _size: {x: 75, y: 75}
+  _enabled: 0
+  _check: {x: 0, y: 0, z: 0}
+--- !u!1 &5524485226046239231
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1255544368150025194}
+  - component: {fileID: 5159427460331344859}
+  m_Layer: 0
+  m_Name: PF_InfoIndicator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -888,5 +1069,6 @@ SceneRoots:
   - {fileID: 1816406119}
   - {fileID: 2699343617401273203}
   - {fileID: 1912207594}
+  - {fileID: 1907216182953920791}
   - {fileID: 996727321}
   - {fileID: 1957266246}

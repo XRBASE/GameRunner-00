@@ -4,8 +4,37 @@ using UnityEditor;
 using UnityEngine;
 
 public class IdLocator : AssetModificationProcessor {
-    public static void SetIds() {
-	    IUniqueId[] holders = GameObject.FindObjectsOfType<MonoBehaviour>(true).OfType<IUniqueId>().OrderBy(i => i.Name).ToArray();
+	
+	public static bool IdTaken(UniqueId item) {
+		UniqueId[] holders = Object.FindObjectsOfType<UniqueId>(true).ToArray();
+		for (int i = 0; i < holders.Length; i++) {
+			if (holders[i] != item && holders[i].Identifier == item.Identifier) {
+				if (EditorUtility.IsDirty(holders[i])) {
+					Debug.LogWarning($"Double index ({item.Identifier}) detected for item {holders[i].name} and {item.name}. Index of {item.name} has been cleared!");
+				}
+				
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	[MenuItem("Cohort/ClearIds")]
+	public static void ClearIds()
+	{
+		UniqueId[] holders = Object.FindObjectsOfType<UniqueId>(true).ToArray();
+		for (int i = 0; i < holders.Length; i++) {
+			if (holders[i].Identifier == -1)
+				continue;
+			
+			holders[i].Identifier = -1;
+			EditorUtility.SetDirty(holders[i]);
+		}
+	}
+
+	public static void SetIds() {
+	    UniqueId[] holders = Object.FindObjectsOfType<UniqueId>(true).OrderBy(i => i.Name).ToArray();
 	    bool[] taken = new bool[holders.Length];
 
 	    for (int i = 0; i < holders.Length; i++) {
@@ -24,7 +53,7 @@ public class IdLocator : AssetModificationProcessor {
 			    }
 
 			    holders[j].Identifier = i;
-			    EditorUtility.SetDirty(holders[i] as MonoBehaviour);
+			    EditorUtility.SetDirty(holders[j]);
 			    break;
 		    }
 	    }
