@@ -193,6 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   teleportEnabled: 1
   _raycaster: {fileID: 6986195436080410789}
+  _uiInputModule: {fileID: 0}
 --- !u!114 &6986195436080410789
 MonoBehaviour:
   m_ObjectHideFlags: 0

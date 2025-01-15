@@ -10,6 +10,9 @@ namespace Cohort.GameRunner.Minigames {
         public bool networked;
 
         public void OnValidate() {
+            if (minigames == null)
+                return;
+            
             for (int i = 0; i < minigames.Length; i++) {
                 minigames[i].index = i;
             }

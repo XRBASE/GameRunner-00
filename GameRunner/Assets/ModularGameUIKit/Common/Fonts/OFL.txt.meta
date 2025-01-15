@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:GameRunner/Assets/02-GameRunner/00-Scenes/Minigames/03-Minigame_MatchGame.unity.meta
+guid: 011821349a6be834f95cd65d066b6126
+DefaultImporter:
+========
 guid: f0346ae0316194a94bf6bb3d8b65f0c9
 TextScriptImporter:
+>>>>>>>> main:GameRunner/Assets/ModularGameUIKit/Common/Fonts/OFL.txt.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

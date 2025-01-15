@@ -642,14 +642,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743df9ff9d3f4054992180156fc0507b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreUI: {fileID: 6574512369134051185}
+  _title: {fileID: 89144911598908369}
+  feedbackAudio: {fileID: 1616206964961886210}
   wordPrefab: {fileID: 6132127963772328923, guid: dad71bbda1b1bc840967cf93c80b3e29, type: 3}
   wordGameInput: {fileID: 1430153029646211118}
   gameParent: {fileID: 3723737972682482784}
-  title: {fileID: 89144911598908369}
-  feedbackAudio: {fileID: 1616206964961886210}
   successAudioClip: {fileID: 8300000, guid: 60f1025236f59c643b27bd8930e5870b, type: 3}
   failureAudioClip: {fileID: 8300000, guid: 9b1fc15cc28b7644899539beab889f0c, type: 3}
-  scoreUI: {fileID: 6574512369134051185}
   hintText: {fileID: 1666242610867921784}
   invalidWordFeedback: {fileID: 3965153309620498674}
 --- !u!1 &2437374305702840113
