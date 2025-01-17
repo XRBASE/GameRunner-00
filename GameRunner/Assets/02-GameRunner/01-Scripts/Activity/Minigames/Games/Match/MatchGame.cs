@@ -92,7 +92,9 @@ public class MatchGame : MiniGame
         _questionElement.WrongAnswer();
         _answerElement.WrongAnswer();
         feedbackAudio.PlayOneShot(inCorrectSoundEffect);
-        InputManager.Instance.SetUIInputActive(false);
+        
+        InputManager.Instance.SetActionMapActive(InputManager.ActionMaps.UI, false);
+        
         DoFeedbackTimeout(INCORRECT_FEEDBACK_TIMEOUT, Deselect);
     }
 
@@ -185,7 +187,8 @@ public class MatchGame : MiniGame
 
     private void Deselect()
     {
-        InputManager.Instance.SetUIInputActive(true);
+        InputManager.Instance.SetActionMapActive(InputManager.ActionMaps.UI, true);
+        
         _questionElement.Deselect();
         _answerElement.Deselect();
         _questionElement = null;

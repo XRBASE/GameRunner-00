@@ -266,11 +266,6 @@ namespace Cohort.GameRunner.Input
                 _actionMapDictionary[actionMap].Disable();
         }
 
-        public void SetUIInputActive(bool active)
-        {
-            _uiInputModule.enabled = active;
-        }
-
         public void SetMinigameInput() {
             _actionMapDictionary[ActionMaps.UI].Enable();
             _actionMapDictionary[ActionMaps.LearningCursor].Enable();
@@ -288,8 +283,6 @@ namespace Cohort.GameRunner.Input
 
         public void SetGameInput()
         {
-            _actionMapDictionary[ActionMaps.LearningCursor].Disable();
-
             _actionMapDictionary[ActionMaps.UI].Enable();
             _actionMapDictionary[ActionMaps.Interact].Enable();
             _actionMapDictionary[ActionMaps.Track].Enable();
@@ -299,6 +292,8 @@ namespace Cohort.GameRunner.Input
             _actionMapDictionary[ActionMaps.GameCursor].Enable();
             _actionMapDictionary[ActionMaps.Dev].Enable();
             _actionMapDictionary[ActionMaps.Typing].Enable();
+            
+            _actionMapDictionary[ActionMaps.LearningCursor].Disable();
             _actionMapDictionary[ActionMaps.Dialog].Disable();
         }
     }
