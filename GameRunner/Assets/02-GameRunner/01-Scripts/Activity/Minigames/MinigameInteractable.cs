@@ -35,8 +35,6 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         protected override void Start() {
-            _networked = _networked && MinigameManager.Instance.LearningsNetworked;
-
             base.Start();
 
             if (_networked) {

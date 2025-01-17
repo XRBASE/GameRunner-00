@@ -36,10 +36,6 @@ namespace Cohort.GameRunner.Minigames {
             get { return _scoreMultiplier; }
         }
 
-        public bool LearningsNetworked {
-            get { return Setting.networked; }
-        }
-
         public Action<int> onAllMinigamesFinished;
         public Action<float> onMinigameFinished;
         public Action onScoreReset;
@@ -62,71 +58,6 @@ namespace Cohort.GameRunner.Minigames {
             _minigameTimers = new List<float>();
         }
 
-        private void OnDestroy() {
-            if (Setting != null && Setting.networked) {
-                Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
-                Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropsChanged;
-                Network.Local.Callbacks.onService -= UpdateNetwork;
-            }
-        }
-
-        private void UpdateNetwork() {
-            if (_minigameTimers.Count > 0 && _minigameTimers[0] > 0 &&
-                _minigameTimers[0] <= TimeManager.Instance.RefTime) {
-                OnTimerFin();
-            }
-        }
-
-        private void InitTimerNetworkData() {
-            Hashtable changes = new Hashtable();
-            changes.Add(GetTimerKey(), -1f);
-            changes.Add(GetActorKey(), -1);
-
-            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
-        }
-
-        private void PushNewTimer() {
-            if (_minigameTimers.Count > 0)
-                return;
-
-            float t = Random.Range(MIN_TIME, MAX_TIME);
-            t = TimeManager.Instance.RefTime + t;
-
-            if (!Setting.networked) {
-                _refActor = Player.Local.ActorNumber;
-                _minigameTimers.Add(t);
-                return;
-            }
-
-            Hashtable changes = new Hashtable();
-            changes.Add(GetTimerKey(), t);
-            changes.Add(GetActorKey(), Player.Local.ActorNumber);
-
-            Hashtable exp = new Hashtable();
-            exp.Add(GetTimerKey(), _refTime);
-
-            Network.Local.Client.CurrentRoom.SetCustomProperties(changes, exp);
-        }
-
-        private void OnTimeReset() {
-            for (int i = 0; i < _minigameTimers.Count; i++) {
-                _minigameTimers[i] %= TimeManager.RESET_VALUE;
-            }
-        }
-
-        private void OnTimerFin() {
-            _minigameTimers.RemoveAt(0);
-            Debug.LogError($"Timer fin actor {_refActor}");
-
-            if (_refActor == Player.Local.ActorNumber) {
-                ActivateMinigame();
-            }
-
-            if (_inActivity) {
-                PushNewTimer();
-            }
-        }
-
         private void ResetMinigames() {
             if (Setting != null) {
                 for (int i = 0; i < Setting.minigames.Length; i++) {
@@ -138,31 +69,13 @@ namespace Cohort.GameRunner.Minigames {
         public void OnActivityStart(int scoreMultiplier) {
             _inActivity = true;
 
-            TimeManager.Instance.onRefTimeReset += OnTimeReset;
-
-            if (Setting.networked) {
-                Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
-                Network.Local.Callbacks.onRoomPropertiesChanged += OnPropsChanged;
-                Network.Local.Callbacks.onService += UpdateNetwork;
-
-                if (Network.Local.Client.InRoom) {
-                    OnJoinedRoom();
-                }
-            }
-
             _scoreMultiplier = scoreMultiplier;
             _interactables = FindObjectsOfType<MinigameInteractable>().ToList().OrderBy((s) => s.Identifier).ToArray();
 
-            if (Setting.useTimer) {
-                PushNewTimer();
-            }
-            else if (!AnyMinigameOpen()) {
+            if (!AnyMinigameOpen()) {
                 ActivateMinigame();
             }
-
-            if (!Setting.networked) {
-                onScoreReset?.Invoke();
-            }
+            onScoreReset?.Invoke();
         }
 
         public void OnActivityStop() {
@@ -199,45 +112,21 @@ namespace Cohort.GameRunner.Minigames {
 
         private bool TryGetNextMinigame(out MinigameDescription minigame) {
             int MinigameId;
-            if (Setting.linear) {
-                MinigameId = -1;
+            MinigameId = -1;
 
-                for (int i = 0; i < Setting.minigames.Length; i++) {
-                    if (Setting.minigames[i].MinigameState == MinigameDescription.State.Open) {
-                        MinigameId = i;
-                        break;
-                    }
-                }
-
-                if (MinigameId == -1) {
-                    onAllMinigamesFinished?.Invoke(HighscoreTracker.Instance.Local.score);
-                    Debug.Log("All minigames finished");
-                    
-                    minigame = null;
-                    return false;
+            for (int i = 0; i < Setting.minigames.Length; i++) {
+                if (Setting.minigames[i].MinigameState == MinigameDescription.State.Open) {
+                    MinigameId = i;
+                    break;
                 }
             }
-            else {
-                MinigameId = Random.Range(0, Setting.minigames.Length);
-                bool found = false;
-                int check = 0;
-                for (int i = 0; i < Setting.minigames.Length; i++) {
-                    check = (MinigameId + i) % Setting.minigames.Length;
 
-                    if (Setting.minigames[check].MinigameState == MinigameDescription.State.Open) {
-                        found = true;
-                        MinigameId = check;
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    onAllMinigamesFinished?.Invoke(HighscoreTracker.Instance.Local.score);
-                    Debug.Log("All minigames finished");
+            if (MinigameId == -1) {
+                onAllMinigamesFinished?.Invoke(HighscoreTracker.Instance.Local.score);
+                Debug.Log("All minigames finished");
                     
-                    minigame = null;
-                    return false;
-                }
+                minigame = null;
+                return false;
             }
 
             minigame = Setting.minigames[MinigameId];
@@ -314,17 +203,8 @@ namespace Cohort.GameRunner.Minigames {
                 ? MinigameDescription.State.Completed
                 : MinigameDescription.State.Failed;
 
-            if (Setting.complete) {
-                _currenMinigameDescription.SetState(s, false);
-            }
-            else {
-                _currenMinigameDescription.SetState(MinigameDescription.State.Open, false, true);
-            }
-
-            if (Setting.networked) {
-                PushMinigameState(_currenMinigameDescription);
-            }
-
+            _currenMinigameDescription.SetState(s, false);
+            
             onMinigameFinished?.Invoke(scorePercentage);
 
             _currenMinigameDescription.log.CheckLogItem(s);
@@ -338,21 +218,7 @@ namespace Cohort.GameRunner.Minigames {
 
             _currenMinigameDescription = null;
             _currentInteractable = null;
-
-            if (!Setting.useTimer) {
-                ActivateMinigame();
-            }
-        }
-
-        private void PushMinigameState(MinigameDescription l) {
-            Hashtable changes = new Hashtable();
-            changes.Add(GetMinigameStateKey(l.index), l.MinigameState);
-
-            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
-        }
-
-        private void SetMinigameState(int learningId, MinigameDescription.State state, bool init) {
-            Setting.minigames[learningId].SetState(state, init);
+            ActivateMinigame();
         }
 
         public void SetMinigameLog(MinigameDescription minigame, MinigameInteractable interactable) {
@@ -370,79 +236,6 @@ namespace Cohort.GameRunner.Minigames {
         public void InitializeMinigame(Minigame minigame) {
             minigame.Initialize(_currenMinigameDescription.data, _scoreMultiplier, OnMinigameFinished, OnExitMinigame);
             _currentMinigame = minigame;
-        }
-
-        private void OnJoinedRoom() {
-            OnPropsChanged(Network.Local.Client.CurrentRoom.CustomProperties, true);
-
-            string key = GetTimerKey();
-            if (!Network.Local.Client.CurrentRoom.CustomProperties.ContainsKey(key) ||
-                (TimeManager.Instance.RefTime - (float)Network.Local.Client.CurrentRoom.CustomProperties[key]) >
-                MAX_TIME) {
-                InitTimerNetworkData();
-            }
-        }
-
-        private void OnPropsChanged(Hashtable changes) {
-            OnPropsChanged(changes, false);
-        }
-
-        private void OnPropsChanged(Hashtable changes, bool init) {
-            string key;
-            for (int i = 0; i < Setting.minigames.Length; i++) {
-                key = GetMinigameStateKey(i);
-
-                if (changes.ContainsKey(key)) {
-                    MinigameDescription.State s;
-                    if (changes[key] == null) {
-                        s = MinigameDescription.State.Open;
-                    }
-                    else {
-                        s = (MinigameDescription.State)changes[key];
-                    }
-
-                    SetMinigameState(i, s, init);
-                }
-            }
-
-            if (Setting.useTimer) {
-                key = GetTimerKey();
-                if (changes.ContainsKey(key)) {
-                    if (changes[key] != null) {
-                        _refTime = (float)changes[key];
-                        _refActor = (int)changes[GetActorKey()];
-
-                        if (_refTime < 0) {
-                            if (_inActivity)
-                                PushNewTimer();
-                            else
-                                _minigameTimers.Clear();
-                        }
-                        else {
-                            _minigameTimers.Add(_refTime);
-                        }
-                    }
-                    else {
-                        InitTimerNetworkData();
-                    }
-                }
-            }
-        }
-
-        private string GetMinigameStateKey(int learningId) {
-            return Keys.Concatenate(
-                Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.State),
-                learningId.ToString());
-        }
-
-        private string GetTimerKey() {
-            return Keys.Concatenate(
-                Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.ManagerTimer));
-        }
-
-        private string GetActorKey() {
-            return Keys.Concatenate(
-                Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.ManagerActor));
         }
     }
 }
