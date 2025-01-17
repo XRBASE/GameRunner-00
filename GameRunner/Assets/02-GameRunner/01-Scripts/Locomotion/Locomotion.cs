@@ -236,6 +236,9 @@ namespace Cohort.GameRunner.LocoMovement {
                 Seated = false;
             }
 
+            if (Control != ControlType.Local)
+                return;
+            
             if (SpawnPoint.TryGetById(SpawnPoint.DEFAULT, out SpawnPoint spawn)) {
                 spawn.TeleportToSpawnPoint();
             }

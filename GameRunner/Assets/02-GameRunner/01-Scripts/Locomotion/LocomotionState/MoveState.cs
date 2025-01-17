@@ -129,6 +129,10 @@ namespace Cohort.GameRunner.LocoMovement {
 		/// Called while falling, respawns player after falling a certain amount of units. 
 		/// </summary>
 		protected void UpdateFalling() {
+			if (_lm.Control != Locomotion.ControlType.Local) { 
+				return;
+			}
+			
 			if ((_fallPosition - _target.position).y >= Locomotion.FALL_RESET_HEIGHT) {
 				if (SpawnPoint.TryGetById(SpawnPoint.DEFAULT, out SpawnPoint spawn)) {
 					spawn.TeleportToSpawnPoint();
@@ -136,6 +140,7 @@ namespace Cohort.GameRunner.LocoMovement {
 				else {
 					TeleportToPosition(Vector3.zero, Quaternion.identity);
 				}
+				
 				_fallPosition = _target.position;
 			}
 		}
