@@ -1782,9 +1782,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d87249e8e93cdd4459cbfa9e1ceb7898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreUI: {fileID: 0}
-  _title: {fileID: 8091194150158464788}
-  feedbackAudio: {fileID: 4815462309847788959}
   MatchGameDataSo: {fileID: 11400000, guid: 5b35e1d7397201d40a033e61e0057fa0, type: 2}
   matchElementPrefab: {fileID: 8586130456299451871, guid: f0f2a59e0a9e101448b680cb5b717adc, type: 3}
   answerElementParent: {fileID: 828700175138960728}
@@ -1795,6 +1792,8 @@ MonoBehaviour:
   inCorrectSoundEffect: {fileID: 8300000, guid: 9b1fc15cc28b7644899539beab889f0c, type: 3}
   selectSoundEffect: {fileID: 8300000, guid: 7fd6f647f9d68b24b9eb0c7dd6ae754c, type: 3}
   matchFoundSoundEffect: {fileID: 8300000, guid: 25145577f3776c5429d53303336c6762, type: 3}
+  title: {fileID: 8091194150158464788}
+  feedbackAudio: {fileID: 4815462309847788959}
 --- !u!1 &7905581878215370765
 GameObject:
   m_ObjectHideFlags: 0

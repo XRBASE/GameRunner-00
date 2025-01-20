@@ -308,7 +308,6 @@ GameObject:
   - component: {fileID: 5000211622419955557}
   - component: {fileID: 6941285389744223130}
   - component: {fileID: 8312619529221601202}
-  - component: {fileID: 3719746595894724824}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -430,20 +429,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3719746595894724824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5105003665222076219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fea050b5c7739ca4fbfef99aad869363, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playableDirector: {fileID: 6941285389744223130}
-  scoreTMP: {fileID: 1321493959635270025}
 --- !u!1 &5164185920674368219
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,7 +441,6 @@ GameObject:
   - component: {fileID: 2960466409013018408}
   - component: {fileID: 2364609116264851078}
   - component: {fileID: 218652587083606824}
-  - component: {fileID: 3466405996570238128}
   m_Layer: 5
   m_Name: PF_ScoreCanvas
   m_TagString: Untagged
@@ -547,17 +531,3 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &3466405996570238128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5164185920674368219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fea050b5c7739ca4fbfef99aad869363, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playableDirector: {fileID: 6941285389744223130}
-  scoreTMP: {fileID: 1321493959635270025}

@@ -8,6 +8,15 @@ using Cohort.Patterns;
 
 namespace Cohort.GameRunner.Minigames.Quiz {
 	public class Quiz : Minigame {
+		protected override float CorrectVisualDuration {
+			get { return 2f; }
+		}
+		protected override float FaultiveVisualDuration {
+			get { return 2f; }
+		}
+		protected override float FinishedVisualDuration {
+			get { return 2f; }
+		}
 
 		public override float Score {
 			get { return _score;}
@@ -18,7 +27,6 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 		
 		public UnityEvent onCorrect;
 		public UnityEvent onIncorrect;
-		[SerializeField] private float _graphicTimeout = 2f;
 		
 		private QuizData _data;
 		private int _questionIndex = 0;
@@ -61,7 +69,8 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 
 			_questionIndex++;
 			if (_questionIndex < _data._questions.Length) {
-				StartCoroutine(GraphicTimeout());
+				DisableAnswerInteraction();
+				StartCoroutine(DoTimeout(CorrectVisualDuration, (Action)EnableAnswerInteraction + ShowQuestion));
 			}
 			else {
 				//end screen routine
@@ -69,11 +78,12 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 			}
 		}
 
-		private IEnumerator GraphicTimeout() {
+		private void DisableAnswerInteraction() {
 			_answerGroup.interactable = false;
-			yield return new WaitForSeconds(_graphicTimeout);
+		}
+
+		private void EnableAnswerInteraction() {
 			_answerGroup.interactable = true;
-			ShowQuestion();
 		}
 
 		private void ShowQuestion() {
@@ -82,7 +92,7 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 		}
 
 		private IEnumerator OnQuizFinished() {
-			yield return new WaitForSeconds(_graphicTimeout);
+			yield return DoTimeout(FinishedVisualDuration, null);
 
 			FinishMinigame();
 		}

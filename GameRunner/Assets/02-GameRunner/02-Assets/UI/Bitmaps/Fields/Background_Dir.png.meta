@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:GameRunner/Assets/02-GameRunner/02-Assets/UI/Bitmaps/Fields/Background_Dir.png.meta
 guid: 34f75dad96a2e0f4dac330c1780761cd
-========
-guid: 41197b07052b8b54e948078522ba3dde
->>>>>>>> feature/match-game:GameRunner/Assets/02-GameRunner/02-Assets/Minigames/Match/Images/Background image for a time travelling game.jpg.meta
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -95,7 +91,6 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
-<<<<<<<< HEAD:GameRunner/Assets/02-GameRunner/02-Assets/UI/Bitmaps/Fields/Background_Dir.png.meta
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -109,8 +104,6 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
-========
->>>>>>>> feature/match-game:GameRunner/Assets/02-GameRunner/02-Assets/Minigames/Match/Images/Background image for a time travelling game.jpg.meta
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -160,12 +153,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-<<<<<<<< HEAD:GameRunner/Assets/02-GameRunner/02-Assets/UI/Bitmaps/Fields/Background_Dir.png.meta
     nameFileIdTable:
       Background_UP: -1067804120
-========
-    nameFileIdTable: {}
->>>>>>>> feature/match-game:GameRunner/Assets/02-GameRunner/02-Assets/Minigames/Match/Images/Background image for a time travelling game.jpg.meta
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

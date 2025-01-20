@@ -4,11 +4,7 @@ namespace Cohort.GameRunner.Minigames {
     [Serializable]
     public class MinigameCycleDescription {
         public MinigameDescription[] minigames;
-        public bool useTimer;
-        public bool linear;
-        public bool complete;
-        public bool networked;
-
+        
         public void OnValidate() {
             if (minigames == null)
                 return;

@@ -15,6 +15,7 @@ namespace Cohort.GameRunner.Minigames {
 		public string sceneName = "";
 		public string data;
 		public int[] locations;
+		public bool networked;
 
 		[Tooltip("Events is called when the learning is finished while the user is in the activity.")]
 		public UnityEvent onFinCinematic;
