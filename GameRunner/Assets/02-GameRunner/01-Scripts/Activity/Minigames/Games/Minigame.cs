@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Cohort.GameRunner.Minigames {
@@ -6,6 +7,10 @@ namespace Cohort.GameRunner.Minigames {
 	/// Minigame base class, used for connecting to the manager classes when game is initialized.
 	/// </summary>
 	public abstract class Minigame : MonoBehaviour {
+
+		protected abstract float CorrectVisualDuration { get; }
+		protected abstract float FaultiveVisualDuration { get; }
+		protected abstract float FinishedVisualDuration { get; }
 
 		public abstract float Score {
 			get;
@@ -42,6 +47,12 @@ namespace Cohort.GameRunner.Minigames {
 
 		protected virtual void Awake() {
 			MinigameManager.Instance.InitializeMinigame(this);
+		}
+
+		protected IEnumerator DoTimeout(float duration, Action onComplete) {
+			yield return new WaitForSeconds(duration);
+			
+			onComplete?.Invoke();
 		}
 	}
 }

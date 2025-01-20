@@ -114,6 +114,9 @@ namespace Cohort.GameRunner.Interaction {
         protected abstract void DeactivateLocal();
 
         protected virtual void OnJoinedRoom() {
+            if (!_networked)
+                return;
+            
             OnPropertiesChanged(Network.Local.Client.CurrentRoom.CustomProperties);
             
             if (!Network.Local.Client.CurrentRoom.CustomProperties.ContainsKey(GetInteractableKey())) {
@@ -122,6 +125,9 @@ namespace Cohort.GameRunner.Interaction {
         }
 
         protected virtual void OnPropertiesChanged(Hashtable changes) {
+            if (!_networked)
+                return;
+            
             string key = GetInteractableKey();
             
             if (changes.ContainsKey(key)) {

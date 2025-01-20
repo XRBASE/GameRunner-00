@@ -1,5 +1,8 @@
 using ExitGames.Client.Photon;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 using Cohort.CustomAttributes;
 using Cohort.GameRunner.Interaction;
@@ -75,10 +78,7 @@ namespace Cohort.GameRunner.Minigames {
 
         protected override void ActivateLocal() {
             _indicator.SetActive(false);
-
-            if (!_networked || _actor == Player.Local.ActorNumber) {
-                MinigameManager.Instance.OnMinigameStart(_minigame, this);
-            }
+            MinigameManager.Instance.OnMinigameStart(_minigame, this);
         }
 
         protected override void Deactivate(Hashtable changes, Hashtable expected = null) {
@@ -103,12 +103,11 @@ namespace Cohort.GameRunner.Minigames {
             base.Deactivate(changes, expected);
         }
 
-        protected override void DeactivateLocal() {
-            //SetMinigameLocal(-1);
-        }
+        protected override void DeactivateLocal() { }
 
-        public void SetMinigame(int index = -1) {
-            if (!_networked) {
+        public void SetMinigame(int index = -1, bool networked = false) {
+            _networked = networked;
+            if (!networked) {
                 SetMinigameLocal(index);
                 return;
             }
@@ -131,11 +130,7 @@ namespace Cohort.GameRunner.Minigames {
             }
 
             _indicator.SetActive(false);
-
-            if (_minigame != null) {
-                MinigameManager.Instance.RemoveMinigameLog(_minigame);
-                _minigame = null;
-            }
+            _minigame = null;
         }
 
         private void OnPlayerLeftRoom(Photon.Realtime.Player obj) {
@@ -189,5 +184,23 @@ namespace Cohort.GameRunner.Minigames {
                 Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.Index),
                 Identifier.ToString());
         }
+        
+#if UNITY_EDITOR
+        public override void OnValidate() {
+            base.OnValidate();
+            
+            if (!_networked) {
+                _networked = true;
+                EditorUtility.SetDirty(this);
+                
+                Debug.LogWarning("Minigame interactables are always networked, minigames themselves can be set to not networked! See sceneConfig!");
+                GameObject ping = FindObjectOfType<SceneConfiguration>().gameObject;
+                if (ping != null) {
+                    EditorGUIUtility.PingObject(ping);
+                }
+            }
+        }
+        
+#endif
     }
 }

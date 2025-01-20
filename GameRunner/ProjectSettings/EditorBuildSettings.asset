@@ -15,6 +15,12 @@ EditorBuildSettings:
     path: Assets/02-GameRunner/00-Scenes/02-Highscore.unity
     guid: 6c4091d5fe03f704a9eece362c16d7cf
   - enabled: 1
+    path: Assets/02-GameRunner/00-Scenes/Minigames/00-Tester.unity
+    guid: 36c6c8e565fd63c47adf381e2609a9ba
+  - enabled: 1
+    path: Assets/02-GameRunner/00-Scenes/Minigames/00-Tester_Pink.unity
+    guid: 94b6ca5c097926d4eb047bd5994777ec
+  - enabled: 1
     path: Assets/02-GameRunner/00-Scenes/Minigames/01-Quiz.unity
     guid: b8fe50585e98cb24d947a6e3b711568b
   - enabled: 1

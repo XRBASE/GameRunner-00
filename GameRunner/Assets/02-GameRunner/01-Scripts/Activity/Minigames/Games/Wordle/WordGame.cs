@@ -14,16 +14,22 @@ namespace Cohort.GameRunner.Minigames.Wordle {
             set { _completionPercent = value; }
         }
         
+        protected override float CorrectVisualDuration {
+            get { return 2f; }
+        }
+        protected override float FaultiveVisualDuration {
+            get { return 1f; }
+        }
+        protected override float FinishedVisualDuration {
+            get { return 1f; }
+        }
+        
         // Enum to define game modes: Random or Sequential word selection
         public enum WordGameMode {
             Random,
             Sequential
         };
-
-        // Constants for feedback timeout durations
-        private const float INVALID_FEEDBACK_TIMEOUT = 1f;
-        private const float GAME_COMPLETE_FEEDBACK_TIMEOUT = 2f;
-
+        
         // Property to get the current word to be played
         private Word CurrentWord => _words[_entryIndex];
 
@@ -37,7 +43,6 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         public TextMeshProUGUI title;
         public AudioSource feedbackAudio;
         public AudioClip successAudioClip, failureAudioClip;
-        public ScoreUI scoreUI;
         public TextMeshProUGUI hintText;
         public PlayableDirector invalidWordFeedback;
 
@@ -50,7 +55,6 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private string _text = string.Empty;
         private int _entryIndex;
         private float _completionPercent;
-        private float _scoreMultiplier;
         private bool _isPlaying;
         private int _currentPuzzle;
         private bool _pickRandomWord;
@@ -68,8 +72,6 @@ namespace Cohort.GameRunner.Minigames.Wordle {
             }
 
             _wordGameMode = _wordGameData.wordGameMode;
-            
-            _scoreMultiplier = scoreMultiplier;
             title.text = _wordGameData.title;
             BuildGame();
         }
@@ -90,7 +92,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private void NextPuzzle() {
             _currentPuzzle++;
             if (_currentPuzzle < _wordGameData.puzzleAmount && _currentPuzzle < _wordGameData.wordList.Count) {
-                DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, ResetGame);
+                StartCoroutine(DoTimeout(CorrectVisualDuration, ResetGame));
             }
             else {
                 HandleGameComplete();
@@ -101,11 +103,6 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private void ResetGame() {
             ClearGame();
             BuildGame();
-        }
-
-        // Display the score after each puzzle or at the end
-        private void DisplayScore(float score) {
-            scoreUI.PlayScore((int)(score * _scoreMultiplier));
         }
 
         // Build the game by selecting a word and creating necessary UI components
@@ -170,7 +167,8 @@ namespace Cohort.GameRunner.Minigames.Wordle {
             feedbackAudio.PlayOneShot(failureAudioClip);
             PlayableDirectorFeedback(invalidWordFeedback);
             wordGameInput.SetInputActive(false);
-            DoFeedbackTimeout(INVALID_FEEDBACK_TIMEOUT, FeedbackTimeout);
+
+            StartCoroutine(DoTimeout(FaultiveVisualDuration, FeedbackTimeout));
         }
 
         // Play an animation feedback using a PlayableDirector
@@ -212,9 +210,9 @@ namespace Cohort.GameRunner.Minigames.Wordle {
             _completionPercent = (_wordGameData.tries * _wordGameData.puzzleAmount - _attempts) /
                                  ((float)_wordGameData.tries * _wordGameData.puzzleAmount -
                                   _wordGameData.puzzleAmount); // Calculate completion percentage
-            DisplayScore(_completionPercent);
             _isPlaying = false;
-            DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, FinishMinigame);
+            
+            StartCoroutine(DoTimeout(FinishedVisualDuration, FinishMinigame));
         }
 
         // Handle the input of a single character from the keyboard
@@ -237,22 +235,6 @@ namespace Cohort.GameRunner.Minigames.Wordle {
 
             CurrentWord.ClearLetter(_text.Length - 1);
             _text = _text.Substring(0, _text.Length - 1);
-        }
-
-        private void DoFeedbackTimeout(float time, Action onFeedbackTimeout) {
-            if (_feedBackTimeoutRoutine != null) {
-                StopCoroutine(_feedBackTimeoutRoutine);
-            }
-
-            _feedBackTimeoutRoutine = FeedbackTimeOutRoutine(time, onFeedbackTimeout);
-            StartCoroutine(_feedBackTimeoutRoutine);
-        }
-
-
-        // Coroutine to handle the timeout period
-        private IEnumerator FeedbackTimeOutRoutine(float time, Action onFeedbackTimeout) {
-            yield return new WaitForSeconds(time);
-            onFeedbackTimeout?.Invoke();
         }
     }
 }

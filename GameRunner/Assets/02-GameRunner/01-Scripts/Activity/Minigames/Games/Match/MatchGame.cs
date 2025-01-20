@@ -2,12 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cohort.GameRunner.Input;
+using Cohort.GameRunner.Minigames;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = System.Random;
 
-public class MatchGame : MiniGame
+public class MatchGame : Minigame
 {
+    protected override float CorrectVisualDuration {
+        get { return 1f; }
+    }
+    protected override float FaultiveVisualDuration {
+        get { return 0.5f; }
+    }
+    protected override float FinishedVisualDuration {
+        get { return 2f; }
+    }
     public override float Score { get; set; }
     
     public MatchGameDataSO MatchGameDataSo;
@@ -19,6 +30,9 @@ public class MatchGame : MiniGame
     public AudioClip inCorrectSoundEffect;
     public AudioClip selectSoundEffect;
     public AudioClip matchFoundSoundEffect;
+
+    public TMP_Text title;
+    public AudioSource feedbackAudio;
 
     private EventSystem _eventSystem;
     private List<MatchPair> _matchPairs;
@@ -35,12 +49,11 @@ public class MatchGame : MiniGame
         base.Initialize(gameData, scoreMultiplier, onGameFinished, onExit);
         
         _matchGameData = MatchGameDataSo.matchGameData;
-        _scoreMultiplier = scoreMultiplier;
-        _title.text = _matchGameData.title;
+        title.text = _matchGameData.title;
         BuildGame();
     }
 
-    protected override void BuildGame()
+    private void BuildGame()
     {
         _matchPairs = new List<MatchPair>();
         _matches = new List<MatchPairData>();
@@ -80,32 +93,31 @@ public class MatchGame : MiniGame
     }
 
 
-    protected override void CorrectFeedback()
+    private void CorrectFeedback()
     {
         _answerElement.Complete();
         _questionElement.Complete();
         feedbackAudio.PlayOneShot(correctSoundEffect);
     }
 
-    protected override void IncorrectFeedback()
+    private void IncorrectFeedback()
     {
         _questionElement.WrongAnswer();
         _answerElement.WrongAnswer();
         feedbackAudio.PlayOneShot(inCorrectSoundEffect);
         
         InputManager.Instance.SetActionMapActive(InputManager.ActionMaps.UI, false);
-        
-        DoFeedbackTimeout(INCORRECT_FEEDBACK_TIMEOUT, Deselect);
+
+        StartCoroutine(DoTimeout(FaultiveVisualDuration, Deselect));
     }
 
-    protected override void GameFinishedFeedback()
+    private void GameFinishedFeedback()
     {
         Score = (float) _matchGameData.pairAmount / _attempts;
-        DisplayScore(Score);
         
         feedbackAudio.PlayOneShot(gameCompleteAudioClip);
         DoGameFinishedFeedback();
-        DoFeedbackTimeout(GAME_COMPLETE_FEEDBACK_TIMEOUT, FinishMinigame);
+        StartCoroutine(DoTimeout(FinishedVisualDuration, FinishMinigame));
     }
 
     private void ShuffleMatches()
@@ -204,12 +216,6 @@ public class MatchGame : MiniGame
         }
 
         _matchPairs.Clear();
-    }
-
-    // Display the score after each puzzle or at the end
-    private void DisplayScore(float score)
-    {
-        scoreUI.PlayScore((int) (score * _scoreMultiplier));
     }
 
     private void DoGameFinishedFeedback()

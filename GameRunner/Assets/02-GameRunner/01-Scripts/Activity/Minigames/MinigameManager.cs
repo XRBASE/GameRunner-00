@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExitGames.Client.Photon;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using Cohort.GameRunner.Input;
-using Cohort.GameRunner.Players;
-using Cohort.Networking.PhotonKeys;
 using Cohort.Patterns;
 using Cohort.UI.Generic;
 
@@ -18,9 +15,6 @@ namespace Cohort.GameRunner.Minigames {
     public class MinigameManager : Singleton<MinigameManager> {
         public const float FAILURE_THRESHOLD = 0.25f;
         public const float AMAZING_THRESHOLD = 0.75f;
-
-        private const float MIN_TIME = 3f;
-        private const float MAX_TIME = 7f;
 
         public MinigameCycleDescription Setting { get; set; }
 
@@ -40,8 +34,6 @@ namespace Cohort.GameRunner.Minigames {
         public Action<float> onMinigameFinished;
         public Action onScoreReset;
 
-        [SerializeField] private List<float> _minigameTimers;
-
         private int _scoreMultiplier;
         private MinigameInteractable[] _interactables;
 
@@ -49,14 +41,6 @@ namespace Cohort.GameRunner.Minigames {
         private MinigameDescription _currenMinigameDescription;
         private Minigame _currentMinigame;
         private MinigameInteractable _currentInteractable;
-
-        private float _refTime = -1;
-        private int _refActor = -1;
-        private bool _inActivity = false;
-
-        private void Start() {
-            _minigameTimers = new List<float>();
-        }
 
         private void ResetMinigames() {
             if (Setting != null) {
@@ -67,8 +51,6 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         public void OnActivityStart(int scoreMultiplier) {
-            _inActivity = true;
-
             _scoreMultiplier = scoreMultiplier;
             _interactables = FindObjectsOfType<MinigameInteractable>().ToList().OrderBy((s) => s.Identifier).ToArray();
 
@@ -83,12 +65,7 @@ namespace Cohort.GameRunner.Minigames {
                 _currentMinigame.FinishMinigame();
             }
 
-            _inActivity = false;
             UILocator.Get<MinigameLogUI>().ClearLog();
-
-            _minigameTimers.Clear();
-            _refTime = -1;
-
             ResetMinigames();
         }
 
@@ -106,7 +83,7 @@ namespace Cohort.GameRunner.Minigames {
             if (TryGetNextMinigame(out MinigameDescription minigameDesc) &&
                 TryGetInteractable(minigameDesc, out MinigameInteractable interactable)) {
 
-                interactable.SetMinigame(minigameDesc.index);
+                interactable.SetMinigame(minigameDesc.index, minigameDesc.networked);
             }
         }
 
@@ -174,6 +151,10 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         public void OnMinigameStart(MinigameDescription minigame, MinigameInteractable interactable) {
+            if (_currentMinigame != null) {
+                _currentMinigame.ExitMinigame();
+            }
+            
             InputManager.Instance.SetMinigameInput();
             _currenMinigameDescription = minigame;
             _currentInteractable = interactable;
@@ -192,8 +173,6 @@ namespace Cohort.GameRunner.Minigames {
             
             _currenMinigameDescription = null;
             _currentInteractable = null;
-            
-            //throw new NotImplementedException("Mwaap");
         }
         
         private void OnMinigameFinished(float scorePercentage) {
@@ -214,7 +193,7 @@ namespace Cohort.GameRunner.Minigames {
 
             //TODO_COHORT: this doesn't work yet when the game is networked, as the interactable is not cleared instantly
             _currentInteractable.Deactivate();
-            _currentInteractable.SetMinigame(-1);
+            _currentInteractable.SetMinigame(-1, false);
 
             _currenMinigameDescription = null;
             _currentInteractable = null;
@@ -224,13 +203,6 @@ namespace Cohort.GameRunner.Minigames {
         public void SetMinigameLog(MinigameDescription minigame, MinigameInteractable interactable) {
             minigame.log = UILocator.Get<MinigameLogUI>()
                 .CreateLogEntry(minigame.actionDescription, interactable.LocationDescription);
-        }
-
-        public void RemoveMinigameLog(MinigameDescription minigame) {
-            if (minigame.log != null) {
-                minigame.log.CheckLogItem(MinigameDescription.State.Failed);
-                minigame.log = null;
-            }
         }
 
         public void InitializeMinigame(Minigame minigame) {
