@@ -206,7 +206,7 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         public void InitializeMinigame(Minigame minigame) {
-            minigame.Initialize(_currenMinigameDescription.data, _scoreMultiplier, OnMinigameFinished, OnExitMinigame);
+            minigame.Initialize(_currenMinigameDescription.data, _currenMinigameDescription.timeLimit, OnMinigameFinished, OnExitMinigame);
             _currentMinigame = minigame;
         }
     }

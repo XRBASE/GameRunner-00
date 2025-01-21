@@ -44,9 +44,9 @@ public class MatchGame : Minigame
     private int _attempts;
     private int _foundMatches;
     
-    public override void Initialize(string gameData, int scoreMultiplier, Action<float> onGameFinished, Action onExit)
+    public override void Initialize(string gameData, float timeLimit, Action<float> onGameFinished, Action onExit)
     {
-        base.Initialize(gameData, scoreMultiplier, onGameFinished, onExit);
+        base.Initialize(gameData, timeLimit, onGameFinished, onExit);
         
         _matchGameData = MatchGameDataSo.matchGameData;
         title.text = _matchGameData.title;

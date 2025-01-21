@@ -754,6 +754,7 @@ MonoBehaviour:
         trees produce which types of nuts?","answers":["Walnuts","Pecans","Pistachios","Macadamia"],"correctAnswerIndex":1}]}'
       locations: 00000000
       networked: 0
+      timeLimit: 120
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -776,6 +777,7 @@ MonoBehaviour:
         na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}]}"
       locations: 01000000
       networked: 0
+      timeLimit: 30
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -793,6 +795,7 @@ MonoBehaviour:
       data: '{"title":"Vind de matches","pairAmount":5,"matches":[{"instanceID":25186},{"instanceID":25002},{"instanceID":24984},{"instanceID":25240},{"instanceID":25024}]}'
       locations: 02000000
       networked: 1
+      timeLimit: 30
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -810,6 +813,7 @@ MonoBehaviour:
       data: 
       locations: 03000000
       networked: 0
+      timeLimit: 30
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []

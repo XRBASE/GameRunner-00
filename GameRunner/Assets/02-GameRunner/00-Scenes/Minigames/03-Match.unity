@@ -563,6 +563,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_MatchGame
       objectReference: {fileID: 0}
+    - target: {fileID: 7665862625839804210, guid: 6e9af821ac3ba4c41b414f29d2937b3d, type: 3}
+      propertyPath: m_Color.b
+      value: 0.44654083
+      objectReference: {fileID: 0}
+    - target: {fileID: 7665862625839804210, guid: 6e9af821ac3ba4c41b414f29d2937b3d, type: 3}
+      propertyPath: m_Color.g
+      value: 0.44654083
+      objectReference: {fileID: 0}
+    - target: {fileID: 7665862625839804210, guid: 6e9af821ac3ba4c41b414f29d2937b3d, type: 3}
+      propertyPath: m_Color.r
+      value: 0.44654083
+      objectReference: {fileID: 0}
     - target: {fileID: 9131157776331956016, guid: 6e9af821ac3ba4c41b414f29d2937b3d, type: 3}
       propertyPath: scoreUI
       value: 

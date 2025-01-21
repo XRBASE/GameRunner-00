@@ -37,8 +37,8 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 		[SerializeField] private QuizAnswer _template;
 		[SerializeField] private TMP_Text _questionField;
 		
-		public override void Initialize(string gameData, int scoreMultiplier, Action<float> onFinished, Action onExit) {
-			base.Initialize(gameData, scoreMultiplier, onFinished, onExit);
+		public override void Initialize(string gameData, float timeLimit, Action<float> onFinished, Action onExit) {
+			base.Initialize(gameData, timeLimit, onFinished, onExit);
 			
 			_data = JsonUtility.FromJson<QuizData>(gameData);
 

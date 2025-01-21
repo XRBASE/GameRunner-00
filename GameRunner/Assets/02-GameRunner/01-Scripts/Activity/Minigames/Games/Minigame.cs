@@ -20,15 +20,26 @@ namespace Cohort.GameRunner.Minigames {
 		protected Action<float> _onFinished;
 		protected Action _onExit;
 
+		[SerializeField] private GameTimer _timer;
+		
+
 		/// <summary>
 		/// Initializes the minigame with given json data.
 		/// </summary>
 		/// <param name="gameData">Json data.</param>
 		/// <param name="scoreMultiplier">Score multiplier, only used for displaying score.</param>
 		/// <param name="onFinished">Range(0,1) decimal percentage of completeness.</param>
-		public virtual void Initialize(string gameData, int scoreMultiplier, Action<float> onFinished, Action onExit) {
+		public virtual void Initialize(string gameData, float timeLimit, Action<float> onFinished, Action onExit) {
 			_onFinished = onFinished;
 			_onExit = onExit;
+
+			if (timeLimit < 0) {
+				_timer.gameObject.SetActive(false);
+			}
+			else {
+				_timer.gameObject.SetActive(true);
+				_timer.Initialize(timeLimit, FinishMinigame);
+			}
 		}
 
 		/// <summary>
