@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dae5f2e17e392474f81eb21819dda258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  causeFilter: 5
+  causeFilter: 7
   _minScore: -1
   _maxScore: -1
   onCheckPassed:
