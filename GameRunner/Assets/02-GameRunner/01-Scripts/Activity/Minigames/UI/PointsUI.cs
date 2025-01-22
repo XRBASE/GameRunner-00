@@ -13,9 +13,9 @@ namespace Cohort.GameRunner.Minigames {
         private readonly Dictionary<Minigame.FinishCause, string> BODIES =
             new Dictionary<Minigame.FinishCause, string> {
                 {Minigame.FinishCause.Completed, "You finished [MINIGAME] and earned [POINTS] points!"},
-                {Minigame.FinishCause.Failed, "You failed [MINIGAME] and didn't earn any points."},
-                {Minigame.FinishCause.Timeout, "You ran out of time... but you still earned [POINTS] points!"},
-                {Minigame.FinishCause.ActivityStop, "The activity was stopped! You earned [POINTS] points."}
+                {Minigame.FinishCause.Failed, "You failed [MINIGAME]... \n[POINTS] Points earned."},
+                {Minigame.FinishCause.Timeout, "You ran out of time... \n[POINTS] Points earned."},
+                {Minigame.FinishCause.ActivityStop, "The activity was stopped. \n[POINTS] Points earned!"}
             };
         private readonly Dictionary<Minigame.FinishCause, string> TITLES =
             new Dictionary<Minigame.FinishCause, string> {
