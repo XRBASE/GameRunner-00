@@ -22,7 +22,9 @@ namespace Cohort.GameRunner.Minigames.Tester {
         }
 
         public void Fail() {
-            _onFinished?.Invoke(0f);
+            Score = 0f;
+            
+            FinishMinigame();
         }
     }
 }

@@ -16,6 +16,8 @@ namespace Cohort.GameRunner.Minigames {
 		public string data;
 		public int[] locations;
 		public bool networked;
+		[Tooltip("If timelimit is negative, the timer is disabled")]
+		public float timeLimit = -1;
 
 		[Tooltip("Events is called when the learning is finished while the user is in the activity.")]
 		public UnityEvent onFinCinematic;
