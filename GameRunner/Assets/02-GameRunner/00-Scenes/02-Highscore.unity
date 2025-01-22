@@ -813,7 +813,7 @@ MonoBehaviour:
       data: 
       locations: 03000000
       networked: 0
-      timeLimit: 30
+      timeLimit: -1
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []

@@ -31,7 +31,7 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         public Action<int> onAllMinigamesFinished;
-        public Action<float> onMinigameFinished;
+        public Action<Minigame.FinishCause, float> onMinigameFinished;
         public Action onScoreReset;
 
         private int _scoreMultiplier;
@@ -62,7 +62,7 @@ namespace Cohort.GameRunner.Minigames {
 
         public void OnActivityStop() {
             if (_currentMinigame != null) {
-                _currentMinigame.FinishMinigame();
+                _currentMinigame.FinishMinigame(Minigame.FinishCause.ActivityStop);
             }
 
             UILocator.Get<MinigameLogUI>().ClearLog();
@@ -175,7 +175,7 @@ namespace Cohort.GameRunner.Minigames {
             _currentInteractable = null;
         }
         
-        private void OnMinigameFinished(float scorePercentage) {
+        private void OnMinigameFinished(Minigame.FinishCause cause, float scorePercentage) {
             _currentMinigame = null;
             InputManager.Instance.SetGameInput();
             MinigameDescription.State s = (scorePercentage > 0.001f)
@@ -184,14 +184,13 @@ namespace Cohort.GameRunner.Minigames {
 
             _currenMinigameDescription.SetState(s, false);
             
-            onMinigameFinished?.Invoke(scorePercentage);
+            onMinigameFinished?.Invoke(cause, scorePercentage);
 
             _currenMinigameDescription.log.CheckLogItem(s);
             _currenMinigameDescription.log = null;
 
             SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
-
-            //TODO_COHORT: this doesn't work yet when the game is networked, as the interactable is not cleared instantly
+            
             _currentInteractable.Deactivate();
             _currentInteractable.SetMinigame(-1, false);
 

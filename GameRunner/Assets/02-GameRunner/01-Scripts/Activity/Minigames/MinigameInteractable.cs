@@ -124,7 +124,8 @@ namespace Cohort.GameRunner.Minigames {
             if (HasLearning) {
                 _minigame = MinigameManager.Instance[index];
 
-                _indicator.SetActive(!InRange && HasLearning);
+                Debug.LogError($"Set indicator {!InRange} for {index}");
+                _indicator.SetActive(!InRange);
                 MinigameManager.Instance.SetMinigameLog(_minigame, this);
                 return;
             }

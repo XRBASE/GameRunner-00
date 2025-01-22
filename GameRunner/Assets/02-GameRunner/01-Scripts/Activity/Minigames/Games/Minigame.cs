@@ -17,7 +17,7 @@ namespace Cohort.GameRunner.Minigames {
 			set;
 		}
 		
-		protected Action<float> _onFinished;
+		protected Action<FinishCause, float> _onFinished;
 		protected Action _onExit;
 
 		[SerializeField] private GameTimer _timer;
@@ -29,7 +29,7 @@ namespace Cohort.GameRunner.Minigames {
 		/// <param name="gameData">Json data.</param>
 		/// <param name="scoreMultiplier">Score multiplier, only used for displaying score.</param>
 		/// <param name="onFinished">Range(0,1) decimal percentage of completeness.</param>
-		public virtual void Initialize(string gameData, float timeLimit, Action<float> onFinished, Action onExit) {
+		public virtual void Initialize(string gameData, float timeLimit, Action<FinishCause, float> onFinished, Action onExit) {
 			_onFinished = onFinished;
 			_onExit = onExit;
 
@@ -38,15 +38,25 @@ namespace Cohort.GameRunner.Minigames {
 			}
 			else {
 				_timer.gameObject.SetActive(true);
-				_timer.Initialize(timeLimit, FinishMinigame);
+				_timer.Initialize(timeLimit, TimeLimitReached);
 			}
+		}
+
+		protected void TimeLimitReached() {
+			FinishMinigame(FinishCause.Timeout);
+		}
+
+		public virtual void FinishMinigame() {
+			FinishCause cause = Score <= MinigameManager.FAILURE_THRESHOLD ? FinishCause.Failed : FinishCause.Completed;
+			
+			FinishMinigame(cause);
 		}
 
 		/// <summary>
 		/// Finishes the minigame and assigns the currently earned score to the player.
 		/// </summary>
-		public virtual void FinishMinigame() {
-			_onFinished?.Invoke(Score);
+		public void FinishMinigame(FinishCause cause) {
+			_onFinished?.Invoke(cause, Score);
 		}
 
 		/// <summary>
@@ -64,6 +74,15 @@ namespace Cohort.GameRunner.Minigames {
 			yield return new WaitForSeconds(duration);
 			
 			onComplete?.Invoke();
+		}
+		
+		[Flags]
+		public enum FinishCause {
+			None = 0,
+			Completed = 1<<0,
+			Failed = 1<<1,
+			Timeout = 1<<2,
+			ActivityStop = 1<<3
 		}
 	}
 }

@@ -62,7 +62,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private WordGameMode _wordGameMode;
 
         // Method to initialize the game with data, score multiplier, and callback on game finish
-        public override void Initialize(string gameData, float timeLimit, Action<float> onFinished, Action onExit) {
+        public override void Initialize(string gameData, float timeLimit, Action<FinishCause, float> onFinished, Action onExit) {
             base.Initialize(gameData, timeLimit, onFinished, onExit);
             
             _wordGameData = JsonUtility.FromJson<WordGameData>(gameData);
