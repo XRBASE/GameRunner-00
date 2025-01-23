@@ -1,3 +1,7 @@
+# v0.2.2
+info point bugfix (exit button added). Stop call of video player now causes a black screen as to provide more feedback.
+mute button of video player now also sets the volume slider.
+
 # v0.2.1
 Added minigame timer that finished the minigame if a timelimit is reached. Adds different texts to
 the points UI that are displayed based on what caused the minigame to finish. Removed superclass MiniGame,
