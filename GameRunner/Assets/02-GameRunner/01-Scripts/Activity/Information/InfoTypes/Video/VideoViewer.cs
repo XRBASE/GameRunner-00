@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Cohort.GameRunner.InformationPoints;
 using Cohort.Networking.Spaces;
 using UnityEngine;
@@ -37,6 +38,7 @@ public class VideoViewer : InfoViewer {
     private bool _initialized;
     private float _vol = 1;
     private bool _audioEnabled;
+    private bool _stopped = true;
     
     protected override void Awake() {
         _player.isLooping = false;
@@ -82,20 +84,31 @@ public class VideoViewer : InfoViewer {
         
         //assign texture to renderer
         _viewport.texture = _tex;
-        _viewport.color = Color.white;
         
         _initialized = true;
         Interactable = true;
 
         if (_playPause.isOn) {
             _player.Play();
+            
+            _viewport.color = Color.white;
+            _stopped = false;
+        }
+        else {
+            _viewport.color = Color.black;
+            _stopped = true;
         }
     }
 
     private void PlayPause(bool isPlaying) {
         if (!_initialized)
             return;
-
+        
+        if (_stopped) {
+            _viewport.color = Color.white;
+            _stopped = false;
+        }
+        
         if (isPlaying) {
             _player.Play();
         }
@@ -105,16 +118,23 @@ public class VideoViewer : InfoViewer {
     }
 
     private void Stop() {
-        _player.time = 0f;
-
-        //pause player
         _playPause.isOn = false;
+        _stopped = true;
         
-        _player.StepForward();
+        _player.time = 0f;
+        _viewport.color = Color.black;
     }
 
     private void SetAudioEnabled(bool isEnabled) {
         _audioEnabled = isEnabled;
+        
+        if (!isEnabled) {
+            _volume.SetValueWithoutNotify(0f);
+        }
+        else {
+            _volume.SetValueWithoutNotify(_vol);
+        }
+        
         _player.SetDirectAudioVolume(0, (_audioEnabled)?_vol * VOLUME_SCALAR : 0f);
     }
 
