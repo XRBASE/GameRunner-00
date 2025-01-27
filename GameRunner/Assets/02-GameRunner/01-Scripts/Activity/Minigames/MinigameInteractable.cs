@@ -91,7 +91,9 @@ namespace Cohort.GameRunner.Minigames {
                 changes = new Hashtable();
 
             changes.Add(GetActorKey(), null);
-
+            
+            //Should we even track actor on deactivate?
+            
             //if there is an actor this item can only be deactivated by that actor.
             if (_actor != -1) {
                 if (expected == null)

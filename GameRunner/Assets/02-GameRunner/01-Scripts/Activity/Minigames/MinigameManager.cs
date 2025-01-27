@@ -5,9 +5,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using Cohort.GameRunner.Input;
+using Cohort.Networking.PhotonKeys;
 using Cohort.Patterns;
 using Cohort.UI.Generic;
-
+using ExitGames.Client.Photon;
+using Player = Cohort.GameRunner.Players.Player;
 using Random = UnityEngine.Random;
 
 namespace Cohort.GameRunner.Minigames {
@@ -42,6 +44,30 @@ namespace Cohort.GameRunner.Minigames {
         private Minigame _currentMinigame;
         private MinigameInteractable _currentInteractable;
 
+        private void Start() {
+            //Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
+            //Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
+        }
+
+        private void OnMinigameStateChange() {
+            Hashtable changes = new Hashtable();
+            changes.Add(GetMinigamePlayerKey(), Setting.GetMinigameStateString());
+
+            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
+        }
+
+        private void OnJoinedRoom() {
+            OnRoomPropertiesChanged(Network.Local.Client.CurrentRoom.CustomProperties);
+        }
+        
+        private void OnRoomPropertiesChanged(Hashtable changes) {
+            string key = GetMinigamePlayerKey();
+            
+            if (changes.ContainsKey(key) && changes[key] != null) {
+                Setting.SetMinigameStates((string)changes[key]);
+            }
+        }
+
         private void ResetMinigames() {
             if (Setting != null) {
                 for (int i = 0; i < Setting.minigames.Length; i++) {
@@ -54,10 +80,15 @@ namespace Cohort.GameRunner.Minigames {
             _scoreMultiplier = scoreMultiplier;
             _interactables = FindObjectsOfType<MinigameInteractable>().ToList().OrderBy((s) => s.Identifier).ToArray();
 
+            if (Network.Local.Client.InRoom) {
+                OnJoinedRoom();
+            }
+            
             if (!AnyMinigameOpen()) {
                 ActivateMinigame();
             }
-            onScoreReset?.Invoke();
+            
+            //onScoreReset?.Invoke();
         }
 
         public void OnActivityStop() {
@@ -160,6 +191,8 @@ namespace Cohort.GameRunner.Minigames {
             _currentInteractable = interactable;
 
             _currenMinigameDescription.SetState(MinigameDescription.State.Active, false);
+            OnMinigameStateChange();
+            
             SceneManager.LoadScene(_currenMinigameDescription.sceneName, LoadSceneMode.Additive);
         }
 
@@ -167,6 +200,8 @@ namespace Cohort.GameRunner.Minigames {
             InputManager.Instance.SetGameInput();
             
             _currenMinigameDescription.SetState(MinigameDescription.State.Open, false);
+            OnMinigameStateChange();
+            
             SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
             
             _currentInteractable.Deactivate();
@@ -183,6 +218,7 @@ namespace Cohort.GameRunner.Minigames {
                 : MinigameDescription.State.Failed;
 
             _currenMinigameDescription.SetState(s, false);
+            OnMinigameStateChange();
             
             onMinigameFinished?.Invoke(cause, scorePercentage);
 
@@ -207,6 +243,10 @@ namespace Cohort.GameRunner.Minigames {
         public void InitializeMinigame(Minigame minigame) {
             minigame.Initialize(_currenMinigameDescription.data, _currenMinigameDescription.timeLimit, OnMinigameFinished, OnExitMinigame);
             _currentMinigame = minigame;
+        }
+
+        private string GetMinigamePlayerKey() {
+            return Keys.Concatenate(Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.State), Player.Local.UUID);
         }
     }
 }

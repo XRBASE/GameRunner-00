@@ -45,7 +45,7 @@ namespace Cohort.GameRunner.Minigames {
 					onFinCinematic?.Invoke();
 				}
 			}
-
+			
 			_state = newState;
 		}
 

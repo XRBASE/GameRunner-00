@@ -1,6 +1,9 @@
 using UnityEngine;
-
 using Cohort.GameRunner.Minigames;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class SceneConfiguration : MonoBehaviour {
     public MinigameCycleDescription Minigame {
@@ -28,6 +31,23 @@ public class SceneConfiguration : MonoBehaviour {
         
         minigame?.OnValidate();
     }
+    
+    [CustomEditor(typeof(SceneConfiguration))]
+    private class SceneConfigurationEditor : Editor {
+        private SceneConfiguration _instance;
 
+        private void OnEnable() {
+            _instance = (SceneConfiguration)target;
+        }
+
+        public override void OnInspectorGUI() {
+            DrawDefaultInspector();
+            if (GUILayout.Button("Debug test!")) {
+                Debug.LogError("Miauw");
+
+                _instance.minigame.SetMinigameStates(_instance.minigame.GetMinigameStateString());
+            }
+        }
+    }
 #endif
 }
