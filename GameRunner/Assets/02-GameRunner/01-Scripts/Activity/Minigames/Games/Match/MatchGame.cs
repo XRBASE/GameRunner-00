@@ -23,7 +23,9 @@ public class MatchGame : Minigame
     
     public MatchGameDataSO MatchGameDataSo;
     public MatchElement matchElementPrefab;
-    public Transform answerElementParent, questionElementParent;
+    public MatchElement dragElement;
+    public FollowCursor followCursor;
+    public Transform answerElementParent, questionElementParent, dragTransform;
     public AudioSource pitchedAudio;
     public AudioClip gameCompleteAudioClip;
     public AudioClip correctSoundEffect;
@@ -43,14 +45,16 @@ public class MatchGame : Minigame
     private MatchGameData _matchGameData;
     private int _attempts;
     private int _foundMatches;
-    
-    public override void Initialize(string gameData, float timeLimit, Action<FinishCause, float> onGameFinished, Action onExit)
+
+    public override void Initialize(string gameData, float timeLimit, Action<FinishCause, float> onGameFinished,
+        Action onExit)
     {
         base.Initialize(gameData, timeLimit, onGameFinished, onExit);
-        
         _matchGameData = MatchGameDataSo.matchGameData;
+        followCursor.Initialise((RectTransform)transform);
         title.text = _matchGameData.title;
         BuildGame();
+        
     }
 
     private void BuildGame()
@@ -63,28 +67,15 @@ public class MatchGame : Minigame
         {
             var match = _matches[UnityEngine.Random.Range(0, _matches.Count)];
             _matches.Remove(match);
+            
             var answerElement = Instantiate(matchElementPrefab, answerElementParent);
-            if (match.originMatchType == MatchPairData.MatchType.Text)
-            {
-                answerElement.SetPreviewElement(match.originText);
-            }
-            else if (match.originMatchType == MatchPairData.MatchType.Image)
-            {
-                answerElement.SetPreviewElement(match.originSprite);
-            }
-
+            answerElement.Initialise(match.originMatchType, match.originSprite, match.originText);
             answerElement.onMatchSelected = SetSelectedAnswer;
+            
             var questionElement = Instantiate(matchElementPrefab, questionElementParent);
-            if (match.targetMatchType == MatchPairData.MatchType.Text)
-            {
-                questionElement.SetPreviewElement(match.targetText);
-            }
-            else if (match.targetMatchType == MatchPairData.MatchType.Image)
-            {
-                questionElement.SetPreviewElement(match.targetSprite);
-            }
-
+            questionElement.Initialise(match.targetMatchType, match.targetSprite, match.targetText);
             questionElement.onMatchSelected = SetSelectedQuestion;
+            
             var matchPair = new MatchPair(i, answerElement, questionElement);
             _matchPairs.Add(matchPair);
         }
@@ -168,11 +159,31 @@ public class MatchGame : Minigame
     {
         feedbackAudio.PlayOneShot(selectSoundEffect);
         //Deselect old answer
-        if (matchElement != null && matchElement != newMatchElement)
+        if (matchElement != null)
+        {
             matchElement.Deselect();
+            if (matchElement == newMatchElement)
+            {
+                if(dragElement!= null)
+                    Destroy(dragElement.gameObject);
+                matchElement = null;
+                return;
+            }
+ 
+        }
         matchElement = newMatchElement;
+        if(dragElement!= null)
+            Destroy(dragElement.gameObject);
+        if(_questionElement == null || _answerElement == null)
+            CopyToDragElement(newMatchElement);
         matchElement.Select();
         Submit();
+    }
+
+    private void CopyToDragElement(MatchElement element)
+    {
+        dragElement = Instantiate(element,dragTransform);
+        ((RectTransform) dragElement.transform).sizeDelta = new Vector2(120, 120);
     }
 
     public void Submit()
@@ -200,7 +211,8 @@ public class MatchGame : Minigame
     private void Deselect()
     {
         InputManager.Instance.SetActionMapActive(InputManager.ActionMaps.UI, true);
-        
+        if(dragElement!= null)
+            Destroy(dragElement.gameObject);
         _questionElement.Deselect();
         _answerElement.Deselect();
         _questionElement = null;

@@ -14,7 +14,7 @@ public class MatchElement : MonoBehaviour
         Wrong
     }
 
-    private MatchPairData.MatchType matchType
+    public MatchPairData.MatchType matchType
     {
         get { return _matchType;}
         set
@@ -40,6 +40,7 @@ public class MatchElement : MonoBehaviour
     public int id;
     public TextMeshProUGUI title;
     public TextMeshProUGUI matchText;
+    public LayoutElement layoutElement;
     public Image matchImage;
     public Button button;
     public Image highLight;
@@ -60,17 +61,13 @@ public class MatchElement : MonoBehaviour
         button.onClick.AddListener(SelectMatch);
     }
 
-    public void SetPreviewElement(Sprite sprite)
+    public void Initialise(MatchPairData.MatchType pmatchType,Sprite sprite, string text)
     {
-        matchType = MatchPairData.MatchType.Image;
+        matchType = pmatchType;
         matchImage.sprite = sprite;
-    }
-
-    public void SetPreviewElement(string text)
-    {
-        matchType = MatchPairData.MatchType.Text;
         matchText.text = text;
     }
+    
 
     private void IncorrectFeedback()
     {
