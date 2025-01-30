@@ -38,9 +38,8 @@ public class MatchElement : MonoBehaviour
     private MatchState _matchState;
 
     public int id;
-    public TextMeshProUGUI title;
+    public TextMeshProUGUI label;
     public TextMeshProUGUI matchText;
-    public LayoutElement layoutElement;
     public Image matchImage;
     public Button button;
     public Image highLight;
@@ -61,11 +60,12 @@ public class MatchElement : MonoBehaviour
         button.onClick.AddListener(SelectMatch);
     }
 
-    public void Initialise(MatchPairData.MatchType pmatchType,Sprite sprite, string text)
+    public void Initialise(MatchPairData.MatchType pmatchType,Sprite sprite, string text, string labelText)
     {
         matchType = pmatchType;
         matchImage.sprite = sprite;
         matchText.text = text;
+        label.text = labelText;
     }
     
 

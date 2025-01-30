@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: MatchPairData3
   m_EditorClassIdentifier: 
   UID: db29024c-a5cb-4511-922b-dea446b02a4e
+  originLabelText: Cat in box
   originMatchType: 0
   originSprite: {fileID: 21300000, guid: 4d13d1d4f2539c24796291951e190895, type: 3}
   originText: Hond van Lotte
+  targetLabelText: 
   targetMatchType: 1
   targetSprite: {fileID: 0}
   targetText: Luna

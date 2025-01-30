@@ -77,11 +77,11 @@ public class MatchGame : Minigame
             _matches.Remove(match);
             
             var answerElement = Instantiate(matchElementPrefab, answerElementParent);
-            answerElement.Initialise(match.originMatchType, match.originSprite, match.originText);
+            answerElement.Initialise(match.originMatchType, match.originSprite, match.originText, match.originLabelText);
             answerElement.onMatchSelected = SetSelectedAnswer;
             
             var questionElement = Instantiate(matchElementPrefab, questionElementParent);
-            questionElement.Initialise(match.targetMatchType, match.targetSprite, match.targetText);
+            questionElement.Initialise(match.targetMatchType, match.targetSprite, match.targetText, match.targetLabelText);
             questionElement.onMatchSelected = SetSelectedQuestion;
             
             var matchPair = new MatchPair(i, answerElement, questionElement);
@@ -269,7 +269,5 @@ public class MatchPair
         this.questionElement = questionElement;
         answerElement.id = id;
         questionElement.id = id;
-        answerElement.title.text = string.Empty;
-        questionElement.title.text = string.Empty;
     }
 }

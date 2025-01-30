@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: MatchPairData4
   m_EditorClassIdentifier: 
   UID: dd6cabae-ae5a-4c90-99a5-d2fcc7a5d794
+  originLabelText: Cat on bed
   originMatchType: 0
   originSprite: {fileID: 21300000, guid: 2c4688ae0ffcd6143985b9032df4f0fe, type: 3}
   originText: Kat van Lotte
+  targetLabelText: 
   targetMatchType: 1
   targetSprite: {fileID: 0}
   targetText: Kiki

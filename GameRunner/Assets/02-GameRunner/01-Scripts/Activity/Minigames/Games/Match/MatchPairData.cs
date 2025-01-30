@@ -12,10 +12,12 @@ public class MatchPairData : ScriptableObject
 
     public string UID;
 
+    public string originLabelText;
     public MatchType originMatchType;
     public Sprite originSprite;
     public string originText;
 
+    public string targetLabelText;
     public MatchType targetMatchType;
     public Sprite targetSprite;
     public string targetText;
@@ -52,7 +54,7 @@ public class MatchPairDataEditor : Editor
 
         GUILayout.Label("UID:", EditorStyles.boldLabel);
         EditorGUILayout.LabelField(matchPairData.UID, EditorStyles.wordWrappedLabel);
-        
+        matchPairData.originLabelText = EditorGUILayout.TextField("OriginLabelText", matchPairData.originLabelText);
         matchPairData.originMatchType =
             (MatchPairData.MatchType) EditorGUILayout.EnumPopup("OriginMatchType", matchPairData.originMatchType);
 
@@ -77,7 +79,7 @@ public class MatchPairDataEditor : Editor
         }
 
         GUILayout.Space(20);
-
+        matchPairData.targetLabelText = EditorGUILayout.TextField("TargetLabelText", matchPairData.targetLabelText);
         matchPairData.targetMatchType =
             (MatchPairData.MatchType) EditorGUILayout.EnumPopup("TargetMatchType", matchPairData.targetMatchType);
 
