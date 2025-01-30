@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55cf2618c0f1a024aa832a909660d915, type: 3}
+  m_Name: MatchGameTestConfig 1
+  m_EditorClassIdentifier: 
+  matchGameData:
+    title: Vind de matches
+    matchPairs:
+    - {fileID: 11400000, guid: 5aff9086751afad459c6452df8719d6d, type: 2}
+    - {fileID: 11400000, guid: b4641ad7d36888b4eba2aae0d3a6e5e4, type: 2}
+    chosenIds:
+    - 8ef2f5ac-e2a3-48ca-8cc7-b4f426896a02
+    - 16286320-c684-444b-99c4-dd5e3e3935e1

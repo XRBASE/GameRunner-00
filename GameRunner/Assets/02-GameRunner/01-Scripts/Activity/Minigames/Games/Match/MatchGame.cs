@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Cohort.GameRunner.Input;
 using Cohort.GameRunner.Minigames;
 using TMPro;
@@ -21,9 +22,10 @@ public class MatchGame : Minigame
     }
     public override float Score { get; set; }
     
-    public MatchGameDataSO MatchGameDataSo;
+
+    public MatchGameLibrarySO matchGameLibrarySo;
     public MatchElement matchElementPrefab;
-    public MatchElement dragElement;
+
     public FollowCursor followCursor;
     public Transform answerElementParent, questionElementParent, dragTransform;
     public AudioSource pitchedAudio;
@@ -36,13 +38,15 @@ public class MatchGame : Minigame
     public TMP_Text title;
     public AudioSource feedbackAudio;
 
+    private MatchGameData _matchGameData;
+    private MatchElement _dragElement;
     private EventSystem _eventSystem;
     private List<MatchPair> _matchPairs;
     private static Random _rng = new Random();
     private List<MatchPairData> _matches;
     private MatchElement _questionElement;
     private MatchElement _answerElement;
-    private MatchGameData _matchGameData;
+    private int _pairAmount;
     private int _attempts;
     private int _foundMatches;
 
@@ -50,7 +54,8 @@ public class MatchGame : Minigame
         Action onExit)
     {
         base.Initialize(gameData, timeLimit, onGameFinished, onExit);
-        _matchGameData = MatchGameDataSo.matchGameData;
+        _matchGameData = JsonUtility.FromJson<MatchGameData>(gameData);
+        _pairAmount = _matchGameData.chosenIds.Count;
         followCursor.Initialise((RectTransform)transform);
         title.text = _matchGameData.title;
         BuildGame();
@@ -61,9 +66,12 @@ public class MatchGame : Minigame
     {
         _matchPairs = new List<MatchPair>();
         _matches = new List<MatchPairData>();
-        _matches.AddRange(_matchGameData.matches);
-        
-        for (int i = 0; i < _matchGameData.pairAmount && _matches.Count > 0; i++)
+        foreach (var id in _matchGameData.chosenIds)
+        {
+            _matches.Add(matchGameLibrarySo.MatchGameLibrary.First(item => item.UID == id));
+        }
+
+        for (int i = 0; i < _pairAmount && _matches.Count > 0; i++)
         {
             var match = _matches[UnityEngine.Random.Range(0, _matches.Count)];
             _matches.Remove(match);
@@ -104,7 +112,7 @@ public class MatchGame : Minigame
 
     private void GameFinishedFeedback()
     {
-        Score = (float) _matchGameData.pairAmount / _attempts;
+        Score = (float) _pairAmount / _attempts;
         
         feedbackAudio.PlayOneShot(gameCompleteAudioClip);
         DoGameFinishedFeedback();
@@ -114,7 +122,7 @@ public class MatchGame : Minigame
     private void ShuffleMatches()
     {
         List<int> places = new List<int>();
-        for (int i = 0; i < _matchGameData.pairAmount; i++)
+        for (int i = 0; i < _pairAmount; i++)
         {
             places.Add(i);
         }
@@ -164,16 +172,16 @@ public class MatchGame : Minigame
             matchElement.Deselect();
             if (matchElement == newMatchElement)
             {
-                if(dragElement!= null)
-                    Destroy(dragElement.gameObject);
+                if(_dragElement!= null)
+                    Destroy(_dragElement.gameObject);
                 matchElement = null;
                 return;
             }
  
         }
         matchElement = newMatchElement;
-        if(dragElement!= null)
-            Destroy(dragElement.gameObject);
+        if(_dragElement!= null)
+            Destroy(_dragElement.gameObject);
         if(_questionElement == null || _answerElement == null)
             CopyToDragElement(newMatchElement);
         matchElement.Select();
@@ -182,8 +190,8 @@ public class MatchGame : Minigame
 
     private void CopyToDragElement(MatchElement element)
     {
-        dragElement = Instantiate(element,dragTransform);
-        ((RectTransform) dragElement.transform).sizeDelta = new Vector2(120, 120);
+        _dragElement = Instantiate(element,dragTransform);
+        ((RectTransform) _dragElement.transform).sizeDelta = new Vector2(120, 120);
     }
 
     public void Submit()
@@ -195,7 +203,7 @@ public class MatchGame : Minigame
         {
             _foundMatches++;
             CorrectFeedback();
-            if (_foundMatches == _matchGameData.pairAmount)
+            if (_foundMatches == _pairAmount)
             {
                 GameFinishedFeedback();
             }
@@ -211,8 +219,8 @@ public class MatchGame : Minigame
     private void Deselect()
     {
         InputManager.Instance.SetActionMapActive(InputManager.ActionMaps.UI, true);
-        if(dragElement!= null)
-            Destroy(dragElement.gameObject);
+        if(_dragElement!= null)
+            Destroy(_dragElement.gameObject);
         _questionElement.Deselect();
         _answerElement.Deselect();
         _questionElement = null;

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c752e5a851313c4418801a5261b3a312, type: 3}
   m_Name: MatchPairData
   m_EditorClassIdentifier: 
+  UID: 8ef2f5ac-e2a3-48ca-8cc7-b4f426896a02
   originMatchType: 0
   originSprite: {fileID: 21300000, guid: 65bc3f9495c1f44489fbc3885d6437b0, type: 3}
   originText: Rat van Glenn

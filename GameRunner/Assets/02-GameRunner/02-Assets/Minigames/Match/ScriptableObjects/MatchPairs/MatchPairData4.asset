@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c752e5a851313c4418801a5261b3a312, type: 3}
   m_Name: MatchPairData4
   m_EditorClassIdentifier: 
+  UID: dd6cabae-ae5a-4c90-99a5-d2fcc7a5d794
   originMatchType: 0
   originSprite: {fileID: 21300000, guid: 2c4688ae0ffcd6143985b9032df4f0fe, type: 3}
   originText: Kat van Lotte

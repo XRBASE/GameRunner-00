@@ -610,6 +610,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9131157776331956016, guid: 6e9af821ac3ba4c41b414f29d2937b3d, type: 3}
+      propertyPath: pairLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 5b35e1d7397201d40a033e61e0057fa0, type: 2}
+    - target: {fileID: 9131157776331956016, guid: 6e9af821ac3ba4c41b414f29d2937b3d, type: 3}
       propertyPath: followCursor
       value: 
       objectReference: {fileID: 2022920628}
@@ -621,6 +625,14 @@ PrefabInstance:
       propertyPath: dragElementParent
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 9131157776331956016, guid: 6e9af821ac3ba4c41b414f29d2937b3d, type: 3}
+      propertyPath: MatchGameLibrarySo
+      value: 
+      objectReference: {fileID: 11400000, guid: 85e2204519a7df540b5ffe331da6d441, type: 2}
+    - target: {fileID: 9131157776331956016, guid: 6e9af821ac3ba4c41b414f29d2937b3d, type: 3}
+      propertyPath: matchGameLibrarySo
+      value: 
+      objectReference: {fileID: 11400000, guid: 85e2204519a7df540b5ffe331da6d441, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
