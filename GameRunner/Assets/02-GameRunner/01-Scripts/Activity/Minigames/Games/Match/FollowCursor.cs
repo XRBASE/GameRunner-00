@@ -5,22 +5,26 @@ using UnityEngine;
 public class FollowCursor : MonoBehaviour
 {
     private RectTransform _rectTransform;
-    private RectTransform _offsetTransform;
-    private Vector3 _position;
-    private bool _initialised;
-
-    public void Initialise(RectTransform offsetTransform)
+    private Vector2 _position;
+    public Canvas canvas;
+    public Camera camera;
+    private void Awake()
     {
         _rectTransform = GetComponent<RectTransform>();
-        _offsetTransform = offsetTransform;
-        _initialised = true;
+        camera = Camera.main;
     }
 
     private void Update()
     {
-        if (!_initialised)
-            return;
-        _position.Set(InputManager.Instance.LearningCursor.ScreenPosition.x + _offsetTransform.position.x,InputManager.Instance.LearningCursor.ScreenPosition.y + _offsetTransform.position.y,0f);
-        _rectTransform.anchoredPosition = _position;
+        _position.Set(InputManager.Instance.LearningCursor.ScreenPosition.x,InputManager.Instance.LearningCursor.ScreenPosition.y);
+
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvas.transform as RectTransform, 
+            _position, 
+            camera, 
+            out localPoint);
+
+        _rectTransform.anchoredPosition = localPoint;
     }
 }

@@ -56,7 +56,6 @@ public class MatchGame : Minigame
         base.Initialize(gameData, timeLimit, onGameFinished, onExit);
         _matchGameData = JsonUtility.FromJson<MatchGameData>(gameData);
         _pairAmount = _matchGameData.chosenIds.Count;
-        followCursor.Initialise((RectTransform)transform);
         title.text = _matchGameData.title;
         BuildGame();
         
