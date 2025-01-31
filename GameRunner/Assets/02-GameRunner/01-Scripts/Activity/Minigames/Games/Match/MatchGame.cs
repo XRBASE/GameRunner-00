@@ -189,8 +189,9 @@ public class MatchGame : Minigame
 
     private void CopyToDragElement(MatchElement element)
     {
-        _dragElement = Instantiate(element,dragTransform);
+        _dragElement = Instantiate(element, dragTransform, false);
         ((RectTransform) _dragElement.transform).sizeDelta = new Vector2(120, 120);
+        ((RectTransform) _dragElement.transform).anchoredPosition = Vector2.zero;
     }
 
     public void Submit()
