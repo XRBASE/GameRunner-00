@@ -11,22 +11,27 @@ using Random = System.Random;
 
 public class MatchGame : Minigame
 {
-    protected override float CorrectVisualDuration {
+    protected override float CorrectVisualDuration
+    {
         get { return 1f; }
     }
-    protected override float FaultiveVisualDuration {
+
+    protected override float FaultiveVisualDuration
+    {
         get { return 0.5f; }
     }
-    protected override float FinishedVisualDuration {
+
+    protected override float FinishedVisualDuration
+    {
         get { return 2f; }
     }
+
     public override float Score { get; set; }
-    
+
 
     public MatchGameLibrarySO matchGameLibrarySo;
     public MatchElement matchElementPrefab;
 
-    public FollowCursor followCursor;
     public Transform answerElementParent, questionElementParent, dragTransform;
     public AudioSource pitchedAudio;
     public AudioClip gameCompleteAudioClip;
@@ -41,14 +46,15 @@ public class MatchGame : Minigame
     private MatchGameData _matchGameData;
     private MatchElement _dragElement;
     private EventSystem _eventSystem;
-    private List<MatchPair> _matchPairs;
     private static Random _rng = new Random();
     private List<MatchPairData> _matches;
-    private MatchElement _questionElement;
-    private MatchElement _answerElement;
+    private List<MatchElement> _matchElements;
+    private MatchElement _selectedMatchElement;
+    private MatchElement _targetMatchElement;
     private int _pairAmount;
     private int _attempts;
     private int _foundMatches;
+    private bool _inClick;
 
     public override void Initialize(string gameData, float timeLimit, Action<FinishCause, float> onGameFinished,
         Action onExit)
@@ -58,13 +64,12 @@ public class MatchGame : Minigame
         _pairAmount = _matchGameData.chosenIds.Count;
         title.text = _matchGameData.title;
         BuildGame();
-        
     }
 
     private void BuildGame()
     {
-        _matchPairs = new List<MatchPair>();
         _matches = new List<MatchPairData>();
+        _matchElements = new List<MatchElement>();
         foreach (var id in _matchGameData.chosenIds)
         {
             _matches.Add(matchGameLibrarySo.MatchGameLibrary.First(item => item.UID == id));
@@ -74,45 +79,58 @@ public class MatchGame : Minigame
         {
             var match = _matches[UnityEngine.Random.Range(0, _matches.Count)];
             _matches.Remove(match);
-            
-            var answerElement = Instantiate(matchElementPrefab, answerElementParent);
-            answerElement.Initialise(match.originMatchType, match.originSprite, match.originText, match.originLabelText);
-            answerElement.onMatchSelected = SetSelectedAnswer;
-            
-            var questionElement = Instantiate(matchElementPrefab, questionElementParent);
-            questionElement.Initialise(match.targetMatchType, match.targetSprite, match.targetText, match.targetLabelText);
-            questionElement.onMatchSelected = SetSelectedQuestion;
-            
-            var matchPair = new MatchPair(i, answerElement, questionElement);
-            _matchPairs.Add(matchPair);
+            for (int j = 0; j < 2; j++)
+            {
+                MatchElement matchElement = null;
+                if (j == 0)
+                {
+                    matchElement = Instantiate(matchElementPrefab, questionElementParent);
+                    matchElement.Initialise(i, match.originMatchType, MatchElement.Category.Question,
+                        match.originSprite, match.originText,
+                        match.originLabelText);
+                }
+                else
+                {
+                    matchElement = Instantiate(matchElementPrefab, answerElementParent);
+                    matchElement.Initialise(i, match.targetMatchType, MatchElement.Category.Answer, match.targetSprite,
+                        match.targetText,
+                        match.targetLabelText);
+                }
+
+                matchElement.onSelectMatch += SelectMatch;
+                matchElement.onDropMatch += ReleaseMatch;
+                _matchElements.Add(matchElement);
+            }
         }
 
         ShuffleMatches();
     }
 
 
-    private void CorrectFeedback()
+    private void CorrectFeedback(int matchId)
     {
-        _answerElement.Complete();
-        _questionElement.Complete();
+        foreach (var matchElement in _matchElements.Where(match => match.id == matchId))
+        {
+            matchElement.Complete();
+        }
+
         feedbackAudio.PlayOneShot(correctSoundEffect);
     }
 
     private void IncorrectFeedback()
     {
-        _questionElement.WrongAnswer();
-        _answerElement.WrongAnswer();
+        _selectedMatchElement.WrongAnswer();
+        _targetMatchElement.WrongAnswer();
         feedbackAudio.PlayOneShot(inCorrectSoundEffect);
-        
-        InputManager.Instance.SetActionMapActive(InputManager.ActionMaps.UI, false);
 
+        InputManager.Instance.SetActionMapActive(InputManager.ActionMaps.LearningCursor, false);
         StartCoroutine(DoTimeout(FaultiveVisualDuration, Deselect));
     }
 
     private void GameFinishedFeedback()
     {
         Score = (float) _pairAmount / _attempts;
-        
+
         feedbackAudio.PlayOneShot(gameCompleteAudioClip);
         DoGameFinishedFeedback();
         StartCoroutine(DoTimeout(FinishedVisualDuration, FinishMinigame));
@@ -127,15 +145,18 @@ public class MatchGame : Minigame
         }
 
         Shuffle(places);
-        for (int i = 0; i < _matchPairs.Count; i++)
+
+        var answers = _matchElements.Where(match => match.category == MatchElement.Category.Answer).ToList();
+        for (int i = 0; i < answers.Count; i++)
         {
-            _matchPairs[i].answerElement.transform.SetSiblingIndex(places[i]);
+            answers[i].transform.SetSiblingIndex(places[i]);
         }
 
         Shuffle(places);
-        for (int i = 0; i < _matchPairs.Count; i++)
+        var questions = _matchElements.Where(match => match.category == MatchElement.Category.Question).ToList();
+        for (int i = 0; i < questions.Count; i++)
         {
-            _matchPairs[i].questionElement.transform.SetSiblingIndex(places[i]);
+            questions[i].transform.SetSiblingIndex(places[i]);
         }
     }
 
@@ -152,38 +173,19 @@ public class MatchGame : Minigame
         }
     }
 
-    private void SetSelectedAnswer(MatchElement answerElement)
-    {
-        HandleSelect(ref _answerElement, answerElement);
-    }
-
-    private void SetSelectedQuestion(MatchElement questionElement)
-    {
-        HandleSelect(ref _questionElement, questionElement);
-    }
-
-    private void HandleSelect(ref MatchElement matchElement, MatchElement newMatchElement)
+    private void SelectMatch(MatchElement matchElement)
     {
         feedbackAudio.PlayOneShot(selectSoundEffect);
-        //Deselect old answer
-        if (matchElement != null)
-        {
-            matchElement.Deselect();
-            if (matchElement == newMatchElement)
-            {
-                if(_dragElement!= null)
-                    Destroy(_dragElement.gameObject);
-                matchElement = null;
-                return;
-            }
- 
-        }
-        matchElement = newMatchElement;
-        if(_dragElement!= null)
-            Destroy(_dragElement.gameObject);
-        if(_questionElement == null || _answerElement == null)
-            CopyToDragElement(newMatchElement);
+        _selectedMatchElement = matchElement;
         matchElement.Select();
+        CopyToDragElement(matchElement);
+    }
+
+    private void ReleaseMatch()
+    {
+        if (_dragElement != null)
+            Destroy(_dragElement.gameObject);
+        _targetMatchElement = _matchElements.FirstOrDefault(match => match.PointerOver());
         Submit();
     }
 
@@ -196,13 +198,18 @@ public class MatchGame : Minigame
 
     public void Submit()
     {
-        if (_answerElement == null || _questionElement == null)
+        if (_selectedMatchElement == null || _targetMatchElement == null ||
+            _targetMatchElement == _selectedMatchElement || _selectedMatchElement.category == _targetMatchElement.category || _targetMatchElement.matchState == MatchElement.MatchState.Completed)
+        {
+            Deselect();
             return;
+        }
+
         _attempts++;
-        if (_answerElement.id == _questionElement.id)
+        if (_selectedMatchElement.id == _targetMatchElement.id)
         {
             _foundMatches++;
-            CorrectFeedback();
+            CorrectFeedback(_selectedMatchElement.id);
             if (_foundMatches == _pairAmount)
             {
                 GameFinishedFeedback();
@@ -213,29 +220,19 @@ public class MatchGame : Minigame
             IncorrectFeedback();
             return;
         }
+
         Deselect();
     }
 
     private void Deselect()
     {
-        InputManager.Instance.SetActionMapActive(InputManager.ActionMaps.UI, true);
-        if(_dragElement!= null)
+        InputManager.Instance.SetActionMapActive(InputManager.ActionMaps.LearningCursor, true);
+        if (_dragElement != null)
             Destroy(_dragElement.gameObject);
-        _questionElement.Deselect();
-        _answerElement.Deselect();
-        _questionElement = null;
-        _answerElement = null;
-    }
-
-    private void Reset()
-    {
-        for (int i = 0; i < _matchPairs.Count; i++)
-        {
-            Destroy(_matchPairs[i].answerElement.gameObject);
-            Destroy(_matchPairs[i].questionElement.gameObject);
-        }
-
-        _matchPairs.Clear();
+        _selectedMatchElement?.Deselect();
+        _targetMatchElement?.Deselect();
+        _selectedMatchElement = null;
+        _targetMatchElement = null;
     }
 
     private void DoGameFinishedFeedback()
@@ -245,29 +242,18 @@ public class MatchGame : Minigame
 
     private IEnumerator GameFinishedFeedbackRoutine()
     {
-        foreach (var matchPair in _matchPairs)
+        for (int i = 0; i < _pairAmount; i++)
         {
-            matchPair.answerElement.Flip();
-            matchPair.questionElement.Flip();
+            foreach (var matchElement in _matchElements.Where(match => match.id == i))
+            {
+                matchElement.Flip();
+            }
+
             pitchedAudio.PlayOneShot(matchFoundSoundEffect);
             pitchedAudio.pitch += .1f;
             yield return new WaitForSeconds(.3f);
         }
 
         pitchedAudio.pitch = 1f;
-    }
-}
-
-public class MatchPair
-{
-    public MatchElement answerElement;
-    public MatchElement questionElement;
-
-    public MatchPair(int id, MatchElement answerElement, MatchElement questionElement)
-    {
-        this.answerElement = answerElement;
-        this.questionElement = questionElement;
-        answerElement.id = id;
-        questionElement.id = id;
     }
 }

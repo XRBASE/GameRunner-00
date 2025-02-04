@@ -794,7 +794,7 @@ MonoBehaviour:
       sceneName: 03-Match
       data: '{"title":"Vind de matches","matchPairs":[{"instanceID":25180},{"instanceID":24978},{"instanceID":25018}],"chosenIds":["8ef2f5ac-e2a3-48ca-8cc7-b4f426896a02","16286320-c684-444b-99c4-dd5e3e3935e1","dd6cabae-ae5a-4c90-99a5-d2fcc7a5d794"]}'
       locations: 02000000
-      networked: 1
+      networked: 0
       timeLimit: 1000
       onFinCinematic:
         m_PersistentCalls:
