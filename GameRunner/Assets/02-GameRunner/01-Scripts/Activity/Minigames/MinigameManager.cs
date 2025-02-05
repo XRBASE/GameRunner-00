@@ -51,14 +51,7 @@ namespace Cohort.GameRunner.Minigames {
         private void OnDestroy() {
             Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoomPropertiesChanged;
         }
-
-        private void SetMinigameState(int index, MinigameDescription.State state) {
-            Hashtable changes = new Hashtable();
-            changes.Add(GetMinigamePlayerKey(index), (int)state);
-
-            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
-        }
-
+        
         private void OnJoinedRoom() {
             OnRoomPropertiesChanged(Network.Local.Client.CurrentRoom.CustomProperties, true);
         }
@@ -69,19 +62,43 @@ namespace Cohort.GameRunner.Minigames {
 
         private void OnRoomPropertiesChanged(Hashtable changes, bool initial) {
             string key = GetMinigamePlayerKey();
-
+            
+            int minigameIndex = -1;
+            MinigameDescription.State newState;
             foreach (var kv_change in changes) {
                 if (kv_change.Key.ToString().StartsWith(key)) {
-                    int miniI = GetMinigameIndexFromKey(kv_change.Key.ToString());
+                    minigameIndex = GetMinigameIndexFromKey(kv_change.Key.ToString());
                     
-                    if (kv_change.Value == null) {
-                        Debug.LogWarning("Minigame null, data reset!");
-                        //reset to open, do not show visual effects of reset.
-                        Setting.minigames[miniI].Reset();
-                    }
-                    else {
-                        Setting.minigames[miniI].SetState((MinigameDescription.State)kv_change.Value, initial);
-                    }
+                    OnMinigameStateChanged(Setting.minigames[minigameIndex], (string)kv_change.Value, initial);
+                }
+            }
+        }
+        
+        private void SetMinigameState(int index, MinigameDescription.Status status, int location) {
+            MinigameDescription.State state = new MinigameDescription.State();
+            state.location = location;
+            state.status = status;
+            
+            Hashtable changes = new Hashtable();
+            changes.Add(GetMinigamePlayerKey(index), JsonUtility.ToJson(state));
+
+            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
+        }
+
+        private void OnMinigameStateChanged(MinigameDescription minigame, string data, bool initial) {
+            if (string.IsNullOrEmpty(data)){
+                Debug.LogWarning("Minigame null, data reset!");
+                
+                minigame.Reset();
+                return;
+            }
+
+            MinigameDescription.State newState = JsonUtility.FromJson<MinigameDescription.State>(data);
+            minigame.SetState(newState, initial);
+
+            for (int i = 0; i < _interactables.Length; i++) {
+                if (_interactables[i].Identifier == newState.location && !_interactables[i].HasMinigame) {
+                    _interactables[i].SetMinigame(minigame.index, minigame.networked);
                 }
             }
         }
@@ -118,7 +135,7 @@ namespace Cohort.GameRunner.Minigames {
 
         private bool AnyMinigameOpen() {
             for (int i = 0; i < _interactables.Length; i++) {
-                if (_interactables[i].HasLearning) {
+                if (_interactables[i].HasMinigame) {
                     return true;
                 }
             }
@@ -130,12 +147,7 @@ namespace Cohort.GameRunner.Minigames {
             if (TryGetNextMinigame(out MinigameDescription minigameDesc) &&
                 TryGetInteractable(minigameDesc, out MinigameInteractable interactable)) {
                 
-                SetMinigameState(minigameDesc.index, MinigameDescription.State.Available);
-                
-                //TODO: this should also be networked.
-                minigameDesc.SetLocation(interactable.Identifier);
-                
-                interactable.SetMinigame(minigameDesc.index, minigameDesc.networked);
+                SetMinigameState(minigameDesc.index, MinigameDescription.Status.Available, interactable.Identifier);
             }
         }
 
@@ -146,7 +158,7 @@ namespace Cohort.GameRunner.Minigames {
             for (int i = 0; i < Setting.minigames.Length; i++) {
                 //TODO: minigames that are available should be assigned based on their network data, rather than just opening them.
                 
-                if (Setting.minigames[i].MinigameState is MinigameDescription.State.Open or MinigameDescription.State.Available) {
+                if (Setting.minigames[i].state.status is MinigameDescription.Status.Open or MinigameDescription.Status.Available) {
                     MinigameId = i;
                     break;
                 }
@@ -186,7 +198,7 @@ namespace Cohort.GameRunner.Minigames {
 
             for (int i = 0; i < options.Count; i++) {
                 check = (optionId + i) % options.Count;
-                if (!options[check].HasLearning) {
+                if (!options[check].HasMinigame) {
                     optionId = check;
                     found = true;
                     break;
@@ -213,7 +225,7 @@ namespace Cohort.GameRunner.Minigames {
             _currenMinigameDescription = minigame;
             _currentInteractable = interactable;
             
-            _currenMinigameDescription.SetState(MinigameDescription.State.Active, false);
+            _currenMinigameDescription.SetStatus(MinigameDescription.Status.Active, false);
             //SetMinigameState(_currenMinigameDescription.index, MinigameDescription.State.Active);
             
             SceneManager.LoadScene(_currenMinigameDescription.sceneName, LoadSceneMode.Additive);
@@ -222,7 +234,7 @@ namespace Cohort.GameRunner.Minigames {
         private void OnExitMinigame() {
             InputManager.Instance.SetGameInput();
             
-            SetMinigameState(_currenMinigameDescription.index, MinigameDescription.State.Open);
+            SetMinigameState(_currenMinigameDescription.index, MinigameDescription.Status.Open, _currenMinigameDescription.state.location);
             
             SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
             
@@ -235,11 +247,11 @@ namespace Cohort.GameRunner.Minigames {
         private void OnMinigameFinished(Minigame.FinishCause cause, float scorePercentage) {
             _currentMinigame = null;
             InputManager.Instance.SetGameInput();
-            MinigameDescription.State s = (scorePercentage > 0.001f)
-                ? MinigameDescription.State.Completed
-                : MinigameDescription.State.Failed;
+            MinigameDescription.Status s = (scorePercentage > 0.001f)
+                ? MinigameDescription.Status.Completed
+                : MinigameDescription.Status.Failed;
             
-            SetMinigameState(_currenMinigameDescription.index, s);
+            SetMinigameState(_currenMinigameDescription.index, s, -1);
             
             onMinigameFinished?.Invoke(cause, scorePercentage);
 

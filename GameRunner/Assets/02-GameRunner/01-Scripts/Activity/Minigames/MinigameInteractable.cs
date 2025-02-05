@@ -17,15 +17,15 @@ namespace Cohort.GameRunner.Minigames {
             get { return _locationDescription; }
         }
 
-        public bool HasLearning {
-            get { return _hasLearning; }
+        public bool HasMinigame {
+            get { return hasMinigame; }
             private set {
                 interactable = value;
-                _hasLearning = value;
+                hasMinigame = value;
             }
         }
 
-        [ReadOnly, SerializeField] private bool _hasLearning;
+        [ReadOnly, SerializeField] private bool hasMinigame;
 
         [SerializeField] private string _locationDescription = "At position";
         [SerializeField] private ObjIndicator _indicator;
@@ -48,11 +48,11 @@ namespace Cohort.GameRunner.Minigames {
         public override void SetInRange(bool value) {
             base.SetInRange(value);
 
-            _indicator.SetActive(!InRange && HasLearning);
+            _indicator.SetActive(!InRange && HasMinigame);
         }
 
         public override void OnInteract() {
-            if (!HasLearning) {
+            if (!HasMinigame) {
                 return;
             }
 
@@ -121,17 +121,18 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         public void SetMinigameLocal(int index) {
-            HasLearning = index >= 0;
+            hasMinigame = index >= 0;
 
-            if (HasLearning) {
+            if (hasMinigame) {
                 _minigame = MinigameManager.Instance[index];
 
                 Debug.LogError($"Set indicator {!InRange} for {index}");
                 _indicator.SetActive(!InRange);
-                MinigameManager.Instance.SetMinigameLog(_minigame, this);
+                
+                MinigameManager.Instance.SetMinigameLog(_minigame, this); 
                 return;
             }
-
+            
             _indicator.SetActive(false);
             _minigame = null;
         }

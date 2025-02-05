@@ -33,12 +33,12 @@ namespace Cohort.GameRunner.Minigames {
             _tgl.isOn = false;
         }
 
-        public void CheckLogItem(MinigameDescription.State state) {
+        public void CheckLogItem(MinigameDescription.Status state) {
             switch (state) {
-                case MinigameDescription.State.Completed:
+                case MinigameDescription.Status.Completed:
                     StartCoroutine(WaitAndRemove());
                     break;
-                case MinigameDescription.State.Failed:
+                case MinigameDescription.Status.Failed:
                     RemoveTask();
                     break;
                 default:

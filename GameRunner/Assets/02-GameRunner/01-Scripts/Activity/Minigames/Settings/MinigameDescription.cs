@@ -7,9 +7,7 @@ using Cohort.CustomAttributes;
 namespace Cohort.GameRunner.Minigames {
 	[Serializable]
 	public class MinigameDescription {
-		public State MinigameState {
-			get { return netData.state; }
-		}
+		public State state;
 
 		public string actionDescription = "Do minigame";
 		public string sceneName = "";
@@ -29,19 +27,21 @@ namespace Cohort.GameRunner.Minigames {
 		
 		[ReadOnly] public int index;
 		[ReadOnly] public MingameLogEntry log;
-		[SerializeField] private MinigameNetworkData netData;
-
-		public void SetLocation(int locationIndex) {
-			netData.location = locationIndex;
-		}
 		
+
+		public void SetState(State newState, bool init) {
+			SetStatus(newState.status, init);
+			state = newState;
+		}
+
 		/// <summary>
-		/// Sets the state of the learning.
+		/// Sets the status of the minigame.
 		/// </summary>
 		/// <param name="newState">New state of the learning.</param>
 		/// <param name="init">Is this an initial/join room set data call?</param>
-		public void SetState(State newState, bool init, bool forceInvoke = false) {
-			if (forceInvoke || newState == State.Completed || newState == State.Failed) {
+		/// <param name="forceInvoke">Force invoke of the matching event?</param>
+		public void SetStatus(Status newState, bool init, bool forceInvoke = false) {
+			if (forceInvoke || newState == Status.Completed || newState == Status.Failed) {
 				if (init) {
 					onFinDirect?.Invoke();
 				}
@@ -49,16 +49,16 @@ namespace Cohort.GameRunner.Minigames {
 					onFinCinematic?.Invoke();
 				}
 			}
-			netData.state = newState;
+			state.status = newState;
 		}
 
 		public void Reset() {
-			netData.state = State.Open;
+			state.status = Status.Open;
 
 			onReset?.Invoke();
 		}
 
-		public enum State {
+		public enum Status {
 			Open = 0,
 			Available,
 			Active,
@@ -67,8 +67,8 @@ namespace Cohort.GameRunner.Minigames {
 		}
 
 		[Serializable]
-		private struct MinigameNetworkData {
-			[ReadOnly] public State state;
+		public struct State {
+			[ReadOnly] public Status status;
 			[ReadOnly] public int location;
 		}
 	}
