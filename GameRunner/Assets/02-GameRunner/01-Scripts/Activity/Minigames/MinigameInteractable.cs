@@ -121,10 +121,21 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         public void SetMinigameLocal(int index) {
-            hasMinigame = index >= 0;
+            HasMinigame = index >= 0;
+            Debug.LogError("SetMinigame");
 
-            if (hasMinigame) {
+            if (HasMinigame) {
                 _minigame = MinigameManager.Instance[index];
+
+                if (_minigame.state.status == MinigameDescription.Status.Completed ||
+                    _minigame.state.status == MinigameDescription.Status.Failed) {
+                    Debug.LogError("Minigame already finished");
+                    
+                    HasMinigame = false;
+                    _indicator.SetActive(false);
+                    _minigame = null;
+                    return;
+                }
 
                 Debug.LogError($"Set indicator {!InRange} for {index}");
                 _indicator.SetActive(!InRange);

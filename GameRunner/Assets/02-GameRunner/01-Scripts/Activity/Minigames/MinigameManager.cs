@@ -69,6 +69,7 @@ namespace Cohort.GameRunner.Minigames {
                 if (kv_change.Key.ToString().StartsWith(key)) {
                     minigameIndex = GetMinigameIndexFromKey(kv_change.Key.ToString());
                     
+                    Debug.LogError("Mingame state change");
                     OnMinigameStateChanged(Setting.minigames[minigameIndex], (string)kv_change.Value, initial);
                 }
             }
