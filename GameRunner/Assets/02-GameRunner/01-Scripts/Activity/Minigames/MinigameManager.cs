@@ -34,7 +34,6 @@ namespace Cohort.GameRunner.Minigames {
 
         public Action<int> onAllMinigamesFinished;
         public Action<Minigame.FinishCause, float> onMinigameFinished;
-        public Action onScoreReset;
 
         private int _scoreMultiplier;
         private MinigameInteractable[] _interactables;
@@ -45,26 +44,45 @@ namespace Cohort.GameRunner.Minigames {
         private MinigameInteractable _currentInteractable;
 
         private void Start() {
-            //Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
-            //Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
+            //join room is called when the activity is started
+            Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
         }
 
-        private void OnMinigameStateChange() {
+        private void OnDestroy() {
+            Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoomPropertiesChanged;
+        }
+
+        private void SetMinigameState(int index, MinigameDescription.State state) {
             Hashtable changes = new Hashtable();
-            changes.Add(GetMinigamePlayerKey(), Setting.GetMinigameStateString());
+            changes.Add(GetMinigamePlayerKey(index), (int)state);
 
             Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
         }
 
         private void OnJoinedRoom() {
-            OnRoomPropertiesChanged(Network.Local.Client.CurrentRoom.CustomProperties);
+            OnRoomPropertiesChanged(Network.Local.Client.CurrentRoom.CustomProperties, true);
         }
-        
+
         private void OnRoomPropertiesChanged(Hashtable changes) {
+            OnRoomPropertiesChanged(changes, false);
+        }
+
+        private void OnRoomPropertiesChanged(Hashtable changes, bool initial) {
             string key = GetMinigamePlayerKey();
-            
-            if (changes.ContainsKey(key) && changes[key] != null) {
-                Setting.SetMinigameStates((string)changes[key]);
+
+            foreach (var kv_change in changes) {
+                if (kv_change.Key.ToString().StartsWith(key)) {
+                    int miniI = GetMinigameIndexFromKey(kv_change.Key.ToString());
+                    
+                    if (kv_change.Value == null) {
+                        Debug.LogWarning("Minigame null, data reset!");
+                        //reset to open, do not show visual effects of reset.
+                        Setting.minigames[miniI].Reset();
+                    }
+                    else {
+                        Setting.minigames[miniI].SetState((MinigameDescription.State)kv_change.Value, initial);
+                    }
+                }
             }
         }
 
@@ -87,8 +105,6 @@ namespace Cohort.GameRunner.Minigames {
             if (!AnyMinigameOpen()) {
                 ActivateMinigame();
             }
-            
-            //onScoreReset?.Invoke();
         }
 
         public void OnActivityStop() {
@@ -113,7 +129,12 @@ namespace Cohort.GameRunner.Minigames {
         private void ActivateMinigame() {
             if (TryGetNextMinigame(out MinigameDescription minigameDesc) &&
                 TryGetInteractable(minigameDesc, out MinigameInteractable interactable)) {
-
+                
+                SetMinigameState(minigameDesc.index, MinigameDescription.State.Available);
+                
+                //TODO: this should also be networked.
+                minigameDesc.SetLocation(interactable.Identifier);
+                
                 interactable.SetMinigame(minigameDesc.index, minigameDesc.networked);
             }
         }
@@ -123,7 +144,9 @@ namespace Cohort.GameRunner.Minigames {
             MinigameId = -1;
 
             for (int i = 0; i < Setting.minigames.Length; i++) {
-                if (Setting.minigames[i].MinigameState == MinigameDescription.State.Open) {
+                //TODO: minigames that are available should be assigned based on their network data, rather than just opening them.
+                
+                if (Setting.minigames[i].MinigameState is MinigameDescription.State.Open or MinigameDescription.State.Available) {
                     MinigameId = i;
                     break;
                 }
@@ -189,9 +212,9 @@ namespace Cohort.GameRunner.Minigames {
             InputManager.Instance.SetMinigameInput();
             _currenMinigameDescription = minigame;
             _currentInteractable = interactable;
-
+            
             _currenMinigameDescription.SetState(MinigameDescription.State.Active, false);
-            OnMinigameStateChange();
+            //SetMinigameState(_currenMinigameDescription.index, MinigameDescription.State.Active);
             
             SceneManager.LoadScene(_currenMinigameDescription.sceneName, LoadSceneMode.Additive);
         }
@@ -199,8 +222,7 @@ namespace Cohort.GameRunner.Minigames {
         private void OnExitMinigame() {
             InputManager.Instance.SetGameInput();
             
-            _currenMinigameDescription.SetState(MinigameDescription.State.Open, false);
-            OnMinigameStateChange();
+            SetMinigameState(_currenMinigameDescription.index, MinigameDescription.State.Open);
             
             SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
             
@@ -216,9 +238,8 @@ namespace Cohort.GameRunner.Minigames {
             MinigameDescription.State s = (scorePercentage > 0.001f)
                 ? MinigameDescription.State.Completed
                 : MinigameDescription.State.Failed;
-
-            _currenMinigameDescription.SetState(s, false);
-            OnMinigameStateChange();
+            
+            SetMinigameState(_currenMinigameDescription.index, s);
             
             onMinigameFinished?.Invoke(cause, scorePercentage);
 
@@ -245,8 +266,20 @@ namespace Cohort.GameRunner.Minigames {
             _currentMinigame = minigame;
         }
 
-        private string GetMinigamePlayerKey() {
-            return Keys.Concatenate(Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.State), Player.Local.UUID);
+        private string GetMinigamePlayerKey(int minigameIndex = -1) {
+            if (minigameIndex >= 0) {
+                return Keys.Concatenate(Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.State),
+                                        Player.Local.UUID, minigameIndex.ToString());
+            }
+            else {
+                return Keys.Concatenate(Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.State),
+                                        Player.Local.UUID);
+            }
+        }
+
+        private int GetMinigameIndexFromKey(string key) {
+            //returns second to last part of key, split by key separator and cast to an int.
+            return int.Parse(key.Split(Keys.SEPARATOR)[^1]);
         }
     }
 }

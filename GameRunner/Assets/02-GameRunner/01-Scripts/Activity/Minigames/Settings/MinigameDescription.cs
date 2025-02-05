@@ -8,7 +8,7 @@ namespace Cohort.GameRunner.Minigames {
 	[Serializable]
 	public class MinigameDescription {
 		public State MinigameState {
-			get { return _state; }
+			get { return netData.state; }
 		}
 
 		public string actionDescription = "Do minigame";
@@ -26,11 +26,15 @@ namespace Cohort.GameRunner.Minigames {
 		public UnityEvent onFinDirect;
 
 		public UnityEvent onReset;
-
-		[ReadOnly, SerializeField] private State _state = State.Open;
+		
 		[ReadOnly] public int index;
 		[ReadOnly] public MingameLogEntry log;
+		[SerializeField] private MinigameNetworkData netData;
 
+		public void SetLocation(int locationIndex) {
+			netData.location = locationIndex;
+		}
+		
 		/// <summary>
 		/// Sets the state of the learning.
 		/// </summary>
@@ -45,23 +49,27 @@ namespace Cohort.GameRunner.Minigames {
 					onFinCinematic?.Invoke();
 				}
 			}
-			
-			_state = newState;
+			netData.state = newState;
 		}
 
 		public void Reset() {
-			_state = State.Open;
+			netData.state = State.Open;
 
 			onReset?.Invoke();
 		}
 
 		public enum State {
 			Open = 0,
+			Available,
 			Active,
-
-			//Available,
 			Completed,
 			Failed
+		}
+
+		[Serializable]
+		private struct MinigameNetworkData {
+			[ReadOnly] public State state;
+			[ReadOnly] public int location;
 		}
 	}
 }

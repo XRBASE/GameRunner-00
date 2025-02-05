@@ -25,8 +25,7 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 	private void Start() {
 		Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
-
-		MinigameManager.Instance.onScoreReset += ClearLocalScore;
+		
 		MinigameManager.Instance.onMinigameFinished += OnLearningFinished;
 	}
 	
@@ -43,8 +42,7 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 	private void OnDestroy() {
 		Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoomPropertiesChanged;
-
-		MinigameManager.Instance.onScoreReset -= ClearLocalScore;
+		
 		MinigameManager.Instance.onMinigameFinished -= OnLearningFinished;
 	}
 
