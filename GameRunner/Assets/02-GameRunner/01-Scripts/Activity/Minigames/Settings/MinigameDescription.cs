@@ -67,9 +67,9 @@ namespace Cohort.GameRunner.Minigames {
 		}
 
 		[Serializable]
-		public struct State {
-			[ReadOnly] public Status status;
-			[ReadOnly] public int location;
+		public class State {
+			[ReadOnly] public Status status = Status.Open;
+			[ReadOnly] public int location = -1;
 		}
 	}
 }

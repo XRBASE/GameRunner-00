@@ -108,8 +108,8 @@ namespace Cohort.GameRunner.Minigames {
         protected override void DeactivateLocal() { }
 
         public void SetMinigame(int index = -1, bool networked = false) {
-            _networked = networked;
-            if (!networked) {
+            _networked = false;
+            if (!_networked) {
                 SetMinigameLocal(index);
                 return;
             }

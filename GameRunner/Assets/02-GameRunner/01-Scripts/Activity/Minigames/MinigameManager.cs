@@ -15,6 +15,7 @@ using Random = UnityEngine.Random;
 namespace Cohort.GameRunner.Minigames {
     [DefaultExecutionOrder(1)] //After LearningInteractable
     public class MinigameManager : Singleton<MinigameManager> {
+        //maybe make this a part of the minigame flow or finish cause or something
         public const float FAILURE_THRESHOLD = 0.25f;
         public const float AMAZING_THRESHOLD = 0.75f;
 
@@ -65,28 +66,36 @@ namespace Cohort.GameRunner.Minigames {
             
             int minigameIndex = -1;
             MinigameDescription.State newState;
+            bool hasUuid;
             foreach (var kv_change in changes) {
                 if (kv_change.Key.ToString().StartsWith(key)) {
-                    minigameIndex = GetMinigameIndexFromKey(kv_change.Key.ToString());
+                    hasUuid = kv_change.Key.ToString().Split(Keys.SEPARATOR)[^1].Length > 2;
+                    minigameIndex = GetMinigameIndexFromKey(kv_change.Key.ToString(), hasUuid);
                     
                     Debug.LogError("Mingame state change");
-                    OnMinigameStateChanged(Setting.minigames[minigameIndex], (string)kv_change.Value, initial);
+                    OnMinigameStateChanged(Setting.minigames[minigameIndex], (string)kv_change.Value, initial, hasUuid);
                 }
             }
         }
         
-        private void SetMinigameState(int index, MinigameDescription.Status status, int location) {
+        private void SetMinigameState(int index, MinigameDescription.Status status, int location, bool networked) {
             MinigameDescription.State state = new MinigameDescription.State();
             state.location = location;
             state.status = status;
             
             Hashtable changes = new Hashtable();
-            changes.Add(GetMinigamePlayerKey(index), JsonUtility.ToJson(state));
+            if (networked) {
+                changes.Add(GetMinigamePlayerKey(index, Player.Local.UUID), JsonUtility.ToJson(state));
+            }
+            else {
+                changes.Add(GetMinigamePlayerKey(index), JsonUtility.ToJson(state));
+            }
+            //okay so now we network the message to everyone, but when I stop the game, it should only be networked for me. 
 
             Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
         }
 
-        private void OnMinigameStateChanged(MinigameDescription minigame, string data, bool initial) {
+        private void OnMinigameStateChanged(MinigameDescription minigame, string data, bool initial, bool hasUuid) {
             if (string.IsNullOrEmpty(data)){
                 Debug.LogWarning("Minigame null, data reset!");
                 
@@ -95,11 +104,14 @@ namespace Cohort.GameRunner.Minigames {
             }
 
             MinigameDescription.State newState = JsonUtility.FromJson<MinigameDescription.State>(data);
-            minigame.SetState(newState, initial);
+            //only override status if it is done locally, or the status is changed into a higher form networked.
+            if (!hasUuid || minigame.state.status < newState.status) {
+                minigame.SetState(newState, initial);
 
-            for (int i = 0; i < _interactables.Length; i++) {
-                if (_interactables[i].Identifier == newState.location && !_interactables[i].HasMinigame) {
-                    _interactables[i].SetMinigame(minigame.index, minigame.networked);
+                for (int i = 0; i < _interactables.Length; i++) {
+                    if (_interactables[i].Identifier == newState.location && !_interactables[i].HasMinigame) {
+                        _interactables[i].SetMinigame(minigame.index, minigame.networked);
+                    }
                 }
             }
         }
@@ -148,7 +160,7 @@ namespace Cohort.GameRunner.Minigames {
             if (TryGetNextMinigame(out MinigameDescription minigameDesc) &&
                 TryGetInteractable(minigameDesc, out MinigameInteractable interactable)) {
                 
-                SetMinigameState(minigameDesc.index, MinigameDescription.Status.Available, interactable.Identifier);
+                SetMinigameState(minigameDesc.index, MinigameDescription.Status.Available, interactable.Identifier, minigameDesc.networked);
             }
         }
 
@@ -172,7 +184,7 @@ namespace Cohort.GameRunner.Minigames {
                 minigame = null;
                 return false;
             }
-
+            
             minigame = Setting.minigames[MinigameId];
             return true;
         }
@@ -235,7 +247,7 @@ namespace Cohort.GameRunner.Minigames {
         private void OnExitMinigame() {
             InputManager.Instance.SetGameInput();
             
-            SetMinigameState(_currenMinigameDescription.index, MinigameDescription.Status.Open, _currenMinigameDescription.state.location);
+            SetMinigameState(_currenMinigameDescription.index, MinigameDescription.Status.Open, _currenMinigameDescription.state.location, false);
             
             SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
             
@@ -252,7 +264,7 @@ namespace Cohort.GameRunner.Minigames {
                 ? MinigameDescription.Status.Completed
                 : MinigameDescription.Status.Failed;
             
-            SetMinigameState(_currenMinigameDescription.index, s, -1);
+            SetMinigameState(_currenMinigameDescription.index, s, -1, false);
             
             onMinigameFinished?.Invoke(cause, scorePercentage);
 
@@ -279,20 +291,32 @@ namespace Cohort.GameRunner.Minigames {
             _currentMinigame = minigame;
         }
 
-        private string GetMinigamePlayerKey(int minigameIndex = -1) {
+        private string GetMinigamePlayerKey(int minigameIndex = -1, string uuid = "") {
+            string postfix = "";
             if (minigameIndex >= 0) {
+                if (!string.IsNullOrEmpty(uuid)) {
+                    postfix = Keys.Concatenate(minigameIndex.ToString(), uuid);
+                }
+                else {
+                    postfix = minigameIndex.ToString();
+                }
+                
                 return Keys.Concatenate(Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.State),
-                                        Player.Local.UUID, minigameIndex.ToString());
+                                        postfix);
             }
             else {
-                return Keys.Concatenate(Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.State),
-                                        Player.Local.UUID);
+                return Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.State);
             }
         }
 
-        private int GetMinigameIndexFromKey(string key) {
+        private int GetMinigameIndexFromKey(string key, bool hasUuid) {
             //returns second to last part of key, split by key separator and cast to an int.
-            return int.Parse(key.Split(Keys.SEPARATOR)[^1]);
+            if (!hasUuid) {
+                return int.Parse(key.Split(Keys.SEPARATOR)[^1]);
+            }
+            else {
+                return int.Parse(key.Split(Keys.SEPARATOR)[^2]);
+            }
         }
     }
 }
