@@ -778,7 +778,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minigame:
     minigames:
-    - actionDescription: Test Quiz
+    - state:
+        status: 0
+        location: -1
+      actionDescription: Test Quiz
       sceneName: 01-Quiz
       data: '{"_questions":[{"question":"What was the original name of Micky Mouse?","answers":["Mortimer
         Mouse","The rat","Marvin Mouse","Marshall Mouse"],"correctAnswerIndex":0},{"question":"What
@@ -800,6 +803,8 @@ MonoBehaviour:
       locations: 00000000
       networked: 0
       timeLimit: 120
+      minScore: 0
+      maxScore: 100
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -809,10 +814,12 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      _state: 0
       index: 0
       log: {fileID: 0}
-    - actionDescription: Test Wordle
+    - state:
+        status: 0
+        location: -1
+      actionDescription: Test Wordle
       sceneName: 02-Wordle
       data: "{\"wordGameMode\":0,\"title\":\"Raad het woord\",\"tries\":5,\"puzzleAmount\":2,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
         leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor
@@ -823,6 +830,8 @@ MonoBehaviour:
       locations: 01000000
       networked: 0
       timeLimit: 30
+      minScore: 1
+      maxScore: 100
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -832,15 +841,19 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      _state: 0
       index: 1
       log: {fileID: 0}
-    - actionDescription: Test Match
+    - state:
+        status: 0
+        location: -1
+      actionDescription: Test Match
       sceneName: 03-Match
       data: '{"title":"Vind de matches","pairAmount":5,"matches":[{"instanceID":25186},{"instanceID":25002},{"instanceID":24984},{"instanceID":25240},{"instanceID":25024}]}'
       locations: 02000000
       networked: 1
       timeLimit: 30
+      minScore: 2
+      maxScore: 100
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -850,15 +863,19 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      _state: 0
       index: 2
       log: {fileID: 0}
-    - actionDescription: Test
+    - state:
+        status: 0
+        location: -1
+      actionDescription: Test
       sceneName: 00-Tester
       data: 
       locations: 03000000
       networked: 0
       timeLimit: -1
+      minScore: 3
+      maxScore: 100
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -868,7 +885,6 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      _state: 0
       index: 3
       log: {fileID: 0}
 --- !u!4 &1957266246

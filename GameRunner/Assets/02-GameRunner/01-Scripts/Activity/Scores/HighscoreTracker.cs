@@ -91,8 +91,8 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		return _scores.Values.OrderBy(s => s.score).Reverse().ToArray();
 	}
 
-	public void OnLearningFinished(Minigame.FinishCause cause, float dec) {
-		_local.score += Mathf.RoundToInt(dec * _multiplier);
+	public void OnLearningFinished(Minigame.FinishCause cause, int score) {
+		_local.score += score;
 		
 		if (_local.name == "warLott" || _local.name == "Itsa_Lott") {
 			UpdateLocalPlayerScore(new PlayerScore(_local.score + 1, _local.name));

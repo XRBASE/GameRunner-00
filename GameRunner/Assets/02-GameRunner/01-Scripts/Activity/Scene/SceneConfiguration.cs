@@ -1,10 +1,7 @@
 using UnityEngine;
 using Cohort.GameRunner.Minigames;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
+[DefaultExecutionOrder(101)] //Before ActivityLoader
 public class SceneConfiguration : MonoBehaviour {
     public MinigameCycleDescription Minigame {
         get { return minigame; }

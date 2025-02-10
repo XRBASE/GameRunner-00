@@ -3,7 +3,7 @@ using Cohort.UI.Generic;
 using TMPro;
 using UnityEngine;
 
-[DefaultExecutionOrder(2)] //After MinigameManager
+[DefaultExecutionOrder(103)] //After MinigameManager
 public class MinigamesFinishedUI : UIPanel {
     public const string SCORE_KEYWORD = "[POINTS]";
 

@@ -10,7 +10,7 @@ using Cohort.GameRunner.Minigames;
 using Cohort.GameRunner.Players;
 using Cohort.Patterns;
 
-[DefaultExecutionOrder(102)] // After playermanagement
+[DefaultExecutionOrder(102)] // After playermanagement and after SceneConfiguration
 public class ActivityLoader : Singleton<ActivityLoader> {
     public bool InActivity { get; private set; }
     public bool AllPlayersReady { get; private set; }
@@ -49,7 +49,7 @@ public class ActivityLoader : Singleton<ActivityLoader> {
     private void StartActivity() {
         onActivityStart?.Invoke();
         
-        MinigameManager.Instance.OnActivityStart(Activity.ScoreMultiplier);
+        MinigameManager.Instance.OnActivityStart();
     }
     
     public void StopActivity() {

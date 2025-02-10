@@ -5,12 +5,12 @@ namespace Cohort.GameRunner.Minigames {
         [SerializeField] private Minigame _controller;
 
         public void WinGame() {
-            _controller.Score = 1f;
+            _controller.Score = _controller.MaxScore;
             _controller.FinishMinigame();
         }
 
         public void LoseGame() {
-            _controller.Score = 0f;
+            _controller.Score = _controller.MinScore;
             _controller.FinishMinigame();
         }
     }

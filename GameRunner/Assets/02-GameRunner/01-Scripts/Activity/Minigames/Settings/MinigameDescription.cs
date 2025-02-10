@@ -17,6 +17,9 @@ namespace Cohort.GameRunner.Minigames {
 		[Tooltip("If timelimit is negative, the timer is disabled")]
 		public float timeLimit = -1;
 
+		public int minScore;
+		public int maxScore;
+
 		[Tooltip("Events is called when the learning is finished while the user is in the activity.")]
 		public UnityEvent onFinCinematic;
 
@@ -30,7 +33,10 @@ namespace Cohort.GameRunner.Minigames {
 		
 
 		public void SetState(State newState, bool init) {
-			SetStatus(newState.status, init);
+			if (newState.status != state.status) {
+				SetStatus(newState.status, init);
+			}
+			
 			state = newState;
 		}
 
@@ -41,7 +47,7 @@ namespace Cohort.GameRunner.Minigames {
 		/// <param name="init">Is this an initial/join room set data call?</param>
 		/// <param name="forceInvoke">Force invoke of the matching event?</param>
 		public void SetStatus(Status newState, bool init, bool forceInvoke = false) {
-			if (forceInvoke || newState == Status.Completed || newState == Status.Failed) {
+			if (forceInvoke || newState == Status.FinSuccess || newState == Status.FinFailed) {
 				if (init) {
 					onFinDirect?.Invoke();
 				}
@@ -62,8 +68,8 @@ namespace Cohort.GameRunner.Minigames {
 			Open = 0,
 			Available,
 			Active,
-			Completed,
-			Failed
+			FinSuccess,
+			FinFailed
 		}
 
 		[Serializable]

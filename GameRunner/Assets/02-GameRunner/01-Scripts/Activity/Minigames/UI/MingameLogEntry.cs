@@ -35,10 +35,10 @@ namespace Cohort.GameRunner.Minigames {
 
         public void CheckLogItem(MinigameDescription.Status state) {
             switch (state) {
-                case MinigameDescription.Status.Completed:
+                case MinigameDescription.Status.FinSuccess:
                     StartCoroutine(WaitAndRemove());
                     break;
-                case MinigameDescription.Status.Failed:
+                case MinigameDescription.Status.FinFailed:
                     RemoveTask();
                     break;
                 default:

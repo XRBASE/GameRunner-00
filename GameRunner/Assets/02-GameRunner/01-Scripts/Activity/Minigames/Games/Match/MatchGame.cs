@@ -19,7 +19,7 @@ public class MatchGame : Minigame
     protected override float FinishedVisualDuration {
         get { return 2f; }
     }
-    public override float Score { get; set; }
+    public override int Score { get; set; }
     
     public MatchGameDataSO MatchGameDataSo;
     public MatchElement matchElementPrefab;
@@ -44,9 +44,9 @@ public class MatchGame : Minigame
     private int _attempts;
     private int _foundMatches;
     
-    public override void Initialize(string gameData, float timeLimit, Action<FinishCause, float> onGameFinished, Action onExit)
+    public override void Initialize(string gameData, float timeLimit, int minScore, int maxScore, Action<FinishCause, int> onFinished, Action onExit)
     {
-        base.Initialize(gameData, timeLimit, onGameFinished, onExit);
+        base.Initialize(gameData, timeLimit, minScore, maxScore, onFinished, onExit);
         
         _matchGameData = MatchGameDataSo.matchGameData;
         title.text = _matchGameData.title;
@@ -113,7 +113,7 @@ public class MatchGame : Minigame
 
     private void GameFinishedFeedback()
     {
-        Score = (float) _matchGameData.pairAmount / _attempts;
+        Score = _scoreRange.GetValueRound((float) _matchGameData.pairAmount / _attempts, true);
         
         feedbackAudio.PlayOneShot(gameCompleteAudioClip);
         DoGameFinishedFeedback();
