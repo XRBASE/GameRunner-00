@@ -848,10 +848,10 @@ MonoBehaviour:
         location: -1
       actionDescription: Test Match
       sceneName: 03-Match
-      data: '{"title":"Vind de matches","pairAmount":5,"matches":[{"instanceID":25186},{"instanceID":25002},{"instanceID":24984},{"instanceID":25240},{"instanceID":25024}]}'
+      data: '{"title":"Vind de matches","matchPairs":[{"instanceID":25180},{"instanceID":24978},{"instanceID":25018}],"chosenIds":["8ef2f5ac-e2a3-48ca-8cc7-b4f426896a02","16286320-c684-444b-99c4-dd5e3e3935e1","dd6cabae-ae5a-4c90-99a5-d2fcc7a5d794"]}'
       locations: 02000000
       networked: 1
-      timeLimit: 30
+      timeLimit: 1000
       minScore: 2
       maxScore: 100
       onFinCinematic:

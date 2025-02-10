@@ -1,4 +1,5 @@
 using System;
+using Cohort.GameRunner.Input;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -14,9 +15,17 @@ public class MatchElement : MonoBehaviour
         Wrong
     }
 
-    private MatchPairData.MatchType matchType
+    public enum Category
     {
-        get { return _matchType;}
+        Question,
+        Answer
+    };
+
+    public Category category;
+
+    public MatchPairData.MatchType matchType
+    {
+        get { return _matchType; }
         set
         {
             _matchType = value;
@@ -35,21 +44,22 @@ public class MatchElement : MonoBehaviour
     }
 
     private MatchPairData.MatchType _matchType;
-    private MatchState _matchState;
+    private bool _inClick;
 
+    public  MatchState matchState;
     public int id;
-    public TextMeshProUGUI title;
+    public TextMeshProUGUI label;
     public TextMeshProUGUI matchText;
     public Image matchImage;
-    public Button button;
     public Image highLight;
-    public Action<MatchElement> onMatchSelected;
+    public Action<MatchElement> onSelectMatch;
+    public Action onDropMatch;
     private Color _originalColor;
     public Color highlightColor;
     public Color completedColor;
     public Color wrongColor;
-	public PlayableDirector playableDirector;
-	public PlayableAsset enlargePlayable;
+    public PlayableDirector playableDirector;
+    public PlayableAsset enlargePlayable;
     public PlayableAsset wobblePlayable;
     public PlayableAsset rotatePlayable;
 
@@ -57,20 +67,56 @@ public class MatchElement : MonoBehaviour
     protected virtual void Awake()
     {
         _originalColor = highLight.color;
-        button.onClick.AddListener(SelectMatch);
+        InputManager.Instance.LearningCursor.leftDown += LeftDown;
+        InputManager.Instance.LearningCursor.leftUp += LeftUp;
     }
 
-    public void SetPreviewElement(Sprite sprite)
+    private void OnDestroy()
     {
-        matchType = MatchPairData.MatchType.Image;
+        InputManager.Instance.LearningCursor.leftDown -= LeftDown;
+        InputManager.Instance.LearningCursor.leftUp -= LeftUp;
+    }
+
+    private void LeftDown()
+    {
+        if (matchState == MatchState.Completed)
+            return;
+        if (PointerOver() && !_inClick)
+        {
+            onSelectMatch?.Invoke(this);
+            _inClick = true;
+        }
+    }
+
+    private void LeftUp()
+    {
+        if (_inClick)
+        {
+            onDropMatch?.Invoke();
+            _inClick = false;
+        }
+    }
+
+    public bool PointerOver()
+    {
+        Vector2 localPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            (RectTransform) transform, InputManager.Instance.LearningCursor.ScreenPosition,
+            Camera.main, out localPos);
+        return ((RectTransform) transform).rect.Contains(localPos);
+    }
+
+    public void Initialise(int pId, MatchPairData.MatchType pMatchType, Category pCategory, Sprite sprite, string text,
+        string labelText)
+    {
+        id = pId;
+        matchType = pMatchType;
+        category = pCategory;
         matchImage.sprite = sprite;
+        matchText.text = text;
+        label.text = labelText;
     }
 
-    public void SetPreviewElement(string text)
-    {
-        matchType = MatchPairData.MatchType.Text;
-        matchText.text = text;
-    }
 
     private void IncorrectFeedback()
     {
@@ -82,21 +128,14 @@ public class MatchElement : MonoBehaviour
         StartPlayable(rotatePlayable);
     }
 
-    private void SelectMatch()
-    {
-        if (_matchState == MatchState.Completed)
-            return;
-        onMatchSelected?.Invoke(this);
-    }
-
     public void Select()
     {
         SetState(MatchState.Selected);
     }
-    
+
     public void Deselect()
     {
-        if(_matchState == MatchState.Completed)
+        if (matchState == MatchState.Completed)
             return;
         SetState(MatchState.Unselected);
     }
@@ -113,7 +152,7 @@ public class MatchElement : MonoBehaviour
 
     private void SetState(MatchState state)
     {
-        _matchState = state;
+        matchState = state;
         switch (state)
         {
             case MatchState.Unselected:
@@ -121,7 +160,7 @@ public class MatchElement : MonoBehaviour
                 break;
             case MatchState.Selected:
                 StartPlayable(enlargePlayable);
-                highLight.color  = highlightColor;
+                highLight.color = highlightColor;
                 break;
             case MatchState.Wrong:
                 IncorrectFeedback();
@@ -131,10 +170,9 @@ public class MatchElement : MonoBehaviour
                 StartPlayable(enlargePlayable);
                 highLight.color = completedColor;
                 break;
-            
         }
     }
-    
+
     private void StartPlayable(PlayableAsset playable)
     {
         playableDirector.time = 0;
