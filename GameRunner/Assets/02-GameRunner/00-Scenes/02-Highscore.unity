@@ -123,6 +123,51 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &592715496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 592715498}
+  - component: {fileID: 592715497}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &592715497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592715496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f893abba9d41034990c4a893a64414d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 0
+--- !u!4 &592715498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592715496}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.06441427, y: 4.5206738, z: -7.94}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &996727321
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -733,7 +778,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minigame:
     minigames:
-    - actionDescription: Test Quiz
+    - state:
+        status: 0
+        location: -1
+      actionDescription: Test Quiz
       sceneName: 01-Quiz
       data: '{"_questions":[{"question":"What was the original name of Micky Mouse?","answers":["Mortimer
         Mouse","The rat","Marvin Mouse","Marshall Mouse"],"correctAnswerIndex":0},{"question":"What
@@ -755,6 +803,8 @@ MonoBehaviour:
       locations: 00000000
       networked: 0
       timeLimit: 120
+      minScore: 0
+      maxScore: 100
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -764,10 +814,12 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      _state: 0
       index: 0
       log: {fileID: 0}
-    - actionDescription: Test Wordle
+    - state:
+        status: 0
+        location: -1
+      actionDescription: Test Wordle
       sceneName: 02-Wordle
       data: "{\"wordGameMode\":0,\"title\":\"Raad het woord\",\"tries\":5,\"puzzleAmount\":2,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
         leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor
@@ -778,6 +830,8 @@ MonoBehaviour:
       locations: 01000000
       networked: 0
       timeLimit: 30
+      minScore: 1
+      maxScore: 100
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -787,15 +841,19 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      _state: 0
       index: 1
       log: {fileID: 0}
-    - actionDescription: Test Match
+    - state:
+        status: 0
+        location: -1
+      actionDescription: Test Match
       sceneName: 03-Match
       data: '{"title":"Vind de matches","pairAmount":5,"matches":[{"instanceID":25186},{"instanceID":25002},{"instanceID":24984},{"instanceID":25240},{"instanceID":25024}]}'
       locations: 02000000
       networked: 1
       timeLimit: 30
+      minScore: 2
+      maxScore: 100
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -805,15 +863,19 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      _state: 0
       index: 2
       log: {fileID: 0}
-    - actionDescription: Test
+    - state:
+        status: 0
+        location: -1
+      actionDescription: Test
       sceneName: 00-Tester
       data: 
       locations: 03000000
       networked: 0
       timeLimit: -1
+      minScore: 3
+      maxScore: 100
       onFinCinematic:
         m_PersistentCalls:
           m_Calls: []
@@ -823,7 +885,6 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      _state: 0
       index: 3
       log: {fileID: 0}
 --- !u!4 &1957266246
@@ -1149,3 +1210,4 @@ SceneRoots:
   - {fileID: 1907216182953920791}
   - {fileID: 996727321}
   - {fileID: 1957266246}
+  - {fileID: 592715498}

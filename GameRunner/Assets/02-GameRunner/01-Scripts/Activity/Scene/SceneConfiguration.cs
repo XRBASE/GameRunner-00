@@ -1,7 +1,7 @@
 using UnityEngine;
-
 using Cohort.GameRunner.Minigames;
 
+[DefaultExecutionOrder(101)] //Before ActivityLoader
 public class SceneConfiguration : MonoBehaviour {
     public MinigameCycleDescription Minigame {
         get { return minigame; }
@@ -28,6 +28,5 @@ public class SceneConfiguration : MonoBehaviour {
         
         minigame?.OnValidate();
     }
-
 #endif
 }

@@ -9,9 +9,9 @@ using Random = UnityEngine.Random;
 
 namespace Cohort.GameRunner.Minigames.Wordle {
     public class WordGame : Minigame {
-        public override float Score {
-            get { return _completionPercent;}
-            set { _completionPercent = value; }
+        public override int Score {
+            get { return _scoreRange.GetValueRound(_completionPercent, true);}
+            set { _completionPercent = _scoreRange.GetTime(value, true); }
         }
         
         protected override float CorrectVisualDuration {
@@ -62,8 +62,8 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private WordGameMode _wordGameMode;
 
         // Method to initialize the game with data, score multiplier, and callback on game finish
-        public override void Initialize(string gameData, float timeLimit, Action<FinishCause, float> onFinished, Action onExit) {
-            base.Initialize(gameData, timeLimit, onFinished, onExit);
+        public override void Initialize(string gameData, float timeLimit, int minScore, int maxScore, Action<FinishCause, int> onFinished, Action onExit) {
+            base.Initialize(gameData, timeLimit, minScore, maxScore, onFinished, onExit);
             
             _wordGameData = JsonUtility.FromJson<WordGameData>(gameData);
             if (_wordGameData == null || _wordGameData.wordList == null || _wordGameData.wordList.Count == 0) {

@@ -18,12 +18,12 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 			get { return 2f; }
 		}
 
-		public override float Score {
+		public override int Score {
 			get { return _score;}
 			set { _score = value; }
 		}
 
-		private float _score;
+		private int _score;
 		
 		public UnityEvent onCorrect;
 		public UnityEvent onIncorrect;
@@ -37,8 +37,8 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 		[SerializeField] private QuizAnswer _template;
 		[SerializeField] private TMP_Text _questionField;
 		
-		public override void Initialize(string gameData, float timeLimit, Action<FinishCause, float> onFinished, Action onExit) {
-			base.Initialize(gameData, timeLimit, onFinished, onExit);
+		public override void Initialize(string gameData, float timeLimit, int minScore, int maxScore, Action<FinishCause, int> onFinished, Action onExit) {
+			base.Initialize(gameData, timeLimit, minScore, maxScore, onFinished, onExit);
 			
 			_data = JsonUtility.FromJson<QuizData>(gameData);
 
@@ -55,7 +55,7 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 			
 			if (index == _data._questions[_questionIndex].correctAnswerIndex) {
 				_correctCount++;
-				_score = (float) _correctCount / _data._questions.Length;
+				_score = _scoreRange.GetValueRound((float) _correctCount / _data._questions.Length, true);
 
 				onCorrect?.Invoke();
 			}

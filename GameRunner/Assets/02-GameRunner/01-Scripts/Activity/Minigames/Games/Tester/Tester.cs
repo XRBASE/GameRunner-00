@@ -16,13 +16,13 @@ namespace Cohort.GameRunner.Minigames.Tester {
             get { return 0f; }
         }
 
-        public override float Score {
-            get { return _score.value;}
-            set { _score.value = value; }
+        public override int Score {
+            get { return _scoreRange.GetValueRound(_score.value);}
+            set { _score.value = _scoreRange.GetTime(value); }
         }
 
         public void Fail() {
-            Score = 0f;
+            Score = MinScore;
             
             FinishMinigame();
         }
