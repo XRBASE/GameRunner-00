@@ -24,6 +24,96 @@ namespace MathBuddy
     namespace FloatExtentions
     {
         [Serializable]
+        public class IntRange {
+            /// <summary>
+            /// Total span between min and max.
+            /// </summary>
+            public int Span {
+                get { return max - min; }
+            }
+            
+            public int A {
+                get { return (_isPositive) ? min : max; }
+            }
+            
+            public int B {
+                get { return (_isPositive) ? max : min; }
+            }
+            public int min, max;
+            
+            
+            [SerializeField, Tooltip("Direction of range, determines where t=0 is.")] 
+            private bool _isPositive = true;
+
+            public IntRange(int b)
+            {
+                if (b > 0f) {
+                    _isPositive = true;
+                    min = 0;
+                    max = b;
+                }
+                else {
+                    _isPositive = false;
+                    max = 0;
+                    min = b;
+                }
+            }
+            
+            public IntRange(int a, int b)
+            {
+                if (b > a) {
+                    _isPositive = true;
+                    min = a;
+                    max = b;
+                }
+                else {
+                    _isPositive = false;
+                    max = a;
+                    min = b;
+                }
+            }
+
+            /// <summary>
+            /// Retrieves value at given time (0 t/m 100%).
+            /// </summary>
+            public float GetValue(float t, bool clamp = false)
+            {
+                if (clamp) {
+                    t = Mathf.Clamp01(t);
+                }
+                return A + (B - A) * t;
+            }
+            
+            /// <summary>
+            /// Retrieves value at given time (0 t/m 100%).
+            /// </summary>
+            public int GetValueRound(float t, bool clamp = false) {
+                if (clamp) {
+                    t = Mathf.Clamp01(t); 
+                }
+
+                return Mathf.RoundToInt(A + (B - A) * t);
+            }
+
+            /// <summary>
+            /// Retrieves time at given value.
+            /// </summary>
+            public float GetTime(float value, bool clamp = false)
+            {
+                if (clamp) {
+                    value = Mathf.Clamp(value, min, max);
+                }
+
+                return (value - A) / (B - A);
+            }
+
+            public override string ToString()
+            {
+                return $"range({A}, {B})";
+            }
+        }
+        
+        [Serializable]
         public class Range
         {
             /// <summary>

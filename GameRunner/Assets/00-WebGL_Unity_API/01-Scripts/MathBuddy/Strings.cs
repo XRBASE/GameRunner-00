@@ -21,6 +21,21 @@ namespace MathBuddy.Strings
             
             return new string(chars);
         }
+
+        public static string ToCsv<T>(IEnumerable<T> data) {
+            string output = "";
+            if (data == null || !data.Any())
+                return output;
+            
+            foreach (var item in data) {
+                output += $"{item.ToString()},";
+            }
+
+            //remove last comma value
+            output = output.Substring(0, output.Length - 1);
+
+            return output;
+        }
         
         public static string ToCsv(IEnumerable<string> data)
         {
@@ -38,6 +53,10 @@ namespace MathBuddy.Strings
             return output;
         }
         
+        /// <summary>
+        /// Convert csv data into a list of strings, split by comma's.
+        /// </summary>
+        /// <param name="data">csv data string.</param>
         public static List<string> FromCsv(string data)
         {
             if (string.IsNullOrEmpty(data))

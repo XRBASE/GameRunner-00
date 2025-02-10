@@ -1,3 +1,7 @@
+# v0.3.0
+Networked minigame state and player progression. Networked minigames now activate for all players, but the minigame itself is still single player.
+Minigames now all have their own minimum and maximum score. Score is tracked as integer now and not as float anymore.
+
 # v0.2.2
 info point bugfix (exit button added). Stop call of video player now causes a black screen as to provide more feedback.
 mute button of video player now also sets the volume slider.
