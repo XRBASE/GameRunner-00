@@ -132,6 +132,7 @@ MonoBehaviour:
   occupiedArrangeElement: {fileID: 0}
   image: {fileID: 728200270793182501}
   description: {fileID: 1051879933389403715}
+  correctId: 
 --- !u!223 &7103241430378732736
 Canvas:
   m_ObjectHideFlags: 0
@@ -279,7 +280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &489646056567453223
 RectTransform:
   m_ObjectHideFlags: 0

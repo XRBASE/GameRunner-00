@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class ArrangeElement : MonoBehaviour
 {
-    public int id;
+    public string id;
     public Sprite sprite;
+
+    public void Initialise(ArrangeData data)
+    {
+        id = data.UID;
+        sprite = data.sprite;
+    }
 }

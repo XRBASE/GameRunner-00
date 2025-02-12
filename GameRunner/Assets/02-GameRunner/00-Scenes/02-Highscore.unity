@@ -735,7 +735,7 @@ MonoBehaviour:
     minigames:
     - actionDescription: Arrange
       sceneName: 04-Arrange
-      data: 
+      data: '{"title":"Arrange the pictures correctly in sequence","ArrangeData":[{"instanceID":-163678},{"instanceID":84076},{"instanceID":84080},{"instanceID":84084},{"instanceID":84090}],"chosenIds":["d23ef070-ae9e-4458-8295-49bb7c53a6eb","3272e382-5f84-4510-80a1-1d282b2d3cb5","51292336-01a7-403f-9f43-7877a14f16ed","9b9a3138-6b17-479c-90d5-09685f643468","869972dd-8c1c-43d1-b565-7afb89da5f66"]}'
       locations: 03000000
       networked: 0
       timeLimit: -1

@@ -1,23 +1,21 @@
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
-//Before ArrangeElement
-[DefaultExecutionOrder(100)]
 public class ArrangeSlot : UIPointerOver
 {
     public enum ArrangeType{Submission, Deposit}
-    public ArrangeType arrangeType;
     public bool occupied;
     public ArrangeElement occupiedArrangeElement;
     public Image image;
     public TextMeshProUGUI description;
-    public int correctId;
-
-    private void Awake()
+    public string correctId;
+    public ArrangeType arrangeType;
+    
+    public void Initialise(ArrangeType arrangeType, string correctId, string descriptionText)
     {
-        if(occupiedArrangeElement!= null)
-            SetOccupiedArrangeElement(occupiedArrangeElement);
+        this.correctId = correctId;
+        description.text = descriptionText;
+        this.arrangeType = arrangeType;
         switch (arrangeType)
         {
             case ArrangeType.Deposit:
