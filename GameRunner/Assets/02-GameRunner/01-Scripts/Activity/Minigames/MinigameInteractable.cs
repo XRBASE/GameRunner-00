@@ -172,7 +172,7 @@ namespace Cohort.GameRunner.Minigames {
         public override void OnValidate() {
             base.OnValidate();
             
-            if (!_networked) {
+            if (_networked) {
                 _networked = false;
                 EditorUtility.SetDirty(this);
                 

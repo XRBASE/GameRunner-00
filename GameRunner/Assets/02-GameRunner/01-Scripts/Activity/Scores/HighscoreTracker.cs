@@ -17,7 +17,6 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 	public Action<PlayerScore[]> onScoresUpdated;
 	
 	private int _session;
-	private int _multiplier = 100;
 	
 	private PlayerScore _local;
 	private Dictionary<string, PlayerScore> _scores = new Dictionary<string, PlayerScore>();
@@ -31,7 +30,6 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 	
 	public void Initialize(ActivityDescription _activity, int session) {
 		_session = session;
-		_multiplier = _activity.ScoreMultiplier;
 		_local = new PlayerScore(0, Player.Local.Name);
 		
 		if (Network.Local.Client.InRoom) {

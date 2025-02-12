@@ -60,6 +60,8 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 				onCorrect?.Invoke();
 			}
 			else {
+				_score = _scoreRange.GetValueRound((float) _correctCount / _data._questions.Length, true);
+				
 				onIncorrect?.Invoke();
 			}
 
