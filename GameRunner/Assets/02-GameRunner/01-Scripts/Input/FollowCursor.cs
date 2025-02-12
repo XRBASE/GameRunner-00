@@ -4,7 +4,7 @@ public class FollowCursor : MonoBehaviour
 {
     private RectTransform _rectTransform;
     public Canvas canvas;
-    
+
     private void Awake()
     {
         _rectTransform = GetComponent<RectTransform>();

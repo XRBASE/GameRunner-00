@@ -733,6 +733,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minigame:
     minigames:
+    - actionDescription: Arrange
+      sceneName: 04-Arrange
+      data: 
+      locations: 03000000
+      networked: 0
+      timeLimit: -1
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      _state: 0
+      index: 0
+      log: {fileID: 0}
     - actionDescription: Test Quiz
       sceneName: 01-Quiz
       data: '{"_questions":[{"question":"What was the original name of Micky Mouse?","answers":["Mortimer
@@ -765,7 +783,7 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       _state: 0
-      index: 0
+      index: 1
       log: {fileID: 0}
     - actionDescription: Test Wordle
       sceneName: 02-Wordle
@@ -788,7 +806,7 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       _state: 0
-      index: 1
+      index: 2
       log: {fileID: 0}
     - actionDescription: Test Match
       sceneName: 03-Match
@@ -806,7 +824,7 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       _state: 0
-      index: 2
+      index: 3
       log: {fileID: 0}
     - actionDescription: Test
       sceneName: 00-Tester
@@ -824,7 +842,7 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       _state: 0
-      index: 3
+      index: 4
       log: {fileID: 0}
 --- !u!4 &1957266246
 Transform:
