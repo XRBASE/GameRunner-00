@@ -175,11 +175,13 @@ namespace Cohort.GameRunner.Minigames {
             if (_networked) {
                 _networked = false;
                 EditorUtility.SetDirty(this);
-                
-                Debug.LogWarning("Minigame interactables are never networked, minigames themselves can be set to not networked! See sceneConfig!");
-                GameObject ping = FindObjectOfType<SceneConfiguration>().gameObject;
-                if (ping != null) {
-                    EditorGUIUtility.PingObject(ping);
+
+                if (!Application.isPlaying) {
+                    Debug.LogWarning("Minigame interactables are never networked, minigames themselves can be set to not networked! See sceneConfig!");
+                    GameObject ping = FindObjectOfType<SceneConfiguration>()?.gameObject;
+                    if (ping != null) {
+                        EditorGUIUtility.PingObject(ping);
+                    }
                 }
             }
         }

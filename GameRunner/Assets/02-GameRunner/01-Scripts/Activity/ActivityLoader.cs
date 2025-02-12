@@ -85,7 +85,7 @@ public class ActivityLoader : Singleton<ActivityLoader> {
         }
         
         //TODO_COHORT: Assetbundles
-        if (_description.AssetRef == name) {
+        if (_description.SceneName == name) {
             OnLocalPlayerReady();
         }
     }
@@ -193,7 +193,7 @@ public class ActivityLoader : Singleton<ActivityLoader> {
         Hashtable changes = new Hashtable();
         changes.Add(GetActivityDefKey(), JsonUtility.ToJson(description));
         changes.Add(GetActivitySessionKey(), _session + 1);
-        changes.Add(GetSceneKey(), description.AssetRef);
+        changes.Add(GetSceneKey(), description.SceneName);
         
         Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
     }

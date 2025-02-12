@@ -461,6 +461,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
+      propertyPath: scene
+      value: 02-Highscore
+      objectReference: {fileID: 0}
+    - target: {fileID: 3082011941790075608, guid: 0bae7f26a58d57642bfd4cf9c7d9baf4, type: 3}
       propertyPath: _testInput
       value: '{"token":"5233774D444B675A6D6A64444D6455325267507A62413D3D","baseUrl":"https://dev.cohort.games","sessionId":"88e4091e-551f-4bba-8816-9ce0a39af590"}'
       objectReference: {fileID: 0}
@@ -611,7 +615,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1180636790054817251, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 566.75977
+      value: 565.88293
       objectReference: {fileID: 0}
     - target: {fileID: 1180636790054817251, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchoredPosition.y
