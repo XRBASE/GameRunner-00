@@ -423,7 +423,9 @@ namespace Cohort.GameRunner.LocoMovement {
 
 			OnSpeedChanged(Locomotion.WALK_SPEED);
 			Direction = Vector3.zero;
-			_lm.Animator.SetState(CharAnimator.AnimationState.Idle);
+			if (_lm.Animator != null) {
+				_lm.Animator.SetState(CharAnimator.AnimationState.Idle);				
+			}
 
 			if (_numTimer <= 0f) {
 				if (_lm.Control == Locomotion.ControlType.Local) {

@@ -1,153 +1,85 @@
-using Cohort.GameRunner.Players;
-using Cohort.Networking.PhotonKeys;
-using ExitGames.Client.Photon;
+using Cohort.GameRunner.Interaction;
 using UnityEngine;
+using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-namespace Cohort.GameRunner.Interaction {
-    public abstract class Interactable : UniqueId {
-        protected const int LAYER = 6;
-
-        public bool Value {
-            get { return _value; }
+/// <summary>
+/// Event based interactable for generic scene interaction purposes.
+/// </summary>
+public class Interactable : BaseInteractable {
+    [Header("Cinematic")]
+    [SerializeField, Tooltip("Activate event, that is called while the user is in the scene.")] 
+    private UnityEvent activateCinematic;
+    [SerializeField, Tooltip("Deactivate event, that is called while the user is in the scene.")] 
+    private UnityEvent deactivateCinematic;
+    
+    [Header("Direct")]
+    //presets the object state, without cinematic effects like camera focus
+    [SerializeField, Tooltip("Activate event, that is called while the scene is being loaded.")]
+    private UnityEvent activateDirect;
+    [SerializeField, Tooltip("Deactivate event, that is called while the scene is being loaded.")]
+    private UnityEvent deactivateDirect;
+    
+    public override void OnInteract() {
+        //flip whatever value is right now.
+        if (Value) {
+            Deactivate();
         }
-
-        public override string Name {
-            get { return gameObject.name; }
+        else {
+            Activate();
         }
-        
-        protected bool InRange { get; private set; }
-        
-        public bool interactable = true;
-        
-        [Tooltip("Can only be activated within this radius"), SerializeField] private float _radius = 1;
-        
-        //all interactables always have a state. True will fire events, false will not.
-        //event like interactions will fire and directly reset themselves, whereas more
-        //permanent Interactables retain it.
+    }
 
-        [Tooltip("Current state on/off"), SerializeField] private bool _value = false;
-        [SerializeField] protected bool _networked = true;
-        private bool _initial = true;
-        
-        protected virtual void Start() {
-            gameObject.layer = LAYER;
-            
-            if (_networked) {
-                Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
-                Network.Local.Callbacks.onRoomPropertiesChanged += OnPropertiesChanged;
-
-                if (Network.Local.Client.InRoom) {
-                    OnJoinedRoom();
-                }
-            }
+    protected override void ActivateLocal() {
+        if (Initial) {
+            activateDirect?.Invoke();
         }
-
-        protected virtual void OnDestroy() {
-            if (_networked) {
-                Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
-                Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropertiesChanged;
-            }
+        else {
+            activateCinematic?.Invoke();
         }
+    }
 
-        public virtual bool CheckInRange() {
-            return (transform.position - Player.Local.transform.position).magnitude <= _radius;
+    protected override void DeactivateLocal() {
+        if (Initial) {
+            deactivateDirect?.Invoke();
         }
-
-        public virtual void SetInRange(bool value) {
-            InRange = value;
+        else {
+            deactivateCinematic?.Invoke();
         }
-
-        public abstract void OnInteract();
-
-        public virtual void Activate() {
-            Activate(null, null);
-        }
-        
-        public virtual void Deactivate() {
-            Deactivate(null, null);
-        }
-
-        protected virtual void Activate(Hashtable changes, Hashtable expected = null) {
-            if (!_networked) {
-                ActivateLocal();
-                return;
-            }
-
-            if (changes == null) {
-                changes = new Hashtable();
-            }
-
-            changes.Add(GetInteractableKey(), true);
-            Network.Local.Client.CurrentRoom.SetCustomProperties(changes, expected);
-        }
-
-        protected virtual void Deactivate(Hashtable changes, Hashtable expected = null) {
-            if (!_networked) {
-                DeactivateLocal();
-                return;
-            }
-
-            if (changes == null) {
-                changes = new Hashtable();
-            }
-
-            changes.Add(GetInteractableKey(), false);
-            Network.Local.Client.CurrentRoom.SetCustomProperties(changes, expected);
-        }
-
-        private void ChangeState(bool newState, bool force = false) {
-            if (!(force || _initial) && _value == newState)
-                return;
-            
-            _initial = false;
-            _value = newState;
-            if (_value) {
-                ActivateLocal();
-            }
-            else {
-                DeactivateLocal();
-            }
-        }
-
-        protected abstract void ActivateLocal();
-
-        protected abstract void DeactivateLocal();
-
-        protected virtual void OnJoinedRoom() {
-            if (!_networked)
-                return;
-            
-            OnPropertiesChanged(Network.Local.Client.CurrentRoom.CustomProperties);
-            
-            if (!Network.Local.Client.CurrentRoom.CustomProperties.ContainsKey(GetInteractableKey())) {
-                Deactivate();
-            }
-        }
-
-        protected virtual void OnPropertiesChanged(Hashtable changes) {
-            if (!_networked)
-                return;
-            
-            string key = GetInteractableKey();
-            
-            if (changes.ContainsKey(key)) {
-                if (changes[key] == null) {
-                    Deactivate();
-                }
-                else {
-                    ChangeState((bool)changes[key]);
-                }
-            }
-        }
-
-        protected string GetInteractableKey() {
-            return Keys.GetUUID(Keys.Room.Interactable, Identifier.ToString());
-        }
+    }
 
 #if UNITY_EDITOR
-        public virtual void OnDrawGizmosSelected() {
-            Gizmos.DrawWireSphere(transform.position, _radius);
+    [CustomEditor(typeof(Interactable))]
+    private class InteractableEditor : Editor {
+        private Interactable _instance;
+
+        private void OnEnable() {
+            _instance = (Interactable)target;
         }
-#endif
+
+        public override void OnInspectorGUI() {
+            DrawDefaultInspector();
+            if (GUILayout.Button("->> Copy cinematic to direct")) {
+                if (_instance.activateCinematic != null) {
+                    _instance.activateDirect = _instance.activateCinematic;
+                }
+
+                if (_instance.deactivateCinematic != null) {
+                    _instance.deactivateDirect = _instance.deactivateCinematic;
+                }
+            }
+            if (GUILayout.Button("<<- Copy direct to cinematic")) {
+                if (_instance.activateDirect != null) {
+                    _instance.activateCinematic = _instance.activateDirect;
+                }
+
+                if (_instance.deactivateDirect != null) {
+                    _instance.deactivateCinematic = _instance.deactivateDirect;
+                }
+            }
+        }
     }
+#endif
 }

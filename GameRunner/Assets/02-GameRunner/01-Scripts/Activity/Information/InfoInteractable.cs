@@ -2,7 +2,7 @@ using Cohort.GameRunner.Interaction;
 using Cohort.GameRunner.Players;
 using UnityEngine;
 
-public class InfoInteractable : Interactable {
+public class InfoInteractable : BaseInteractable {
     [SerializeField] private InfoDescription description;
     [SerializeField] private ObjIndicator _indicator;
     
