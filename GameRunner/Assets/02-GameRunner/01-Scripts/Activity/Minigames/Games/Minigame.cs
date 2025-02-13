@@ -16,6 +16,8 @@ namespace Cohort.GameRunner.Minigames {
 			get;
 			set;
 		}
+
+		protected bool IsPlaying;
 		
 		protected Action<FinishCause, float> _onFinished;
 		protected Action _onExit;

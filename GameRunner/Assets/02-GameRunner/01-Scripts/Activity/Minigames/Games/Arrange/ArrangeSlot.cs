@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 public class ArrangeSlot : UIPointerOver
@@ -9,22 +10,13 @@ public class ArrangeSlot : UIPointerOver
     public Image image;
     public TextMeshProUGUI description;
     public string correctId;
-    public ArrangeType arrangeType;
-    
-    public void Initialise(ArrangeType arrangeType, string correctId, string descriptionText)
+    public PlayableDirector playableDirector;
+    public PlayableAsset correctFeedback, incorrectFeedback;
+
+    public void Initialise(string correctId, string descriptionText)
     {
         this.correctId = correctId;
         description.text = descriptionText;
-        this.arrangeType = arrangeType;
-        switch (arrangeType)
-        {
-            case ArrangeType.Deposit:
-                description.gameObject.SetActive(false);
-                break;
-            case ArrangeType.Submission:
-                description.gameObject.SetActive(true);
-                break;
-        }
     }
 
     public void SetOccupiedArrangeElement(ArrangeElement arrangeElement)
@@ -52,6 +44,25 @@ public class ArrangeSlot : UIPointerOver
     public void Reset()
     {
         SetImageVisible(occupied);
+    }
+
+    public void PlayCorrectFeedback()
+    {
+        StartPlayable(correctFeedback);
+    }
+    
+    public void PlayInCorrectFeedback()
+    {
+        StartPlayable(incorrectFeedback);
+    }
+    
+    private void StartPlayable(PlayableAsset playable)
+    {
+        playableDirector.time = 0;
+        playableDirector.Stop();
+        playableDirector.Evaluate();
+        playableDirector.playableAsset = playable;
+        playableDirector.Play();
     }
     
 }
