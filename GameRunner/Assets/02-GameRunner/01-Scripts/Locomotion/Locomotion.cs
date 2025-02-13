@@ -7,7 +7,7 @@ using Cohort.GameRunner.Input;
 using ExitGames.Client.Photon;
 using UnityEngine;
 using System;
-
+using UnityEngine.SceneManagement;
 using Avatar = Cohort.GameRunner.Avatars.Avatar;
 
 namespace Cohort.GameRunner.LocoMovement {
@@ -132,14 +132,19 @@ namespace Cohort.GameRunner.LocoMovement {
             }
             
             if (Control == ControlType.Local) {
-                EnvironmentLoader.Instance.onEnvironmentLoaded += InitLocomotion;
+                SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;
+                //EnvironmentLoader.Instance.onEnvironmentLoaded += InitLocomotion;
             }
             
             if (Networked && Network.Local.Client.InRoom) {
                 OnJoinedRoom();
             }
         }
-        
+
+        private void SceneManagerOnsceneLoaded(Scene arg0, LoadSceneMode arg1) {
+            InitLocomotion("");
+        }
+
         protected virtual void OnDestroy() {
             if (Control != ControlType.NPC) {
                 ((TrackState)_sm[State.Track]).onTrackEnd -= OnTrackEnd;
@@ -152,7 +157,8 @@ namespace Cohort.GameRunner.LocoMovement {
             }
             
             if (Control == ControlType.Local) {
-                EnvironmentLoader.Instance.onEnvironmentLoaded -= InitLocomotion;
+                SceneManager.sceneLoaded -= SceneManagerOnsceneLoaded;
+                //EnvironmentLoader.Instance.onEnvironmentLoaded -= InitLocomotion;
             }
         }
         
@@ -248,16 +254,16 @@ namespace Cohort.GameRunner.LocoMovement {
         }
 
         private void InitLocomotion(string sceneName) {
-            if (Control == ControlType.Local) {
-                TeleportToSpawn();
-            }
-            
             ActivateRigidBody();
             
             _sm.State = State.Move;
             _state = State.Move;
             
             _initialized = true;
+            
+            if (Control == ControlType.Local) {
+                TeleportToSpawn();
+            }
         }
         
         /// <summary>

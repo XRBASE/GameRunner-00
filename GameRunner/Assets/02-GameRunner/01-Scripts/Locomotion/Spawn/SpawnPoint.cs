@@ -100,6 +100,10 @@ public class SpawnPoint : MonoBehaviour
                     node.transform.position = hit.point;
                 }
             }
+            if (GUILayout.Button("Boink"))
+            {
+                node.TeleportToSpawnPoint();
+            }
         }
     }
     #endif
