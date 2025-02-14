@@ -134,7 +134,7 @@ public class ArrangeGame : Minigame
         Shuffle(places);
         for (int i = 0; i < _arrangeElements.Count; i++)
         {
-            _slots[i].SetOccupiedArrangeElement(_arrangeElements[i]);
+            _slots[i].SetOccupiedArrangeElement(_arrangeElements[places[i]]);
         }
         
     }
