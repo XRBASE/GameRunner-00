@@ -514,7 +514,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _networked
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
@@ -596,6 +596,10 @@ PrefabInstance:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _index
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _networked
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
@@ -681,6 +685,10 @@ PrefabInstance:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _radius
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _networked
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
@@ -778,10 +786,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minigame:
     minigames:
-    - state:
+    - actionDescription: Test video
+      state:
         status: 0
         location: -1
-      actionDescription: Test Quiz
+      sceneName: 01-InfoVi
+      data: '{"uuid":"eccd8c4c-705b-42c1-b83d-5212e9f83d66"}'
+      locations: 03000000
+      networked: 0
+      timeLimit: -1
+      minScore: 3
+      maxScore: 100
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      index: 0
+      log: {fileID: 0}
+    - actionDescription: Test tx
+      state:
+        status: 0
+        location: -1
+      sceneName: 00-InfoTx
+      data: '{"pages":[{"title":"The meaning of life","body":"The meaning of life
+        and everything boils down to the number 42. Most people don''t understand
+        that, but actually it is quite simple."},{"title":"","body":"42 mwaaapp."},{"title":"Luna","body":"Luna
+        is lief"},{"title":"","body":"Miauw!"}]}'
+      locations: 03000000
+      networked: 0
+      timeLimit: -1
+      minScore: 3
+      maxScore: 100
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      index: 1
+      log: {fileID: 0}
+    - actionDescription: Test Quiz
+      state:
+        status: 0
+        location: -1
       sceneName: 01-Quiz
       data: '{"_questions":[{"question":"What was the original name of Micky Mouse?","answers":["Mortimer
         Mouse","The rat","Marvin Mouse","Marshall Mouse"],"correctAnswerIndex":0},{"question":"What
@@ -814,12 +869,12 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 0
+      index: 2
       log: {fileID: 0}
-    - state:
+    - actionDescription: Test Wordle
+      state:
         status: 0
         location: -1
-      actionDescription: Test Wordle
       sceneName: 02-Wordle
       data: "{\"wordGameMode\":0,\"title\":\"Raad het woord\",\"tries\":5,\"puzzleAmount\":2,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
         leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor
@@ -841,12 +896,12 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 1
+      index: 3
       log: {fileID: 0}
-    - state:
+    - actionDescription: Test Match
+      state:
         status: 0
         location: -1
-      actionDescription: Test Match
       sceneName: 03-Match
       data: '{"title":"Vind de matches","matchPairs":[{"instanceID":25180},{"instanceID":24978},{"instanceID":25018}],"chosenIds":["8ef2f5ac-e2a3-48ca-8cc7-b4f426896a02","16286320-c684-444b-99c4-dd5e3e3935e1","dd6cabae-ae5a-4c90-99a5-d2fcc7a5d794"]}'
       locations: 02000000
@@ -863,12 +918,12 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 2
+      index: 4
       log: {fileID: 0}
-    - state:
+    - actionDescription: Test
+      state:
         status: 0
         location: -1
-      actionDescription: Test
       sceneName: 00-Tester
       data: 
       locations: 03000000
@@ -885,7 +940,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 3
+      index: 5
       log: {fileID: 0}
 --- !u!4 &1957266246
 Transform:
@@ -921,6 +976,10 @@ PrefabInstance:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _radius
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _networked
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription

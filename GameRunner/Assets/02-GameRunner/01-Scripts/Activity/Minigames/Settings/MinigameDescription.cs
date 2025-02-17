@@ -7,9 +7,9 @@ using Cohort.CustomAttributes;
 namespace Cohort.GameRunner.Minigames {
 	[Serializable]
 	public class MinigameDescription {
-		public State state;
-
 		public string actionDescription = "Do minigame";
+		
+		public State state;
 		public string sceneName = "";
 		public string data;
 		public int[] locations;

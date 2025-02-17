@@ -1,10 +1,27 @@
 using System;
-using Cohort.GameRunner.InformationPoints;
+using Cohort.GameRunner.Minigames;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TextViewer : InfoViewer {
+/// <summary>
+/// Shows the user a piece of text. It can be stylized in it's own scene and pages and titles can be added to further
+/// clarify the information.
+///
+/// Could be further improved by adding the make file formatting rules.
+/// </summary>
+public class TextViewer : Minigame {
+    protected override float CorrectVisualDuration {
+        get { return 0f; }
+    }
+    protected override float FaultiveVisualDuration {
+        get { return 0f; }
+    }
+    protected override float FinishedVisualDuration {
+        get { return 0f; }
+    }
+    public override int Score { get; set; }
+    
     [SerializeField] private GameObject _title;
     [SerializeField] private TMP_Text _titleField;
     [SerializeField] private TMP_Text _bodyField;
@@ -13,28 +30,26 @@ public class TextViewer : InfoViewer {
     [SerializeField] private Button _next;
     [SerializeField] private Button _prev;
     
-
     private int _pageId;
     private TextInfo _data;
-    private Action _onInfoClosed;
-    
-    public override void Initialize(string infoData, Action onInfoClosed) {
-        _data = JsonUtility.FromJson<TextInfo>(infoData);
-        _onInfoClosed = onInfoClosed;
 
+    public override void Initialize(string gameData, float timeLimit, int minScore, int maxScore,
+                                    Action<FinishCause, int> onFinished, Action onExit) {
+        base.Initialize(gameData, timeLimit, minScore, maxScore, onFinished, onExit);
+        
+        _data = JsonUtility.FromJson<TextInfo>(gameData);
+        
         _pageId = 0;
-
         _next.onClick.AddListener(NextPage);
         _prev.onClick.AddListener(PrevPage);
-        _exit.onClick.AddListener(CloseInfoViewer);
-        
+        _exit.onClick.AddListener(FinishMinigame);
         ShowPage();
     }
 
     private void OnDestroy() {
         _next.onClick.RemoveListener(NextPage);
         _prev.onClick.RemoveListener(PrevPage);
-        _exit.onClick.RemoveListener(CloseInfoViewer);
+        _exit.onClick.RemoveListener(FinishMinigame);
     }
 
     private void NextPage() {
@@ -58,7 +73,7 @@ public class TextViewer : InfoViewer {
         _prev.gameObject.SetActive(_pageId != 0);
     }
 
-    public override void CloseInfoViewer() {
-        _onInfoClosed?.Invoke();
+    public override void FinishMinigame() {
+        base.FinishMinigame(FinishCause.FinPointless);
     }
 }
