@@ -42,7 +42,10 @@ namespace Cohort.GameRunner.Minigames {
 		public virtual void Initialize(string gameData, float timeLimit, int minScore, int maxScore, Action<FinishCause, int> onFinished, Action onExit) {
 			_onFinished = onFinished;
 			_onExit = onExit;
+			
 			_scoreRange = new IntRange(minScore, maxScore);
+			//present minimum score, so if no points are earned the minimum is already assigned.
+			Score = minScore;
 
 			if (timeLimit < 0) {
 				_timer.gameObject.SetActive(false);
@@ -104,7 +107,8 @@ namespace Cohort.GameRunner.Minigames {
 			FinFailed = 1<<1,
 			FinPerfect = 1<<2,
 			Timeout = 1<<3,
-			ActivityStop = 1<<4
+			ActivityStop = 1<<4,
+			FinPointless = 1<<5, //This option skips the point panel and acts as if there were no points earned.
 		}
 	}
 }

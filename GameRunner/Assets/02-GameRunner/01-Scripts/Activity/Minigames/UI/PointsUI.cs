@@ -55,8 +55,10 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         private void OnMinigameFinished(Minigame.FinishCause cause, int score) {
+            if (cause == Minigame.FinishCause.FinPointless)
+                return;
+            
             Activate();
-
             ShowScore(score, MinigameManager.Instance.Current.minScore, MinigameManager.Instance.Current.maxScore,
                       MinigameManager.Instance.Current.actionDescription, cause);
         }

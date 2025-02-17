@@ -132,8 +132,8 @@ namespace Cohort.GameRunner.LocoMovement {
             }
             
             if (Control == ControlType.Local) {
-                SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;
-                //EnvironmentLoader.Instance.onEnvironmentLoaded += InitLocomotion;
+                //SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;
+                EnvironmentLoader.Instance.onEnvironmentLoaded += InitLocomotion;
             }
             
             if (Networked && Network.Local.Client.InRoom) {
@@ -157,8 +157,8 @@ namespace Cohort.GameRunner.LocoMovement {
             }
             
             if (Control == ControlType.Local) {
-                SceneManager.sceneLoaded -= SceneManagerOnsceneLoaded;
-                //EnvironmentLoader.Instance.onEnvironmentLoaded -= InitLocomotion;
+                //SceneManager.sceneLoaded -= SceneManagerOnsceneLoaded;
+                EnvironmentLoader.Instance.onEnvironmentLoaded -= InitLocomotion;
             }
         }
         

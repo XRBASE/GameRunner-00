@@ -1,12 +1,22 @@
 using System;
-using System.Collections;
-using Cohort.GameRunner.InformationPoints;
+using Cohort.GameRunner.Minigames;
 using Cohort.Networking.Spaces;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-public class VideoViewer : InfoViewer {
+public class VideoViewer : Minigame {
+    protected override float CorrectVisualDuration {
+        get { return 0f; }
+    }
+    protected override float FaultiveVisualDuration {
+        get { return 0f; }
+    }
+    protected override float FinishedVisualDuration {
+        get { return 0f; }
+    }
+    public override int Score { get; set; }
+    
     private const float VOLUME_SCALAR = 1f;
 
     public bool Interactable {
@@ -30,8 +40,7 @@ public class VideoViewer : InfoViewer {
     
     [SerializeField] private Toggle _audioTgl;
     [SerializeField] private Slider _volume;
-
-    private Action _onInfoClosed;
+    
     private VideoInfo _data;
     private RenderTexture _tex;
     
@@ -50,6 +59,7 @@ public class VideoViewer : InfoViewer {
         
         Interactable = false;
         _player.prepareCompleted += OnPrep;
+        _player.loopPointReached += OnVideoFinished;
         
         base.Awake();
     }
@@ -63,16 +73,18 @@ public class VideoViewer : InfoViewer {
         _player.prepareCompleted -= OnPrep;
     }
 
-    public override void Initialize(string infoData, Action onInfoClosed) {
-        _data = JsonUtility.FromJson<VideoInfo>(infoData);
-        _onInfoClosed = onInfoClosed;
+    public override void Initialize(string gameData, float timeLimit, int minScore, int maxScore,
+                                    Action<FinishCause, int> onFinished, Action onExit) {
+        base.Initialize(gameData, timeLimit, minScore, maxScore, onFinished, onExit);
+        
+        _data = JsonUtility.FromJson<VideoInfo>(gameData);
         
         _player.url = AssetRequest.GetDownloadURL(_data.uuid);
         _player.Prepare();
     }
 
-    public override void CloseInfoViewer() {
-        _onInfoClosed?.Invoke();
+    public override void FinishMinigame() {
+        base.FinishMinigame(FinishCause.FinPointless);
     }
 
     private void OnPrep(VideoPlayer source) {
@@ -98,6 +110,10 @@ public class VideoViewer : InfoViewer {
             _viewport.color = Color.black;
             _stopped = true;
         }
+    }
+    
+    private void OnVideoFinished(VideoPlayer source) {
+        FinishMinigame();
     }
 
     private void PlayPause(bool isPlaying) {

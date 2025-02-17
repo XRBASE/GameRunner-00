@@ -37,6 +37,10 @@ namespace Base.Ravel.Utils
             {
                 EditorUtility.RevealInFinder(Application.persistentDataPath);
             }
+            if (GUILayout.Button("Ping settings object"))
+            {
+                EditorGUIUtility.PingObject(Resources.Load<SceneContainer>("Config/SO_SceneContainer"));
+            }
             if (!EditorApplication.isPlaying)
             {
                 DrawScenes();
