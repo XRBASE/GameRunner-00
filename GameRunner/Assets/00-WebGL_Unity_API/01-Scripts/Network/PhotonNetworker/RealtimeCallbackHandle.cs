@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cohort.Ravel.PhotonNetworking.Rooms;
 using Photon.Realtime;
 using UnityEngine;
-using UnityEngine.Android;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 //no partial, but namespace
@@ -28,6 +26,9 @@ namespace Cohort.Ravel.PhotonNetworking.Callbacks
         public Action onRoomCreateFailed;
         public Action onJoinedRoom;
         public Action onJoinRoomFailed;
+
+        //network update (data will be sent and recieved based on this call).
+        public Action onService;
         
         /// <summary>
         /// This callback is called when the player has disconnected from the network (or is connecting to the next room),

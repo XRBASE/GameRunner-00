@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,47 +8,59 @@ using Cohort.UI.Generic;
 namespace Cohort.GameRunner.Minigames {
     public class PointsUI : UIPanel {
         private const string POINTS_KEYWORD = "[POINTS]";
-        private const string NAME_KEYWORD = "[LEARNING]";
+        private const string NAME_KEYWORD = "[MINIGAME]";
+
+        private readonly Dictionary<Minigame.FinishCause, string> BODIES =
+            new Dictionary<Minigame.FinishCause, string> {
+                {Minigame.FinishCause.FinPerfect, "Amazing, you finished [MINIGAME] perfectly and earned [POINTS] points!"},
+                {Minigame.FinishCause.FinSuccess, "You finished [MINIGAME] and earned [POINTS] points!"},
+                {Minigame.FinishCause.FinFailed, "You failed [MINIGAME]... \n[POINTS] Points earned."},
+                {Minigame.FinishCause.Timeout, "You ran out of time... \n[POINTS] Points earned."},
+                {Minigame.FinishCause.ActivityStop, "The activity was stopped. \n[POINTS] Points earned!"}
+            };
+        private readonly Dictionary<Minigame.FinishCause, string> TITLES =
+            new Dictionary<Minigame.FinishCause, string> {
+                {Minigame.FinishCause.FinPerfect, "[MINIGAME] perfect score!"},
+                {Minigame.FinishCause.FinSuccess, "[MINIGAME] minigame finished!"},
+                {Minigame.FinishCause.FinFailed, "[MINIGAME] minigame failed!"},
+                {Minigame.FinishCause.Timeout, "Time limit reached!"},
+                {Minigame.FinishCause.ActivityStop, "Activity stopped!"}
+            };
 
         [SerializeField] private Slider _scoreSlider;
         [SerializeField] private float _slideDuration;
         [SerializeField] private AnimationCurve _scoreSlideCurve;
         [SerializeField] private ParticleSystem _confetti;
-
-        [SerializeField] private GameObject _successVisuals;
-        [SerializeField] private GameObject _failureVisuals;
-        [SerializeField] private TMP_Text[] _fields;
-
-        private string[] _fieldTemplates;
+        
+        [SerializeField] private TMP_Text _bodyField;
+        [SerializeField] private TMP_Text _titleField;
+        
         private bool _animate;
         private float _timer;
         private float _score;
 
         private void Awake() {
             UILocator.Register(this);
-
-            _fieldTemplates = new string[_fields.Length];
-            for (int i = 0; i < _fields.Length; i++) {
-                _fieldTemplates[i] = _fields[i].text;
-            }
         }
 
         private void Start() {
-            MinigameManager.Instance.onMinigameFinished += OnLearningFinished;
+            MinigameManager.Instance.onMinigameFinished += OnMinigameFinished;
 
             Deactivate();
         }
 
         private void OnDestroy() {
             UILocator.Remove<PointsUI>();
-            MinigameManager.Instance.onMinigameFinished -= OnLearningFinished;
+            MinigameManager.Instance.onMinigameFinished -= OnMinigameFinished;
         }
 
-        private void OnLearningFinished(float score) {
+        private void OnMinigameFinished(Minigame.FinishCause cause, int score) {
+            if (cause == Minigame.FinishCause.FinPointless)
+                return;
+            
             Activate();
-
-            ShowScore(score, MinigameManager.Instance.ScoreMultiplier,
-                      MinigameManager.Instance.Current.actionDescription);
+            ShowScore(score, MinigameManager.Instance.Current.minScore, MinigameManager.Instance.Current.maxScore,
+                      MinigameManager.Instance.Current.actionDescription, cause);
         }
 
         public void ResetPanel() {
@@ -67,19 +80,12 @@ namespace Cohort.GameRunner.Minigames {
             _scoreSlider.value = _scoreSlideCurve.Evaluate(Mathf.Clamp01(_timer / _slideDuration)) * _score;
         }
 
-        private void ShowScore(float score, int scoreMod, string learningName) {
-            bool success = score >= MinigameManager.FAILURE_THRESHOLD;
-            bool amazing = score >= MinigameManager.AMAZING_THRESHOLD;
+        private void ShowScore(int score, int minScore, int maxscore, string learningName, Minigame.FinishCause cause) {
+            _bodyField.text = GetInfoString(score, learningName, BODIES[cause]);
+            _titleField.text = GetInfoString(score, learningName, TITLES[cause]);
 
-            _successVisuals.gameObject.SetActive(success);
-            _failureVisuals.gameObject.SetActive(!success);
-
-            for (int i = 0; i < _fields.Length; i++) {
-                _fields[i].text = GetInfoString(Mathf.RoundToInt(score * scoreMod), learningName, _fieldTemplates[i]);
-            }
-
-            _score = score;
-            if (amazing) {
+            _score = (float)(score - minScore) / (maxscore - minScore);
+            if (cause == Minigame.FinishCause.FinPerfect) {
                 _confetti.Clear();
                 _confetti.Play();
             }

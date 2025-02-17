@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.InputSystem.UI;
 
 namespace Cohort.GameRunner.Input
 {
@@ -20,79 +21,153 @@ namespace Cohort.GameRunner.Input
 
         public bool teleportEnabled = true;
 
-        public CursorRayCaster Raycaster {
+        public CursorRayCaster Raycaster
+        {
             get { return _raycaster; }
             set { _raycaster = value; }
         }
 
         [SerializeField] private CursorRayCaster _raycaster;
-        
+        [SerializeField] private InputSystemUIInputModule _uiInputModule;
+
         /// <summary>
         /// Returns the input action asset or loads it if it is null
         /// </summary>
-        public static InputActionAsset InputActionAsset { get { return _inputActionAsset; } }
+        public static InputActionAsset InputActionAsset
+        {
+            get { return _inputActionAsset; }
+        }
+
         private static InputActionAsset _inputActionAsset;
-        
+
         /// <summary>
         /// UI input subaction set
         /// </summary>
-        public UIInput UIInput { get { return _uiInput; } }
+        public UIInput UIInput
+        {
+            get { return _uiInput; }
+        }
+
         private UIInput _uiInput;
-        
+
         /// <summary>
         /// Cursor input for the overlying game
         /// </summary>
-        public CursorInput GameCursor { get { return _gameCursor; } }
+        public CursorInput GameCursor
+        {
+            get { return _gameCursor; }
+        }
+
         private CursorInput _gameCursor;
-        
+
         /// <summary>
         /// Cursor input for the learning mini games.
         /// </summary>
-        public CursorInput LearningCursor { get { return _learningCursor; } }
+        public CursorInput LearningCursor
+        {
+            get { return _learningCursor; }
+        }
+
         private CursorInput _learningCursor;
-        
-        public InteractInput InteractInput { get { return _interactInput; } }
+
+        public InteractInput InteractInput
+        {
+            get { return _interactInput; }
+        }
+
         private InteractInput _interactInput;
 
-        public TrackInputs TrackInputs { get { return _trackInputs; } }
+        public TrackInputs TrackInputs
+        {
+            get { return _trackInputs; }
+        }
+
         private TrackInputs _trackInputs;
-        
-        public PlayerMoveInput PlayerMove { get { return _playerMove; } }
+
+        public PlayerMoveInput PlayerMove
+        {
+            get { return _playerMove; }
+        }
+
         private PlayerMoveInput _playerMove;
-        
-        public CameraInput CameraInput { get { return _cameraInput; } }
+
+        public CameraInput CameraInput
+        {
+            get { return _cameraInput; }
+        }
+
         private CameraInput _cameraInput;
-        
-        public DialogInput DialogInput { get { return _dialogInput; } }
+
+        public DialogInput DialogInput
+        {
+            get { return _dialogInput; }
+        }
+
         private DialogInput _dialogInput;
 
-        public DevInput DevInput { get { return _devInput; } }
+        public DevInput DevInput
+        {
+            get { return _devInput; }
+        }
+
         private DevInput _devInput;
 
-        public EmoteInput EmoteInput { get { return _emoteInput; } }
+        public EmoteInput EmoteInput
+        {
+            get { return _emoteInput; }
+        }
+
         private EmoteInput _emoteInput;
-        
-        public GamepadInput GamepadInput { get { return _gamepadInput; } }
+
+        public GamepadInput GamepadInput
+        {
+            get { return _gamepadInput; }
+        }
+
         private GamepadInput _gamepadInput;
 
-        public InputDetector InputDetector { get { return _inputDetector; } }
+        public InputDetector InputDetector
+        {
+            get { return _inputDetector; }
+        }
+
         private InputDetector _inputDetector;
-        public TypingInput TypingInput { get { return _typingInput; } }
+
+        public TypingInput TypingInput
+        {
+            get { return _typingInput; }
+        }
+
         private TypingInput _typingInput;
 
-        public enum ActionMaps {UI, LearningCursor, GameCursor, Interact, Track, PlayerMove,Emote, Camera, Dialog, Typing, Dev}
+        public enum ActionMaps
+        {
+            UI,
+            LearningCursor,
+            GameCursor,
+            Interact,
+            Track,
+            PlayerMove,
+            Emote,
+            Camera,
+            Dialog,
+            Typing,
+            Dev
+        }
 
-        private Dictionary<ActionMaps, InputActionMap> _actionMapDictionary = new Dictionary<ActionMaps, InputActionMap>();
-        
+        private Dictionary<ActionMaps, InputActionMap> _actionMapDictionary =
+            new Dictionary<ActionMaps, InputActionMap>();
+
 
         protected override void Awake()
         {
             base.Awake();
             _inputActionAsset = Resources.Load<InputActionAsset>("Input/InputActions");
             if (_inputActionAsset is null)
-                throw new Exception("Inputactions not found, check if the file is in the resource folder under the correct name");
-            
-            
+                throw new Exception(
+                    "Inputactions not found, check if the file is in the resource folder under the correct name");
+
+
             //order in this list is the order of execution
             //before move, so it can subscribe to typing input
             _typingInput = new TypingInput(InputActionAsset);
@@ -113,9 +188,9 @@ namespace Cohort.GameRunner.Input
         }
 
         protected void Start()
-        {            
+        {
             PopulateActionMaps(InputActionAsset);
-            
+
             _actionMapDictionary[ActionMaps.UI].Enable();
             _actionMapDictionary[ActionMaps.Interact].Enable();
             _actionMapDictionary[ActionMaps.Track].Enable();
@@ -128,12 +203,12 @@ namespace Cohort.GameRunner.Input
             _actionMapDictionary[ActionMaps.Typing].Enable();
             _actionMapDictionary[ActionMaps.Dialog].Disable();
         }
-        
+
         protected void OnDestroy()
         {
             UIInput.Dispose();
             _uiInput = null;
-            
+
             GameCursor.Dispose();
             InteractInput.Dispose();
             PlayerMove.Dispose();
@@ -144,7 +219,7 @@ namespace Cohort.GameRunner.Input
             TrackInputs.Dispose();
             GamepadInput.Dispose();
             TypingInput.Dispose();
-            
+
             _gameCursor = null;
             _interactInput = null;
             _playerMove = null;
@@ -155,7 +230,7 @@ namespace Cohort.GameRunner.Input
             _trackInputs = null;
             _gamepadInput = null;
             _typingInput = null;
-            
+
             Disposed = true;
         }
 
@@ -167,12 +242,16 @@ namespace Cohort.GameRunner.Input
         public void PopulateActionMaps(InputActionAsset inputActionAsset)
         {
             _actionMapDictionary.Add(ActionMaps.UI, inputActionAsset.FindActionMap(ActionMaps.UI.ToString()));
-            _actionMapDictionary.Add(ActionMaps.Interact, inputActionAsset.FindActionMap(ActionMaps.Interact.ToString()));
-            _actionMapDictionary.Add(ActionMaps.PlayerMove, inputActionAsset.FindActionMap(ActionMaps.PlayerMove.ToString()));
+            _actionMapDictionary.Add(ActionMaps.Interact,
+                inputActionAsset.FindActionMap(ActionMaps.Interact.ToString()));
+            _actionMapDictionary.Add(ActionMaps.PlayerMove,
+                inputActionAsset.FindActionMap(ActionMaps.PlayerMove.ToString()));
             _actionMapDictionary.Add(ActionMaps.Emote, inputActionAsset.FindActionMap(ActionMaps.Emote.ToString()));
             _actionMapDictionary.Add(ActionMaps.Camera, inputActionAsset.FindActionMap(ActionMaps.Camera.ToString()));
-            _actionMapDictionary.Add(ActionMaps.GameCursor, inputActionAsset.FindActionMap(ActionMaps.GameCursor.ToString()));
-            _actionMapDictionary.Add(ActionMaps.LearningCursor, inputActionAsset.FindActionMap(ActionMaps.LearningCursor.ToString()));
+            _actionMapDictionary.Add(ActionMaps.GameCursor,
+                inputActionAsset.FindActionMap(ActionMaps.GameCursor.ToString()));
+            _actionMapDictionary.Add(ActionMaps.LearningCursor,
+                inputActionAsset.FindActionMap(ActionMaps.LearningCursor.ToString()));
             _actionMapDictionary.Add(ActionMaps.Dialog, inputActionAsset.FindActionMap(ActionMaps.Dialog.ToString()));
             _actionMapDictionary.Add(ActionMaps.Dev, inputActionAsset.FindActionMap(ActionMaps.Dev.ToString()));
             _actionMapDictionary.Add(ActionMaps.Track, inputActionAsset.FindActionMap(ActionMaps.Track.ToString()));
@@ -181,7 +260,7 @@ namespace Cohort.GameRunner.Input
 
         public void SetActionMapActive(ActionMaps actionMap, bool active)
         {
-            if(active)
+            if (active)
                 _actionMapDictionary[actionMap].Enable();
             else
                 _actionMapDictionary[actionMap].Disable();
@@ -190,7 +269,7 @@ namespace Cohort.GameRunner.Input
         public void SetMinigameInput() {
             _actionMapDictionary[ActionMaps.UI].Enable();
             _actionMapDictionary[ActionMaps.LearningCursor].Enable();
-            
+
             _actionMapDictionary[ActionMaps.Interact].Disable();
             _actionMapDictionary[ActionMaps.Track].Disable();
             _actionMapDictionary[ActionMaps.PlayerMove].Disable();
@@ -202,9 +281,8 @@ namespace Cohort.GameRunner.Input
             _actionMapDictionary[ActionMaps.Dialog].Disable();
         }
 
-        public void SetGameInput() {
-            _actionMapDictionary[ActionMaps.LearningCursor].Disable();
-            
+        public void SetGameInput()
+        {
             _actionMapDictionary[ActionMaps.UI].Enable();
             _actionMapDictionary[ActionMaps.Interact].Enable();
             _actionMapDictionary[ActionMaps.Track].Enable();
@@ -214,6 +292,8 @@ namespace Cohort.GameRunner.Input
             _actionMapDictionary[ActionMaps.GameCursor].Enable();
             _actionMapDictionary[ActionMaps.Dev].Enable();
             _actionMapDictionary[ActionMaps.Typing].Enable();
+            
+            _actionMapDictionary[ActionMaps.LearningCursor].Disable();
             _actionMapDictionary[ActionMaps.Dialog].Disable();
         }
     }

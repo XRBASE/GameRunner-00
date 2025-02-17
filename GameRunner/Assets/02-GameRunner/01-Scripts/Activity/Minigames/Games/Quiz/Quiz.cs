@@ -8,15 +8,27 @@ using Cohort.Patterns;
 
 namespace Cohort.GameRunner.Minigames.Quiz {
 	public class Quiz : Minigame {
+		protected override float CorrectVisualDuration {
+			get { return 2f; }
+		}
+		protected override float FaultiveVisualDuration {
+			get { return 2f; }
+		}
+		protected override float FinishedVisualDuration {
+			get { return 2f; }
+		}
 
+		public override int Score {
+			get { return _score;}
+			set { _score = value; }
+		}
+
+		private int _score;
+		
 		public UnityEvent onCorrect;
 		public UnityEvent onIncorrect;
-		[SerializeField] private float _graphicTimeout = 2f;
-
-		private Action<float> _onLearningFinished;
-
+		
 		private QuizData _data;
-		private int _scoreMultiplier;
 		private int _questionIndex = 0;
 		private int _correctCount;
 
@@ -24,11 +36,11 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 		[SerializeField] private CanvasGroup _answerGroup;
 		[SerializeField] private QuizAnswer _template;
 		[SerializeField] private TMP_Text _questionField;
-
-		public override void Initialize(string gameData, int scoreMultiplier, Action<float> onLearningFinished) {
+		
+		public override void Initialize(string gameData, float timeLimit, int minScore, int maxScore, Action<FinishCause, int> onFinished, Action onExit) {
+			base.Initialize(gameData, timeLimit, minScore, maxScore, onFinished, onExit);
+			
 			_data = JsonUtility.FromJson<QuizData>(gameData);
-			_scoreMultiplier = scoreMultiplier;
-			_onLearningFinished = onLearningFinished;
 
 			_template.onAnswerGiven = OnAnswerChanged;
 			_pool = new ObjectPool<string, QuizAnswer>(_template);
@@ -43,7 +55,8 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 			
 			if (index == _data._questions[_questionIndex].correctAnswerIndex) {
 				_correctCount++;
-
+				_score = _scoreRange.GetValueRound((float) _correctCount / _data._questions.Length, true);
+				
 				onCorrect?.Invoke();
 			}
 			else {
@@ -56,7 +69,8 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 
 			_questionIndex++;
 			if (_questionIndex < _data._questions.Length) {
-				StartCoroutine(GraphicTimeout());
+				DisableAnswerInteraction();
+				StartCoroutine(DoTimeout(CorrectVisualDuration, (Action)EnableAnswerInteraction + ShowQuestion));
 			}
 			else {
 				//end screen routine
@@ -64,11 +78,12 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 			}
 		}
 
-		private IEnumerator GraphicTimeout() {
+		private void DisableAnswerInteraction() {
 			_answerGroup.interactable = false;
-			yield return new WaitForSeconds(_graphicTimeout);
+		}
+
+		private void EnableAnswerInteraction() {
 			_answerGroup.interactable = true;
-			ShowQuestion();
 		}
 
 		private void ShowQuestion() {
@@ -77,13 +92,8 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 		}
 
 		private IEnumerator OnQuizFinished() {
-			yield return new WaitForSeconds(_graphicTimeout);
-
-			_onLearningFinished?.Invoke((float)_correctCount / _data._questions.Length);
-		}
-
-		public override void StopMinigame() {
-			_onLearningFinished?.Invoke((float)_correctCount / _data._questions.Length);
+			yield return DoTimeout(FinishedVisualDuration, null);
+			FinishMinigame();
 		}
 	}
 }

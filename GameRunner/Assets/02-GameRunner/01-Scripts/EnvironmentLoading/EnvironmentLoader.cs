@@ -82,13 +82,17 @@ public class EnvironmentLoader : Singleton<EnvironmentLoader> {
 
 	    SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
 	    _activeScene = sceneName;
-	    onEnvironmentLoaded?.Invoke(sceneName);
+	    
     }
     
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
 	    if (_initial) {
 		    LoadingManager.Instance[LoadPhase.Lobby, LoadType.LoadLobbyScene].Finish();
 		    _initial = false;
+	    }
+	    
+	    if (scene.name == _activeScene) {
+		    onEnvironmentLoaded?.Invoke(_activeScene);
 	    }
     }
 

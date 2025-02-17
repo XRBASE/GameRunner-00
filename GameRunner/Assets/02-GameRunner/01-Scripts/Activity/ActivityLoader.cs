@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Cohort.CustomAttributes;
 using ExitGames.Client.Photon;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ using Cohort.GameRunner.Minigames;
 using Cohort.GameRunner.Players;
 using Cohort.Patterns;
 
-[DefaultExecutionOrder(102)] // After playermanagement
+[DefaultExecutionOrder(102)] // After playermanagement and after SceneConfiguration
 public class ActivityLoader : Singleton<ActivityLoader> {
     public bool InActivity { get; private set; }
     public bool AllPlayersReady { get; private set; }
@@ -21,7 +22,7 @@ public class ActivityLoader : Singleton<ActivityLoader> {
     public Action onActivityStart; 
     public Action onActivityStop; 
 
-    [SerializeField] private int _session = -1;
+    [SerializeField, ReadOnly] private int _session = -1;
     [SerializeField] private HighscoreTracker _score; 
     private ActivityDescription _description;
 
@@ -48,7 +49,7 @@ public class ActivityLoader : Singleton<ActivityLoader> {
     private void StartActivity() {
         onActivityStart?.Invoke();
         
-        MinigameManager.Instance.OnActivityStart(Activity.ScoreMultiplier);
+        MinigameManager.Instance.OnActivityStart();
     }
     
     public void StopActivity() {
@@ -84,7 +85,7 @@ public class ActivityLoader : Singleton<ActivityLoader> {
         }
         
         //TODO_COHORT: Assetbundles
-        if (_description.AssetRef == name) {
+        if (_description.SceneName == name) {
             OnLocalPlayerReady();
         }
     }
@@ -170,6 +171,9 @@ public class ActivityLoader : Singleton<ActivityLoader> {
         //clear old data
         List<object> keys = props.Keys.ToList();
         foreach (var key in keys) {
+            if (key.ToString() == Keys.Concatenate(Keys.Room.Activity, Keys.Activity.Session)) {
+                continue;
+            }
             if (key.ToString().StartsWith(HighscoreTracker.Instance.GetPlayerSessionScoreKey())) {
                 continue;
             }
@@ -189,7 +193,7 @@ public class ActivityLoader : Singleton<ActivityLoader> {
         Hashtable changes = new Hashtable();
         changes.Add(GetActivityDefKey(), JsonUtility.ToJson(description));
         changes.Add(GetActivitySessionKey(), _session + 1);
-        changes.Add(GetSceneKey(), description.AssetRef);
+        changes.Add(GetSceneKey(), description.SceneName);
         
         Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
     }

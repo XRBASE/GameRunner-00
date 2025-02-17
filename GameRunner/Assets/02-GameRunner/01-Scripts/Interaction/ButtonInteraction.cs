@@ -1,13 +1,12 @@
 using Cohort.GameRunner.Input;
 using Cohort.GameRunner.Interaction;
-using Cohort.GameRunner.Players;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ButtonInteraction : MonoBehaviour {
     [SerializeField] private ObjIndicator _btnFeedback;
     
-    [SerializeField] private Interactable[] _interactables;
+    [SerializeField] private BaseInteractable[] _interactables;
 
     private int _activeId = -1;
     private bool _hasInteractables;
@@ -32,8 +31,9 @@ public class ButtonInteraction : MonoBehaviour {
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        _interactables = FindObjectsOfType<Interactable>();
+        _interactables = FindObjectsOfType<BaseInteractable>();
         _hasInteractables = _interactables.Length > 0;
+        _btnFeedback.SetActive(false);
     }
 
     void Update() {

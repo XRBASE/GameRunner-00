@@ -1,5 +1,4 @@
 using Cohort.GameRunner.Input;
-using Cohort.GameRunner.Players;
 using UnityEngine;
 
 namespace Cohort.GameRunner.Interaction {
@@ -13,7 +12,7 @@ namespace Cohort.GameRunner.Interaction {
 		}
 		
 		void OnInteract() {
-			Interactable i = _raycaster.CurHit.collider.GetComponent<Interactable>();
+			BaseInteractable i = _raycaster.CurHit.collider.GetComponent<BaseInteractable>();
 			if (i == null) {
 				//TODO_COHORT: really wanna do this?
 				//does it even work?

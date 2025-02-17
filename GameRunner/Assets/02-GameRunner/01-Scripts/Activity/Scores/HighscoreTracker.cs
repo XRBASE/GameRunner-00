@@ -17,7 +17,6 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 	public Action<PlayerScore[]> onScoresUpdated;
 	
 	private int _session;
-	private int _multiplier = 100;
 	
 	private PlayerScore _local;
 	private Dictionary<string, PlayerScore> _scores = new Dictionary<string, PlayerScore>();
@@ -25,14 +24,12 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 	private void Start() {
 		Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
-
-		MinigameManager.Instance.onScoreReset += ClearLocalScore;
+		
 		MinigameManager.Instance.onMinigameFinished += OnLearningFinished;
 	}
 	
 	public void Initialize(ActivityDescription _activity, int session) {
 		_session = session;
-		_multiplier = _activity.ScoreMultiplier;
 		_local = new PlayerScore(0, Player.Local.Name);
 		
 		if (Network.Local.Client.InRoom) {
@@ -43,8 +40,7 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 	private void OnDestroy() {
 		Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoomPropertiesChanged;
-
-		MinigameManager.Instance.onScoreReset -= ClearLocalScore;
+		
 		MinigameManager.Instance.onMinigameFinished -= OnLearningFinished;
 	}
 
@@ -93,8 +89,8 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		return _scores.Values.OrderBy(s => s.score).Reverse().ToArray();
 	}
 
-	public void OnLearningFinished(float dec) {
-		_local.score += Mathf.RoundToInt(dec * _multiplier);
+	public void OnLearningFinished(Minigame.FinishCause cause, int score) {
+		_local.score += score;
 		
 		if (_local.name == "warLott" || _local.name == "Itsa_Lott") {
 			UpdateLocalPlayerScore(new PlayerScore(_local.score + 1, _local.name));

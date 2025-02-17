@@ -1,11 +1,10 @@
-using System;
 using Cohort.CustomAttributes;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
 /// Should be derived from MonoBehaviour to work.
 /// </summary>
-[Serializable]
 public abstract class UniqueId : MonoBehaviour
 {
 	/// <summary>
@@ -14,24 +13,18 @@ public abstract class UniqueId : MonoBehaviour
 	/// </summary>
 	public int Identifier {
 		get { return _id;}
-		set {
-			_id = value;
-			_idSet = value >= 0;
-		}
+		set { _id = value; }
 	}
-
-	public bool IdentifierSet {
-		get { return _idSet; }
-	}
-
 	[ReadOnly, SerializeField] private int _id = -1;
-	private bool _idSet;
+	[HideInInspector, SerializeField] private bool _subscribed;
 	
 	public abstract string Name { get; }
-
+	
 	public virtual void OnValidate() {
-		if (_id > 0 && !_idSet) {
+#if UNITY_EDITOR
+		if (_id >= 0 && EditorUtility.IsDirty(this) && IdLocator.IdTaken(this)) {
 			_id = -1;
 		}
+#endif
 	}
 }

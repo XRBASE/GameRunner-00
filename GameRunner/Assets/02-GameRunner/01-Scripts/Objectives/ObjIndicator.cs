@@ -1,4 +1,3 @@
-using Cohort.GameRunner.Players;
 using Cohort.UI.Generic;
 using UnityEngine;
 using UnityEngine.UI;

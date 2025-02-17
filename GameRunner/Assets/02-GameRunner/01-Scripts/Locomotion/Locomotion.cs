@@ -7,7 +7,7 @@ using Cohort.GameRunner.Input;
 using ExitGames.Client.Photon;
 using UnityEngine;
 using System;
-
+using UnityEngine.SceneManagement;
 using Avatar = Cohort.GameRunner.Avatars.Avatar;
 
 namespace Cohort.GameRunner.LocoMovement {
@@ -123,6 +123,7 @@ namespace Cohort.GameRunner.LocoMovement {
         protected virtual void Start() {
             if (Networked) {
                 Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
+                Network.Local.Callbacks.onService += UpdateNetwork;
                 _player.onPropertiesChanged += OnCustomPropertiesChanged;
             }
 
@@ -131,6 +132,7 @@ namespace Cohort.GameRunner.LocoMovement {
             }
             
             if (Control == ControlType.Local) {
+                //SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;
                 EnvironmentLoader.Instance.onEnvironmentLoaded += InitLocomotion;
             }
             
@@ -138,7 +140,11 @@ namespace Cohort.GameRunner.LocoMovement {
                 OnJoinedRoom();
             }
         }
-        
+
+        private void SceneManagerOnsceneLoaded(Scene arg0, LoadSceneMode arg1) {
+            InitLocomotion("");
+        }
+
         protected virtual void OnDestroy() {
             if (Control != ControlType.NPC) {
                 ((TrackState)_sm[State.Track]).onTrackEnd -= OnTrackEnd;
@@ -147,9 +153,11 @@ namespace Cohort.GameRunner.LocoMovement {
             if (Networked) {
                 _player.onPropertiesChanged -= OnCustomPropertiesChanged;
                 Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
+                Network.Local.Callbacks.onService -= UpdateNetwork;
             }
             
             if (Control == ControlType.Local) {
+                //SceneManager.sceneLoaded -= SceneManagerOnsceneLoaded;
                 EnvironmentLoader.Instance.onEnvironmentLoaded -= InitLocomotion;
             }
         }
@@ -234,6 +242,9 @@ namespace Cohort.GameRunner.LocoMovement {
                 Seated = false;
             }
 
+            if (Control != ControlType.Local)
+                return;
+            
             if (SpawnPoint.TryGetById(SpawnPoint.DEFAULT, out SpawnPoint spawn)) {
                 spawn.TeleportToSpawnPoint();
             }
@@ -243,16 +254,16 @@ namespace Cohort.GameRunner.LocoMovement {
         }
 
         private void InitLocomotion(string sceneName) {
-            if (Control == ControlType.Local) {
-                TeleportToSpawn();
-            }
-            
             ActivateRigidBody();
             
             _sm.State = State.Move;
             _state = State.Move;
             
             _initialized = true;
+            
+            if (Control == ControlType.Local) {
+                TeleportToSpawn();
+            }
         }
         
         /// <summary>
@@ -275,7 +286,7 @@ namespace Cohort.GameRunner.LocoMovement {
             _sm.Update();
         }
 
-        protected virtual void FixedUpdate() {
+        protected virtual void UpdateNetwork() {
             //publish changes whenever there are new changes.
             if (Networked && _hasChanges && _player.Initialized && Network.Local.Client.IsConnectedAndReady) {
                 _player.SetCustomProperties(_changeTable);

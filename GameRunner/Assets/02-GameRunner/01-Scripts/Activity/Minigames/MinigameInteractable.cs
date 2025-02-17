@@ -1,5 +1,8 @@
 using ExitGames.Client.Photon;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 using Cohort.CustomAttributes;
 using Cohort.GameRunner.Interaction;
@@ -7,22 +10,21 @@ using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 
 namespace Cohort.GameRunner.Minigames {
-    [DefaultExecutionOrder(0)] //Before learningManager
-    public class MinigameInteractable : Interactable {
+    public class MinigameInteractable : BaseInteractable {
 
         public string LocationDescription {
             get { return _locationDescription; }
         }
 
-        public bool HasLearning {
-            get { return _hasLearning; }
+        public bool HasMinigame {
+            get { return hasMinigame; }
             private set {
                 interactable = value;
-                _hasLearning = value;
+                hasMinigame = value;
             }
         }
 
-        [ReadOnly, SerializeField] private bool _hasLearning;
+        [ReadOnly, SerializeField] private bool hasMinigame;
 
         [SerializeField] private string _locationDescription = "At position";
         [SerializeField] private ObjIndicator _indicator;
@@ -35,8 +37,6 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         protected override void Start() {
-            _networked = _networked && MinigameManager.Instance.LearningsNetworked;
-
             base.Start();
 
             if (_networked) {
@@ -47,11 +47,11 @@ namespace Cohort.GameRunner.Minigames {
         public override void SetInRange(bool value) {
             base.SetInRange(value);
 
-            _indicator.SetActive(!InRange && HasLearning);
+            _indicator.SetActive(!InRange && HasMinigame);
         }
 
         public override void OnInteract() {
-            if (!HasLearning) {
+            if (!HasMinigame) {
                 return;
             }
 
@@ -77,10 +77,7 @@ namespace Cohort.GameRunner.Minigames {
 
         protected override void ActivateLocal() {
             _indicator.SetActive(false);
-
-            if (!_networked || _actor == Player.Local.ActorNumber) {
-                MinigameManager.Instance.OnMinigameStart(_minigame, this);
-            }
+            MinigameManager.Instance.OnMinigameStart(_minigame, this);
         }
 
         protected override void Deactivate(Hashtable changes, Hashtable expected = null) {
@@ -93,8 +90,9 @@ namespace Cohort.GameRunner.Minigames {
                 changes = new Hashtable();
 
             changes.Add(GetActorKey(), null);
-            changes.Add(GetLearningKey(), -1);
-
+            
+            //Should we even track actor on deactivate?
+            
             //if there is an actor this item can only be deactivated by that actor.
             if (_actor != -1) {
                 if (expected == null)
@@ -106,48 +104,32 @@ namespace Cohort.GameRunner.Minigames {
             base.Deactivate(changes, expected);
         }
 
-        protected override void DeactivateLocal() {
-            SetMinigameLocal(-1);
-        }
+        protected override void DeactivateLocal() { }
 
-        public void SetMinigame(MinigameDescription minigame = null) {
-            if (!_networked) {
-                if (minigame == null)
-                    SetMinigameLocal(-1);
-                else
-                    SetMinigameLocal(minigame.index);
+        public void SetMinigame(int index = -1) {
+            HasMinigame = index >= 0;
 
-                return;
-            }
-
-            Hashtable changes = new Hashtable();
-            if (minigame != null) {
-                changes.Add(GetLearningKey(), minigame.index);
-            }
-            else {
-                changes.Add(GetLearningKey(), -1);
-            }
-
-            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
-        }
-
-        public void SetMinigameLocal(int index) {
-            HasLearning = index >= 0;
-
-            if (HasLearning) {
+            if (HasMinigame) {
                 _minigame = MinigameManager.Instance[index];
 
-                _indicator.SetActive(!InRange && HasLearning);
-                MinigameManager.Instance.SetMinigameLog(_minigame, this);
+                if (_minigame.state.status == MinigameDescription.Status.FinSuccess ||
+                    _minigame.state.status == MinigameDescription.Status.FinFailed) {
+                    Debug.LogWarning("Minigame already finished");
+                    
+                    HasMinigame = false;
+                    _indicator.SetActive(false);
+                    _minigame = null;
+                    return;
+                }
+                
+                _indicator.SetActive(!InRange);
+                
+                MinigameManager.Instance.SetMinigameLog(_minigame, this); 
                 return;
             }
-
+            
             _indicator.SetActive(false);
-
-            if (_minigame != null) {
-                MinigameManager.Instance.RemoveMinigameLog(_minigame);
-                _minigame = null;
-            }
+            _minigame = null;
         }
 
         private void OnPlayerLeftRoom(Photon.Realtime.Player obj) {
@@ -167,17 +149,7 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         protected override void OnPropertiesChanged(Hashtable changes) {
-            string key = GetLearningKey();
-            if (changes.ContainsKey(key)) {
-                if (changes[key] == null) {
-                    SetMinigameLocal(-1);
-                }
-                else {
-                    SetMinigameLocal((int)changes[key]);
-                }
-            }
-
-            key = GetActorKey();
+            string key =  GetActorKey();
             if (changes.ContainsKey(key)) {
                 if (changes[key] == null) {
                     _actor = -1;
@@ -195,11 +167,25 @@ namespace Cohort.GameRunner.Minigames {
                 Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.Actor),
                 Identifier.ToString());
         }
+        
+#if UNITY_EDITOR
+        public override void OnValidate() {
+            base.OnValidate();
+            
+            if (_networked) {
+                _networked = false;
+                EditorUtility.SetDirty(this);
 
-        private string GetLearningKey() {
-            return Keys.Concatenate(
-                Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.Index),
-                Identifier.ToString());
+                if (!Application.isPlaying) {
+                    Debug.LogWarning("Minigame interactables are never networked, minigames themselves can be set to not networked! See sceneConfig!");
+                    GameObject ping = FindObjectOfType<SceneConfiguration>()?.gameObject;
+                    if (ping != null) {
+                        EditorGUIUtility.PingObject(ping);
+                    }
+                }
+            }
         }
+        
+#endif
     }
 }

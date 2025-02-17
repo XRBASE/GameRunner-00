@@ -29,6 +29,7 @@ namespace Cohort.GameRunner.Input.Maps {
 
         public Action rightDown;
         public Action rightUp;
+        public Action<Vector2> onDrag;
         private float _rightClickTimer;
 
         private InputAction _screenPosAction;
@@ -95,6 +96,11 @@ namespace Cohort.GameRunner.Input.Maps {
             if (context.performed) {
                 //set to false on mouse down to ensure it is true only while dragging, even in the mouseUp event.
                 Dragging = true;
+                
+                onDrag?.Invoke(context.ReadValue<Vector2>());
+            }
+            else {
+                onDrag?.Invoke(Vector2.zero);
             }
         }
 
