@@ -10,7 +10,7 @@ using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 
 namespace Cohort.GameRunner.Minigames {
-    public class MinigameInteractable : Interactable {
+    public class MinigameInteractable : BaseInteractable {
 
         public string LocationDescription {
             get { return _locationDescription; }

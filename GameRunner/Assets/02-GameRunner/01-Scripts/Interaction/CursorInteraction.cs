@@ -12,7 +12,7 @@ namespace Cohort.GameRunner.Interaction {
 		}
 		
 		void OnInteract() {
-			Interactable i = _raycaster.CurHit.collider.GetComponent<Interactable>();
+			BaseInteractable i = _raycaster.CurHit.collider.GetComponent<BaseInteractable>();
 			if (i == null) {
 				//TODO_COHORT: really wanna do this?
 				//does it even work?
