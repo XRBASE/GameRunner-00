@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
+/// <summary>
+/// This class is used to display a video as a minigame. The game continiues when the video has finished playing.
+/// </summary>
 public class VideoViewer : Minigame {
     protected override float CorrectVisualDuration {
         get { return 0f; }

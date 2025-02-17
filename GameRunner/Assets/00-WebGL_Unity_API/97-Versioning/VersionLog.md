@@ -1,3 +1,7 @@
+# v0.3.1
+- minor patches in spawn point, so that it does not teleport the player when starting a minigame
+- Information points now integrated into the minigame system, so that text and video can also be shown as a minigame.
+
 # v0.3.0
 Networked minigame state and player progression. Networked minigames now activate for all players, but the minigame itself is still single player.
 Minigames now all have their own minimum and maximum score. Score is tracked as integer now and not as float anymore.
