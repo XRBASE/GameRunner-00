@@ -162,7 +162,7 @@ Transform:
   m_GameObject: {fileID: 592715496}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.06441427, y: 4.5206738, z: -7.94}
+  m_LocalPosition: {x: -0.0644142, y: 4.5206738, z: -7.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -786,7 +786,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minigame:
     minigames:
-    - actionDescription: Test video
+    - actionDescription: 0-Test video
+      phase: 0
       state:
         status: 0
         location: -1
@@ -808,7 +809,8 @@ MonoBehaviour:
           m_Calls: []
       index: 0
       log: {fileID: 0}
-    - actionDescription: Test tx
+    - actionDescription: 1-Test tx
+      phase: 1
       state:
         status: 0
         location: -1
@@ -833,7 +835,8 @@ MonoBehaviour:
           m_Calls: []
       index: 1
       log: {fileID: 0}
-    - actionDescription: Test Quiz
+    - actionDescription: 2-Test Quiz
+      phase: 2
       state:
         status: 0
         location: -1
@@ -871,34 +874,8 @@ MonoBehaviour:
           m_Calls: []
       index: 2
       log: {fileID: 0}
-    - actionDescription: Test Wordle
-      state:
-        status: 0
-        location: -1
-      sceneName: 02-Wordle
-      data: "{\"wordGameMode\":0,\"title\":\"Raad het woord\",\"tries\":5,\"puzzleAmount\":2,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
-        leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor
-        veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt veel gebruikt in thaise
-        recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen
-        worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt
-        na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}]}"
-      locations: 01000000
-      networked: 0
-      timeLimit: 30
-      minScore: 1
-      maxScore: 100
-      onFinCinematic:
-        m_PersistentCalls:
-          m_Calls: []
-      onFinDirect:
-        m_PersistentCalls:
-          m_Calls: []
-      onReset:
-        m_PersistentCalls:
-          m_Calls: []
-      index: 3
-      log: {fileID: 0}
-    - actionDescription: Test Match
+    - actionDescription: 2-Test Match
+      phase: 2
       state:
         status: 0
         location: -1
@@ -918,9 +895,10 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 4
+      index: 3
       log: {fileID: 0}
-    - actionDescription: Test
+    - actionDescription: 3-Test
+      phase: 3
       state:
         status: 0
         location: -1
@@ -940,7 +918,97 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
+      index: 4
+      log: {fileID: 0}
+    - actionDescription: 3-Test Wordle
+      phase: 3
+      state:
+        status: 0
+        location: -1
+      sceneName: 02-Wordle
+      data: "{\"wordGameMode\":0,\"title\":\"Raad het woord\",\"tries\":5,\"puzzleAmount\":2,\"wordList\":[{\"word\":\"Aarde\",\"hint\":\"Iedereen
+        leeft hier op\"},{\"word\":\"moord\",\"hint\":\"Jeffrey dahmer is er voor
+        veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt veel gebruikt in thaise
+        recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen
+        worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt
+        na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}]}"
+      locations: 03000000
+      networked: 0
+      timeLimit: 30
+      minScore: 1
+      maxScore: 100
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
       index: 5
+      log: {fileID: 0}
+    - actionDescription: 3-Test Quiz
+      phase: 3
+      state:
+        status: 0
+        location: -1
+      sceneName: 01-Quiz
+      data: '{"_questions":[{"question":"What was the original name of Micky Mouse?","answers":["Mortimer
+        Mouse","The rat","Marvin Mouse","Marshall Mouse"],"correctAnswerIndex":0},{"question":"What
+        does the license plate of the delorian say in Back to the future?","answers":["1Time","88timego","GoFuture","Outatime"],"correctAnswerIndex":3},{"question":"Which
+        of the following is the largest ocean in the world?","answers":["Atlantic
+        ocean","Pacific ocean","Arctic ocean","Indian ocean"],"correctAnswerIndex":1},{"question":"Which
+        star is the brightest star in the night sky?","answers":["Arcturus","North
+        star","Sirius A","None of these"],"correctAnswerIndex":2},{"question":"The
+        Aztecs even used cocoa beans as what?","answers":["Currency","Drugs","Stress
+        relievers","Weapon decorations"],"correctAnswerIndex":0},{"question":"\"Mamma
+        Mia\" is based on a song by which Swedish musical act?","answers":["Bee Gees","Queen","Elton
+        John","ABBA"],"correctAnswerIndex":3},{"question":"Who was the second president
+        of the USA?","answers":["Thomas Jefferson","John Adams","Benjamin Franklin","John
+        Quincy Adams"],"correctAnswerIndex":1},{"question":"Mr Pibb was a soft drink
+        created by the Coca-Cola Company to compete with what other soft drink?","answers":["Cherry
+        Cola","Mountain Dew","Dr. Pepper","Root beer"],"correctAnswerIndex":2},{"question":"True
+        or false? All spiders are carnivorous.","answers":["True","False"],"correctAnswerIndex":0},{"question":"Hicory
+        trees produce which types of nuts?","answers":["Walnuts","Pecans","Pistachios","Macadamia"],"correctAnswerIndex":1}]}'
+      locations: 00000000
+      networked: 0
+      timeLimit: 120
+      minScore: 0
+      maxScore: 100
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      index: 6
+      log: {fileID: 0}
+    - actionDescription: 3-Test
+      phase: 3
+      state:
+        status: 0
+        location: -1
+      sceneName: 00-Tester
+      data: 
+      locations: 01000000
+      networked: 0
+      timeLimit: -1
+      minScore: 3
+      maxScore: 100
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      index: 7
       log: {fileID: 0}
 --- !u!4 &1957266246
 Transform:
