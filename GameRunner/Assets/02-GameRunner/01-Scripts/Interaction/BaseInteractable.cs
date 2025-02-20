@@ -18,7 +18,7 @@ namespace Cohort.GameRunner.Interaction {
         protected bool InRange { get; private set; }
 
         protected bool Initial {
-            get { return _initial; }
+            get { return (_networked && _initial); }
         }
 
         public bool interactable = true;
