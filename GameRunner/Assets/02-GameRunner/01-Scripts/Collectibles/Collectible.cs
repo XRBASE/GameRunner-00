@@ -6,9 +6,16 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider))]
 public class Collectible : BaseInteractable {
 	
-	[SerializeField] private UnityEvent onReset;
-	[SerializeField] private UnityEvent onCollectCinematic;
-	[SerializeField] private UnityEvent onCollectDirect;
+	[SerializeField, Tooltip("Is fired when resetting the collectible, so it can be grabbed again.")]
+	private UnityEvent onReset;
+	[SerializeField, Tooltip("Is fired when the item is grabbed by any player.")]
+	private UnityEvent onCollectCinematic;
+	[SerializeField, Tooltip("Is fired when joining the room, to preset the value of the collectible.")]
+	private UnityEvent onCollectDirect;
+	[SerializeField, Tooltip("Is fired along with the cinematic option, if the item was collected by the local player.")]
+	private UnityEvent onCollectLocal;
+
+	private bool _localTrigger = false;
 
 	public override bool CheckInRange() {
 		if (!Value)
@@ -29,6 +36,12 @@ public class Collectible : BaseInteractable {
 		else {
 			onCollectCinematic?.Invoke();
 		}
+
+		if (_localTrigger) {
+			onCollectLocal?.Invoke();
+		}
+
+		_localTrigger = false;
 	}
 
 	protected override void DeactivateLocal() {
@@ -37,6 +50,7 @@ public class Collectible : BaseInteractable {
 
 	protected void OnTriggerEnter(Collider other) {
 		if (other.transform == Player.Local.transform) {
+			_localTrigger = true;
 			Activate();
 		}
 	}

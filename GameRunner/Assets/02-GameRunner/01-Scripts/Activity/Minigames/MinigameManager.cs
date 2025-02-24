@@ -97,13 +97,18 @@ namespace Cohort.GameRunner.Minigames {
                     //override data only if there is a uuid
                     if (nStates[minigameIndex] == null || hasUuid) {
                         nStates[minigameIndex] = JsonUtility.FromJson<MinigameDescription.State>(data);
+                        
+                        //only override status if it is done locally, or the status is changed into a higher form networked.
+                        if (!hasUuid && nStates[minigameIndex].status <= _setting.minigames[minigameIndex].state.status) {
+                            nStates[minigameIndex] = null;
+                        }
                     }
                         
                 }
                 else if (hasUuid) {
                     //todo: reset
                     Setting.minigames[minigameIndex].Reset();
-                    nStates[minigameIndex] = Setting.minigames[minigameIndex].state;
+                    nStates[minigameIndex] = null;
                 }
             }
 
@@ -134,8 +139,12 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         private void OnMinigameStateChanged(MinigameDescription minigame, MinigameDescription.State state, bool initial) {
-            //only override status if it is done locally, or the status is changed into a higher form networked.
             minigame.SetState(state, initial);
+            
+            if (state.status == MinigameDescription.Status.Active) {
+                OnMinigameStart(minigame);
+                return;
+            }
             
             for (int i = 0; i < _interactables.Length; i++) {
                 if (_interactables[i].Identifier == state.location && !_interactables[i].HasMinigame) {
@@ -226,13 +235,22 @@ namespace Cohort.GameRunner.Minigames {
             }
         }
 
+        public void StartMinigameById(int index) {
+            if (Setting.minigames[index].state.status == MinigameDescription.Status.Open) {
+                StartMinigame(Setting.minigames[index], null);
+            }
+            else {
+                Debug.LogWarning($"Minigame {index} already finished!");
+            }
+        }
+
         private bool TryGetPhaseIndex(out int phase) {
             phase = int.MaxValue;
             bool found = false; 
             
             for (int i = 0; i < Setting.minigames.Count; i++) {
                 if (Setting.minigames[i].state.status is MinigameDescription.Status.Open or MinigameDescription.Status.Available &&
-                    Setting.minigames[i].phase < phase) {
+                    Setting.minigames[i].phase < phase && Setting.minigames[i].phase >= 0) {
                     phase = Setting.minigames[i].phase;
                     
                     found = true;
@@ -282,16 +300,29 @@ namespace Cohort.GameRunner.Minigames {
             return true;
         }
 
-        public void OnMinigameStart(MinigameDescription minigame, MinigameInteractable interactable) {
+        public void StartMinigame(MinigameDescription minigame, MinigameInteractable interactable) {
+            Hashtable changes = GetMinigameStateChangeTable(minigame.index,
+                                                            MinigameDescription.Status.Active,
+                                                            minigame.state.location, minigame.networked);
+            
+            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
+        }
+
+        public void OnMinigameStart(MinigameDescription minigame) {
+            if (minigame.state.location >= 0) {
+                for (int i = 0; i < _interactables.Length; i++) {
+                    if (_interactables[i].Identifier == minigame.state.location && _interactables[i].MinigameIndex == minigame.index) {
+                        _currentInteractable = _interactables[i];
+                    }
+                }
+            }
+            
             if (_currentMinigame != null) {
                 _currentMinigame.ExitMinigame();
             }
+            _currenMinigameDescription = minigame;
             
             InputManager.Instance.SetMinigameInput();
-            _currenMinigameDescription = minigame;
-            _currentInteractable = interactable;
-            
-            _currenMinigameDescription.SetStatus(MinigameDescription.Status.Active, false);
             SceneManager.LoadScene(_currenMinigameDescription.sceneName, LoadSceneMode.Additive);
         }
 
@@ -304,8 +335,10 @@ namespace Cohort.GameRunner.Minigames {
             Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
             
             SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
-            
-            _currentInteractable.Deactivate();
+
+            if (_currentInteractable) {
+                _currentInteractable.Deactivate();
+            }
             
             _currenMinigameDescription = null;
             _currentInteractable = null;
@@ -334,13 +367,16 @@ namespace Cohort.GameRunner.Minigames {
             
             onMinigameFinished?.Invoke(cause, score);
 
-            _currenMinigameDescription.log.CheckLogItem(s);
-            _currenMinigameDescription.log = null;
-
+            if (_currenMinigameDescription.log) {
+                _currenMinigameDescription.log.CheckLogItem(s);
+                _currenMinigameDescription.log = null;
+            }
             SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
-            
-            _currentInteractable.Deactivate();
-            _currentInteractable.SetMinigame();
+
+            if (_currentInteractable) {
+                _currentInteractable.Deactivate();
+                _currentInteractable.SetMinigame();
+            }
 
             _currenMinigameDescription = null;
             _currentInteractable = null;
