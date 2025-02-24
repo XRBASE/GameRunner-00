@@ -610,6 +610,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _viewRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _interactRadius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
       value: at 0
       objectReference: {fileID: 0}
@@ -693,6 +701,14 @@ PrefabInstance:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _networked
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _viewRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _interactRadius
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
@@ -782,6 +798,18 @@ PrefabInstance:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _networked
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _viewRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _interactRadius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _visibilityRadius
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription
@@ -1201,6 +1229,14 @@ PrefabInstance:
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _networked
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _viewRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
+      propertyPath: _interactRadius
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1863697989707260563, guid: 19b3576a8f63da347b5b922431a0da44, type: 3}
       propertyPath: _locationDescription

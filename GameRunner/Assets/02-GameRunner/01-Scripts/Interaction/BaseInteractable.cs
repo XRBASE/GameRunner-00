@@ -15,7 +15,7 @@ namespace Cohort.GameRunner.Interaction {
             get { return gameObject.name; }
         }
         
-        protected bool InRange { get; private set; }
+        public bool InInteractRange { get; protected set; }
 
         protected bool Initial {
             get { return (_networked && _initial); }
@@ -23,7 +23,7 @@ namespace Cohort.GameRunner.Interaction {
 
         public bool interactable = true;
         
-        [Tooltip("Can only be activated within this radius"), SerializeField] private float _radius = 1;
+        [Tooltip("Can only be activated within this radius"), SerializeField] private float _interactRadius = 1;
         
         //all interactables always have a state. True will fire events, false will not.
         //event like interactions will fire and directly reset themselves, whereas more
@@ -53,12 +53,13 @@ namespace Cohort.GameRunner.Interaction {
             }
         }
 
-        public virtual bool CheckInRange() {
-            return (transform.position - Player.Local.transform.position).magnitude <= _radius;
+        protected virtual void Update() {
+            CheckInteractRange();
         }
 
-        public virtual void SetInRange(bool value) {
-            InRange = value;
+        protected virtual bool CheckInteractRange() {
+            InInteractRange = (transform.position - Player.Local.transform.position).magnitude <= _interactRadius;
+            return InInteractRange;
         }
 
         public abstract void OnInteract();
@@ -151,7 +152,7 @@ namespace Cohort.GameRunner.Interaction {
 
 #if UNITY_EDITOR
         public virtual void OnDrawGizmosSelected() {
-            Gizmos.DrawWireSphere(transform.position, _radius);
+            Gizmos.DrawWireSphere(transform.position, _interactRadius);
         }
 #endif
     }

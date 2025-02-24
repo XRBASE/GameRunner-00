@@ -20,7 +20,7 @@ namespace Cohort.GameRunner.Interaction {
 				return;
 			}
 
-			if (i.CheckInRange()) {
+			if (i.InInteractRange) {
 				i.OnInteract();
 			}
 		}

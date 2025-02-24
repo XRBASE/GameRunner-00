@@ -17,11 +17,13 @@ public class Collectible : BaseInteractable {
 
 	private bool _localTrigger = false;
 
-	public override bool CheckInRange() {
+	protected override bool CheckInteractRange() {
 		if (!Value)
-			return base.CheckInRange();
-		else
-			return false;
+			return base.CheckInteractRange();
+		else {
+			InInteractRange = false;
+			return InInteractRange;
+		}
 	}
 	
 	public override void OnInteract() {
