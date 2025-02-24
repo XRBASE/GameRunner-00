@@ -24,6 +24,10 @@ namespace Cohort.GameRunner.Minigames {
             }
         }
 
+        public int MinigameIndex {
+            get { return HasMinigame? _minigame.index : -1; }
+        }
+
         [ReadOnly, SerializeField] private bool hasMinigame;
 
         [SerializeField] private string _locationDescription = "At position";
@@ -41,6 +45,14 @@ namespace Cohort.GameRunner.Minigames {
 
             if (_networked) {
                 Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
+            }
+        }
+
+        protected override void OnDestroy() {
+            base.OnDestroy();
+
+            if (HasMinigame && _minigame.log) {
+                _minigame.log.RemoveDirect();
             }
         }
 
@@ -77,7 +89,7 @@ namespace Cohort.GameRunner.Minigames {
 
         protected override void ActivateLocal() {
             _indicator.SetActive(false);
-            MinigameManager.Instance.OnMinigameStart(_minigame, this);
+            MinigameManager.Instance.StartMinigame(_minigame, this);
         }
 
         protected override void Deactivate(Hashtable changes, Hashtable expected = null) {
