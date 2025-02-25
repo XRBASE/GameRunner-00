@@ -1,3 +1,4 @@
+using Cohort.GameRunner.Input;
 using UnityEngine;
 using Cohort.GameRunner.Minigames;
 #if UNITY_EDITOR
@@ -9,11 +10,18 @@ public class SceneConfiguration : MonoBehaviour {
     public MinigameCycleDescription Minigame {
         get { return minigame; }
     }
-    
+
+    [SerializeField] private bool _teleportEnabled;
     [SerializeField] private MinigameCycleDescription minigame;
 
     private void Awake() {
         MinigameManager.Instance.Setting = Minigame;
+        InputManager.Instance.teleportEnabled = _teleportEnabled;
+    }
+
+    public void SetTeleportEnabled(bool isEnabled) {
+        _teleportEnabled = isEnabled;
+        InputManager.Instance.teleportEnabled = isEnabled;
     }
     
 #if UNITY_EDITOR

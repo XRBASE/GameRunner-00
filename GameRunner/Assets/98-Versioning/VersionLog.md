@@ -1,3 +1,9 @@
+# v0.4.0
+- Removed lobby scene as and option. Experience starts in the scene provided in the Server handle and activity description.
+- Added collectible interactables that are worth points and can be used to trigger minigames.
+- Added a handle for both the minigame manager and the activity loader, so that their functions can be accessed through objects in the scene.
+- Minigame interactables now have a visibility range, in which their indicators are shown. This range can also be disabled.
+
 # v0.3.1
 - minor patches in spawn point, so that it does not teleport the player when starting a minigame
 - Information points now integrated into the minigame system, so that text and video can also be shown as a minigame.

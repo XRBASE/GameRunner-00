@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/02-GameRunner/00-Scenes/00-Management.unity
     guid: 80d51bf8955fb9c47b53fddc18ecc564
   - enabled: 1
-    path: Assets/02-GameRunner/00-Scenes/01-Lobby.unity
-    guid: 7c6183c8baa5c7b419ae0519c01a6820
-  - enabled: 1
     path: Assets/02-GameRunner/00-Scenes/02-Highscore.unity
     guid: 6c4091d5fe03f704a9eece362c16d7cf
   - enabled: 1

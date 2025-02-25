@@ -149,8 +149,9 @@ namespace Cohort.GameRunner.LocoMovement {
 			string key = Keys.Get(Keys.Player.Position);
 			if (_lm.Control != Locomotion.ControlType.Local &&
 			    changes.ContainsKey(key) && changes[key] != null) {
+				Debug.LogError($"Remote position {(Vector3) changes[key]} {initialize}");
 				if (initialize) {
-					_target.position = (Vector3) changes[key];
+					_rb.MovePosition((Vector3) changes[key]);
 				}
 				else {
 					MoveToPosition((Vector3) changes[key]);
@@ -429,7 +430,8 @@ namespace Cohort.GameRunner.LocoMovement {
 
 			if (_numTimer <= 0f) {
 				if (_lm.Control == Locomotion.ControlType.Local) {
-					TeleportToPosition(_numGoal);
+					if (InputManager.Instance.teleportEnabled)
+						TeleportToPosition(_numGoal);
 				}
 				else {
 					//don't use the teleport state for the remote
