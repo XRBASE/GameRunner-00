@@ -25,7 +25,7 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
 		
-		MinigameManager.Instance.onMinigameFinished += OnLearningFinished;
+		MinigameManager.Instance.onMinigameFinished += OnMinigameFinished;
 	}
 	
 	public void Initialize(ActivityDescription _activity, int session) {
@@ -41,7 +41,7 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
 		Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoomPropertiesChanged;
 		
-		MinigameManager.Instance.onMinigameFinished -= OnLearningFinished;
+		MinigameManager.Instance.onMinigameFinished -= OnMinigameFinished;
 	}
 
 	private void OnJoinedRoom() {
@@ -89,7 +89,13 @@ public class HighscoreTracker : Singleton<HighscoreTracker> {
 		return _scores.Values.OrderBy(s => s.score).Reverse().ToArray();
 	}
 
-	public void OnLearningFinished(Minigame.FinishCause cause, int score) {
+	public void AddPoints(int score) {
+		_local.score += score;
+		
+		UpdateLocalPlayerScore(_local);
+	}
+
+	public void OnMinigameFinished(Minigame.FinishCause cause, int score) {
 		_local.score += score;
 		
 		if (_local.name == "warLott" || _local.name == "Itsa_Lott") {
