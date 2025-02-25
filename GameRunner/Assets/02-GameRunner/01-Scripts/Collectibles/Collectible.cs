@@ -15,6 +15,8 @@ public class Collectible : BaseInteractable {
 	[SerializeField, Tooltip("Is fired along with the cinematic option, if the item was collected by the local player.")]
 	private UnityEvent onCollectLocal;
 
+	[SerializeField] private int _score;
+
 	private bool _localTrigger = false;
 
 	protected override bool CheckInteractRange() {
@@ -40,6 +42,7 @@ public class Collectible : BaseInteractable {
 		}
 
 		if (_localTrigger) {
+			HighscoreTracker.Instance.AddPoints(_score);
 			onCollectLocal?.Invoke();
 		}
 
