@@ -159,6 +159,12 @@ namespace Cohort.GameRunner.Minigames {
                     Setting.minigames[i].Reset();
                 }
             }
+
+            for (int i = 0; i < _interactables.Length; i++) {
+                if (_interactables[i].HasMinigame) {
+                    _interactables[i].SetMinigame(-1);
+                }
+            }
         }
 
         public void OnActivityStart() {

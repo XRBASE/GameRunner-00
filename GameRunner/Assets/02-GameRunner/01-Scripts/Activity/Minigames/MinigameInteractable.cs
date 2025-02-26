@@ -1,4 +1,3 @@
-using System;
 using ExitGames.Client.Photon;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -48,7 +47,7 @@ namespace Cohort.GameRunner.Minigames {
 
         protected override void Start() {
             base.Start();
-
+            
             if (_networked) {
                 Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
             }
@@ -56,6 +55,10 @@ namespace Cohort.GameRunner.Minigames {
 
         protected override void OnDestroy() {
             base.OnDestroy();
+            
+            if (_networked) {
+                Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
+            }
 
             if (HasMinigame && _minigame.log) {
                 _minigame.log.RemoveDirect();
