@@ -3,24 +3,26 @@ using UnityEngine;
 
 using Cohort.Patterns;
 
-public class Scoreboard : MonoBehaviour {
-    [SerializeField] private ScoreboardEntry _templateEntry;
-    [SerializeField] private int _maxEntries;
-    
-    private ObjectPool<HighscoreTracker.PlayerScore, ScoreboardEntry> _pool;
+namespace Cohort.GameRunner.Score {
+    public class Scoreboard : MonoBehaviour {
+        [SerializeField] private ScoreboardEntry _templateEntry;
+        [SerializeField] private int _maxEntries;
 
-    private void Awake() {
-        _pool = new ObjectPool<HighscoreTracker.PlayerScore, ScoreboardEntry>(_templateEntry);
-        
-        HighscoreTracker.Instance.onScoresUpdated += OnScoresUpdated;
-        OnScoresUpdated(HighscoreTracker.Instance.GetScores());
-    }
+        private ObjectPool<HighscoreTracker.PlayerScore, ScoreboardEntry> _pool;
 
-    private void OnDestroy() {
-        HighscoreTracker.Instance.onScoresUpdated -= OnScoresUpdated;
-    }
+        private void Awake() {
+            _pool = new ObjectPool<HighscoreTracker.PlayerScore, ScoreboardEntry>(_templateEntry);
 
-    private void OnScoresUpdated(HighscoreTracker.PlayerScore[] scores) {
-        _pool.SetAll(scores.Skip(0).Take(_maxEntries));
+            HighscoreTracker.Instance.onScoresUpdated += OnScoresUpdated;
+            OnScoresUpdated(HighscoreTracker.Instance.GetScores());
+        }
+
+        private void OnDestroy() {
+            HighscoreTracker.Instance.onScoresUpdated -= OnScoresUpdated;
+        }
+
+        private void OnScoresUpdated(HighscoreTracker.PlayerScore[] scores) {
+            _pool.SetAll(scores.Skip(0).Take(_maxEntries));
+        }
     }
 }

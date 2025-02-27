@@ -1,5 +1,6 @@
 using Cohort.GameRunner.Interaction;
 using Cohort.GameRunner.Players;
+using Cohort.GameRunner.Score;
 using UnityEngine;
 using UnityEngine.Events;
 

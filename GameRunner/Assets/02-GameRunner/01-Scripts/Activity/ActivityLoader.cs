@@ -8,6 +8,7 @@ using UnityEngine;
 using Cohort.Networking.PhotonKeys;
 using Cohort.GameRunner.Minigames;
 using Cohort.GameRunner.Players;
+using Cohort.GameRunner.Score;
 using Cohort.Patterns;
 
 [DefaultExecutionOrder(102)] // After playermanagement and after SceneConfiguration
