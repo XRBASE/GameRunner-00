@@ -24,10 +24,19 @@ namespace Cohort.GameRunner.Minigames {
             }
         }
 
+        public int MinigameIndex {
+            get { return HasMinigame? _minigame.index : -1; }
+        }
+        
+        protected bool InViewRange { get; private set; }
+
         [ReadOnly, SerializeField] private bool hasMinigame;
 
         [SerializeField] private string _locationDescription = "At position";
         [SerializeField] private ObjIndicator _indicator;
+        
+        [Tooltip("Icon is shown within this radius, negative value will always be visible"), SerializeField] 
+        private float _viewRadius = -1;
 
         private int _actor = -1;
         private MinigameDescription _minigame;
@@ -38,16 +47,39 @@ namespace Cohort.GameRunner.Minigames {
 
         protected override void Start() {
             base.Start();
-
+            
             if (_networked) {
                 Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
             }
         }
 
-        public override void SetInRange(bool value) {
-            base.SetInRange(value);
+        protected override void OnDestroy() {
+            base.OnDestroy();
+            
+            if (_networked) {
+                Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
+            }
 
-            _indicator.SetActive(!InRange && HasMinigame);
+            if (HasMinigame && _minigame.log) {
+                _minigame.log.RemoveDirect();
+            }
+        }
+
+        protected override void Update() {
+            base.Update();
+            CheckViewRange();
+
+            _indicator.SetActive( InViewRange && !InInteractRange && HasMinigame);
+        }
+
+        public virtual bool CheckViewRange() {
+            if (_viewRadius < 0)
+                InViewRange = true;
+            else {
+                InViewRange = (transform.position - Player.Local.transform.position).magnitude <= _viewRadius;
+            }
+
+            return InViewRange;
         }
 
         public override void OnInteract() {
@@ -77,7 +109,7 @@ namespace Cohort.GameRunner.Minigames {
 
         protected override void ActivateLocal() {
             _indicator.SetActive(false);
-            MinigameManager.Instance.OnMinigameStart(_minigame, this);
+            MinigameManager.Instance.StartMinigame(_minigame, this);
         }
 
         protected override void Deactivate(Hashtable changes, Hashtable expected = null) {
@@ -122,7 +154,7 @@ namespace Cohort.GameRunner.Minigames {
                     return;
                 }
                 
-                _indicator.SetActive(!InRange);
+                _indicator.SetActive(!InInteractRange);
                 
                 MinigameManager.Instance.SetMinigameLog(_minigame, this); 
                 return;
@@ -169,6 +201,19 @@ namespace Cohort.GameRunner.Minigames {
         }
         
 #if UNITY_EDITOR
+        public override void OnDrawGizmosSelected() {
+            if (_viewRadius > 0) {
+                Color buffer = Gizmos.color;
+                Gizmos.color = Color.green;
+            
+                Gizmos.DrawWireSphere(transform.position, _viewRadius);
+            
+                Gizmos.color = buffer;
+            }
+            
+            base.OnDrawGizmosSelected();
+        }
+        
         public override void OnValidate() {
             base.OnValidate();
             

@@ -75,7 +75,7 @@ namespace Cohort.GameRunner.Minigames {
             string key = GetMinigamePlayerKey();
             
             int minigameIndex = -1;
-            MinigameDescription.State[] nStates = new MinigameDescription.State[Setting.minigames.Length];
+            MinigameDescription.State[] nStates = new MinigameDescription.State[Setting.minigames.Count];
             bool hasUuid;
             string data;
             string uuid;
@@ -97,13 +97,18 @@ namespace Cohort.GameRunner.Minigames {
                     //override data only if there is a uuid
                     if (nStates[minigameIndex] == null || hasUuid) {
                         nStates[minigameIndex] = JsonUtility.FromJson<MinigameDescription.State>(data);
+                        
+                        //only override status if it is done locally, or the status is changed into a higher form networked.
+                        if (!hasUuid && nStates[minigameIndex].status <= _setting.minigames[minigameIndex].state.status) {
+                            nStates[minigameIndex] = null;
+                        }
                     }
                         
                 }
                 else if (hasUuid) {
                     //todo: reset
                     Setting.minigames[minigameIndex].Reset();
-                    nStates[minigameIndex] = Setting.minigames[minigameIndex].state;
+                    nStates[minigameIndex] = null;
                 }
             }
 
@@ -113,27 +118,33 @@ namespace Cohort.GameRunner.Minigames {
                 }
             }
         }
-        
-        private void SetMinigameState(int index, MinigameDescription.Status status, int location, bool networked) {
+
+        private Hashtable GetMinigameStateChangeTable(int index, MinigameDescription.Status status, int location, bool networked, Hashtable changes = null) {
+            if (changes == null) {
+                changes = new Hashtable();
+            }
+            
             MinigameDescription.State state = new MinigameDescription.State();
             state.location = location;
             state.status = status;
             
-            Hashtable changes = new Hashtable();
             if (!networked) {
                 changes.Add(GetMinigamePlayerKey(index, Player.Local.UUID), JsonUtility.ToJson(state));
             }
             else {
                 changes.Add(GetMinigamePlayerKey(index), JsonUtility.ToJson(state));
             }
-            //okay so now we network the message to everyone, but when I stop the game, it should only be networked for me. 
 
-            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
+            return changes;
         }
 
         private void OnMinigameStateChanged(MinigameDescription minigame, MinigameDescription.State state, bool initial) {
-            //only override status if it is done locally, or the status is changed into a higher form networked.
             minigame.SetState(state, initial);
+            
+            if (state.status == MinigameDescription.Status.Active) {
+                OnMinigameStart(minigame);
+                return;
+            }
             
             for (int i = 0; i < _interactables.Length; i++) {
                 if (_interactables[i].Identifier == state.location && !_interactables[i].HasMinigame) {
@@ -144,8 +155,14 @@ namespace Cohort.GameRunner.Minigames {
 
         private void ResetMinigames() {
             if (Setting != null) {
-                for (int i = 0; i < Setting.minigames.Length; i++) {
+                for (int i = 0; i < Setting.minigames.Count; i++) {
                     Setting.minigames[i].Reset();
+                }
+            }
+
+            for (int i = 0; i < _interactables.Length; i++) {
+                if (_interactables[i].HasMinigame) {
+                    _interactables[i].SetMinigame(-1);
                 }
             }
         }
@@ -165,7 +182,7 @@ namespace Cohort.GameRunner.Minigames {
                 }
             
                 if (!AnyMinigameOpen()) {
-                    ActivateMinigame();
+                    ActivateMinigames();
                 }
             }
         }
@@ -189,37 +206,64 @@ namespace Cohort.GameRunner.Minigames {
             return false;
         }
 
-        private void ActivateMinigame() {
-            if (TryGetNextMinigame(out MinigameDescription minigameDesc) &&
-                TryGetInteractable(minigameDesc, out MinigameInteractable interactable)) {
+        private void ActivateMinigames() {
+            if (!TryGetPhaseIndex(out int phase)) {
+                onAllMinigamesFinished?.Invoke(HighscoreTracker.Instance.Local.score);
                 
-                SetMinigameState(minigameDesc.index, MinigameDescription.Status.Available, interactable.Identifier, minigameDesc.networked);
+                Debug.LogWarning("All minigames finished");
+                return;
             }
-        }
 
-        private bool TryGetNextMinigame(out MinigameDescription minigame) {
-            int MinigameId;
-            MinigameId = -1;
+            bool hasChanges = false;
+            List<int> takenInteractables = new List<int>();
+            Hashtable changes = new Hashtable();
 
-            for (int i = 0; i < Setting.minigames.Length; i++) {
-                //TODO: minigames that are available should be assigned based on their network data, rather than just opening them.
-                
-                if (Setting.minigames[i].state.status is MinigameDescription.Status.Open or MinigameDescription.Status.Available) {
-                    MinigameId = i;
-                    break;
+            for (int i = 0; i < Setting.minigames.Count; i++) {
+                if (Setting.minigames[i].phase == phase &&
+                    Setting.minigames[i].state.status == MinigameDescription.Status.Open) {
+                    
+                    if (TryGetInteractable(Setting.minigames[i], out MinigameInteractable interactable) && !takenInteractables.Contains(interactable.Identifier))
+                    {
+                        changes = GetMinigameStateChangeTable(Setting.minigames[i].index, MinigameDescription.Status.Available, interactable.Identifier,
+                                                           Setting.minigames[i].networked, changes);
+                        
+                        takenInteractables.Add(interactable.Identifier);
+                        hasChanges = true;
+                    }
+                    else {
+                        Debug.LogWarning($"No available interactable for learning {Setting.minigames[i].index}!");
+                    }
                 }
             }
 
-            if (MinigameId == -1) {
-                onAllMinigamesFinished?.Invoke(HighscoreTracker.Instance.Local.score);
-                Debug.Log("All minigames finished");
-                    
-                minigame = null;
-                return false;
+            if (hasChanges) {
+                Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
             }
+        }
+
+        public void StartMinigameById(int index) {
+            if (Setting.minigames[index].state.status == MinigameDescription.Status.Open) {
+                StartMinigame(Setting.minigames[index], null);
+            }
+            else {
+                Debug.LogWarning($"Minigame {index} already finished!");
+            }
+        }
+
+        private bool TryGetPhaseIndex(out int phase) {
+            phase = int.MaxValue;
+            bool found = false; 
             
-            minigame = Setting.minigames[MinigameId];
-            return true;
+            for (int i = 0; i < Setting.minigames.Count; i++) {
+                if (Setting.minigames[i].state.status is MinigameDescription.Status.Open or MinigameDescription.Status.Available &&
+                    Setting.minigames[i].phase < phase && Setting.minigames[i].phase >= 0) {
+                    phase = Setting.minigames[i].phase;
+                    
+                    found = true;
+                }
+            }
+
+            return found;
         }
 
         private bool TryGetInteractable(MinigameDescription minigame, out MinigameInteractable interactable) {
@@ -262,29 +306,45 @@ namespace Cohort.GameRunner.Minigames {
             return true;
         }
 
-        public void OnMinigameStart(MinigameDescription minigame, MinigameInteractable interactable) {
+        public void StartMinigame(MinigameDescription minigame, MinigameInteractable interactable) {
+            Hashtable changes = GetMinigameStateChangeTable(minigame.index,
+                                                            MinigameDescription.Status.Active,
+                                                            minigame.state.location, minigame.networked);
+            
+            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
+        }
+
+        public void OnMinigameStart(MinigameDescription minigame) {
+            if (minigame.state.location >= 0) {
+                for (int i = 0; i < _interactables.Length; i++) {
+                    if (_interactables[i].Identifier == minigame.state.location && _interactables[i].MinigameIndex == minigame.index) {
+                        _currentInteractable = _interactables[i];
+                    }
+                }
+            }
+            
             if (_currentMinigame != null) {
                 _currentMinigame.ExitMinigame();
             }
+            _currenMinigameDescription = minigame;
             
             InputManager.Instance.SetMinigameInput();
-            _currenMinigameDescription = minigame;
-            _currentInteractable = interactable;
-            
-            _currenMinigameDescription.SetStatus(MinigameDescription.Status.Active, false);
-            //SetMinigameState(_currenMinigameDescription.index, MinigameDescription.State.Active);
-            
             SceneManager.LoadScene(_currenMinigameDescription.sceneName, LoadSceneMode.Additive);
         }
 
         private void OnExitMinigame() {
             InputManager.Instance.SetGameInput();
-            
-            SetMinigameState(_currenMinigameDescription.index, MinigameDescription.Status.Open, _currenMinigameDescription.state.location, false);
+
+            Hashtable changes = GetMinigameStateChangeTable(_currenMinigameDescription.index,
+                                                            MinigameDescription.Status.Open,
+                                                            _currenMinigameDescription.state.location, false);
+            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
             
             SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
-            
-            _currentInteractable.Deactivate();
+
+            if (_currentInteractable) {
+                _currentInteractable.Deactivate();
+            }
             
             _currenMinigameDescription = null;
             _currentInteractable = null;
@@ -307,22 +367,26 @@ namespace Cohort.GameRunner.Minigames {
                     s = MinigameDescription.Status.FinFailed;
                     break;
             }
-            
-            SetMinigameState(_currenMinigameDescription.index, s, -1, false);
+
+            Hashtable changes = GetMinigameStateChangeTable(_currenMinigameDescription.index, s, -1, false);
+            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
             
             onMinigameFinished?.Invoke(cause, score);
 
-            _currenMinigameDescription.log.CheckLogItem(s);
-            _currenMinigameDescription.log = null;
-
+            if (_currenMinigameDescription.log) {
+                _currenMinigameDescription.log.CheckLogItem(s);
+                _currenMinigameDescription.log = null;
+            }
             SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
-            
-            _currentInteractable.Deactivate();
-            _currentInteractable.SetMinigame();
+
+            if (_currentInteractable) {
+                _currentInteractable.Deactivate();
+                _currentInteractable.SetMinigame();
+            }
 
             _currenMinigameDescription = null;
             _currentInteractable = null;
-            ActivateMinigame();
+            ActivateMinigames();
         }
 
         public void SetMinigameLog(MinigameDescription minigame, MinigameInteractable interactable) {

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Cohort.GameRunner.Players;
 using MathBuddy.Flags;
 using UnityEngine;
 
 public class FloorCollision : MonoBehaviour
 {
-    private const int PLAYER_LAYER = 3;
     public Action<bool> onFloorCollision;
     private LayerMask _layerMask;
     private CapsuleCollider _capsuleCollider;
@@ -13,7 +13,7 @@ public class FloorCollision : MonoBehaviour
 
     public void Initialise(LayerMask mask, Vector3 center, float radius, float height)
     {
-        gameObject.layer = PLAYER_LAYER;
+        gameObject.layer = Player.LAYER;
         _layerMask = mask;
         _capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
         _capsuleCollider.radius = radius;
@@ -24,7 +24,7 @@ public class FloorCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_layerMask.MaskIncludes(other.gameObject.layer))
+        if (!other.isTrigger && _layerMask.MaskIncludes(other.gameObject.layer))
         {
             _contacts.Add(other);
             RemoveDestroyed();
@@ -38,7 +38,7 @@ public class FloorCollision : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (_layerMask.MaskIncludes(other.gameObject.layer))
+        if (!other.isTrigger && _layerMask.MaskIncludes(other.gameObject.layer))
         {
             _contacts.Remove(other);
             RemoveDestroyed();

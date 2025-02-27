@@ -41,7 +41,7 @@ public class ServerActionsUI : UIPanel
 	}
 
 	private void StartGame() { ;
-		ActivityLoader.Instance.LoadActivity(new ActivityDescription(ServerHandle.Instance.scene));
+		ActivityLoader.Instance.LoadActivity();
 	}
 
 	public void ToggleState() {

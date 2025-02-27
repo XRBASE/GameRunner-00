@@ -15,16 +15,13 @@ public class ActivityLoader : Singleton<ActivityLoader> {
     public bool InActivity { get; private set; }
     public bool AllPlayersReady { get; private set; }
 
-    public ActivityDescription Activity {
-        get { return _description; }
-    }
-
     public Action onActivityStart; 
     public Action onActivityStop; 
 
     [SerializeField, ReadOnly] private int _session = -1;
     [SerializeField] private HighscoreTracker _score; 
     private ActivityDescription _description;
+    private string _scene;
 
     private bool _sceneLoaded, _activityLoaded;
 
@@ -35,13 +32,9 @@ public class ActivityLoader : Singleton<ActivityLoader> {
         if (Network.Local.Client.InRoom) {
             OnJoinRoom();
         }
-        
-        EnvironmentLoader.Instance.onEnvironmentLoaded += OnSceneLoaded;
     }
 
     private void OnDestroy() {
-        EnvironmentLoader.Instance.onEnvironmentLoaded -= OnSceneLoaded;
-        
         Network.Local.Callbacks.onJoinedRoom -= OnJoinRoom;
         Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropsChanged;
     }
@@ -72,22 +65,6 @@ public class ActivityLoader : Singleton<ActivityLoader> {
         
         onActivityStop?.Invoke();
         ClearPhotonRoomProperties();
-    }
-
-    private void OnSceneLoaded(string name) {
-        if (!InActivity) {
-            return;
-        }
-        
-        if (_description == null) {
-            Debug.LogError("Missing game description\n Please reload the activity!");
-            return;
-        }
-        
-        //TODO_COHORT: Assetbundles
-        if (_description.SceneName == name) {
-            OnLocalPlayerReady();
-        }
     }
 
     private void OnLocalPlayerReady() {
@@ -186,20 +163,28 @@ public class ActivityLoader : Singleton<ActivityLoader> {
         Debug.Log("Room properties cleared");
     }
 
-    public void LoadActivity(ActivityDescription description) {
+    public void SetScene(string scene) {
+        _scene = scene;
+    }
+
+    public void LoadActivity() {
+        LoadActivity(new ActivityDescription(_scene));
+    }
+    
+    private void LoadActivity(ActivityDescription description) {
         if (InActivity)
             return;
         
         Hashtable changes = new Hashtable();
         changes.Add(GetActivityDefKey(), JsonUtility.ToJson(description));
         changes.Add(GetActivitySessionKey(), _session + 1);
-        changes.Add(GetSceneKey(), description.SceneName);
         
         Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
     }
 
     private void LoadActivityLocal() {
         InActivity = true;
+        OnLocalPlayerReady();
         
         _score.Initialize(_description, _session);
     }
@@ -219,9 +204,5 @@ public class ActivityLoader : Singleton<ActivityLoader> {
         }
 
         return key;
-    }
-    
-    private string GetSceneKey() {
-        return Keys.Room.Scene.ToString();
     }
 }

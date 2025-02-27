@@ -6,9 +6,12 @@ using ExitGames.Client.Photon;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[DefaultExecutionOrder(103)] // After ActivityLoader
+[DefaultExecutionOrder(101)] // Before ActivityLoader
 public class EnvironmentLoader : Singleton<EnvironmentLoader> {
-	private const string LOBBY_SCENE = "01-Lobby";
+	
+	public string CurrentScene {
+		get { return _activeScene; }
+	}
 
 	public Action<string> onEnvironmentLoaded;
 
@@ -21,7 +24,7 @@ public class EnvironmentLoader : Singleton<EnvironmentLoader> {
 	    Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
 	    Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
 	    
-	    LoadingManager.Instance[LoadPhase.Lobby, LoadType.LoadLobbyScene].Start();
+	    LoadingManager.Instance[LoadPhase.Scene, LoadType.LoadEnvironmentScene].Start();
 	    _initial = true;
 	    
 	    if (Network.Local.Client.InRoom) {
@@ -38,10 +41,6 @@ public class EnvironmentLoader : Singleton<EnvironmentLoader> {
 
     private void OnJoinedRoom() {
 	    OnRoomPropertiesChanged(Network.Local.Client.CurrentRoom.CustomProperties);
-	    
-	    if (string.IsNullOrEmpty(_activeScene)) {
-		    LoadScene(LOBBY_SCENE);
-	    }
     }
     
     private void OnRoomPropertiesChanged(Hashtable changes) {
@@ -49,17 +48,16 @@ public class EnvironmentLoader : Singleton<EnvironmentLoader> {
 	    if (changes.ContainsKey(key)) {
 		    string scene;
 		    if (changes[key] == null) {
-			    scene = LOBBY_SCENE;
+			    scene = "";
 		    }
 		    else {
 			    scene = (string)changes[key];
+			    LoadSceneLocal(scene);
 		    }
-		    
-		    LoadSceneLocal(scene);
 	    }
     }
 
-    private void LoadScene(string sceneName) {
+    public void LoadScene(string sceneName) {
 	    Hashtable changes = new Hashtable();
 	    changes.Add(GetSceneKey(), sceneName);
 
@@ -72,7 +70,7 @@ public class EnvironmentLoader : Singleton<EnvironmentLoader> {
 	    }
 
 	    if (_initial) {
-		    LoadingManager.Instance[LoadPhase.Lobby, LoadType.LoadLobbyScene].Increment("Loading initial scene");
+		    LoadingManager.Instance[LoadPhase.Scene, LoadType.LoadEnvironmentScene].Increment("Loading initial scene");
 	    }
 	    
 	    //TODO_COHORT: assetbundles
@@ -87,7 +85,7 @@ public class EnvironmentLoader : Singleton<EnvironmentLoader> {
     
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
 	    if (_initial) {
-		    LoadingManager.Instance[LoadPhase.Lobby, LoadType.LoadLobbyScene].Finish();
+		    LoadingManager.Instance[LoadPhase.Scene, LoadType.LoadEnvironmentScene].Finish();
 		    _initial = false;
 	    }
 	    

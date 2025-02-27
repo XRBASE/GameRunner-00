@@ -132,17 +132,12 @@ namespace Cohort.GameRunner.LocoMovement {
             }
             
             if (Control == ControlType.Local) {
-                //SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;
                 EnvironmentLoader.Instance.onEnvironmentLoaded += InitLocomotion;
             }
             
             if (Networked && Network.Local.Client.InRoom) {
                 OnJoinedRoom();
             }
-        }
-
-        private void SceneManagerOnsceneLoaded(Scene arg0, LoadSceneMode arg1) {
-            InitLocomotion("");
         }
 
         protected virtual void OnDestroy() {

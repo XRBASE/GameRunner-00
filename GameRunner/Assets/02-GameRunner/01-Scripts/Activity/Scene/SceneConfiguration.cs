@@ -1,16 +1,27 @@
+using Cohort.GameRunner.Input;
 using UnityEngine;
 using Cohort.GameRunner.Minigames;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [DefaultExecutionOrder(101)] //Before ActivityLoader
 public class SceneConfiguration : MonoBehaviour {
     public MinigameCycleDescription Minigame {
         get { return minigame; }
     }
-    
+
+    [SerializeField] private bool _teleportEnabled;
     [SerializeField] private MinigameCycleDescription minigame;
 
     private void Awake() {
         MinigameManager.Instance.Setting = Minigame;
+        InputManager.Instance.teleportEnabled = _teleportEnabled;
+    }
+
+    public void SetTeleportEnabled(bool isEnabled) {
+        _teleportEnabled = isEnabled;
+        InputManager.Instance.teleportEnabled = isEnabled;
     }
     
 #if UNITY_EDITOR
@@ -28,5 +39,22 @@ public class SceneConfiguration : MonoBehaviour {
         
         minigame?.OnValidate();
     }
+    
+    [CustomEditor(typeof(SceneConfiguration))]
+    private class SceneConfigurationEditor : Editor {
+        private SceneConfiguration _instance;
+
+        private void OnEnable() {
+            _instance = (SceneConfiguration)target;
+        }
+
+        public override void OnInspectorGUI() {
+            DrawDefaultInspector();
+            if (GUILayout.Button("Sort mingames")) {
+                _instance.minigame?.minigames.Sort(MinigameDescription.SortPhase);
+            }
+        }
+    }
+
 #endif
 }

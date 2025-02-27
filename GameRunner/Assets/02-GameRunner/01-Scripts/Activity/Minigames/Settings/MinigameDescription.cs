@@ -8,6 +8,9 @@ namespace Cohort.GameRunner.Minigames {
 	[Serializable]
 	public class MinigameDescription {
 		public string actionDescription = "Do minigame";
+
+		[Tooltip("Determines the order of minigames. Minigames in the same phase are available at the same time. -1 Means the minigame does not get activat")]
+		public int phase = -1;
 		
 		public State state;
 		public string sceneName = "";
@@ -76,6 +79,15 @@ namespace Cohort.GameRunner.Minigames {
 		public class State {
 			[ReadOnly] public Status status = Status.Open;
 			[ReadOnly] public int location = -1;
+		}
+
+		public static int SortPhase(MinigameDescription left, MinigameDescription right) {
+			if (left.phase > right.phase)
+				return 1;
+			if (left.phase < right.phase)
+				return -1;
+			
+			return 0;
 		}
 	}
 }

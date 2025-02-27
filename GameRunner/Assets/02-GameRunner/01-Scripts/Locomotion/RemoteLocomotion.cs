@@ -1,6 +1,7 @@
 using Cohort.GameRunner.AvatarAnimations;
 using Cohort.Networking.PhotonKeys;
 using ExitGames.Client.Photon;
+using UnityEngine;
 
 namespace Cohort.GameRunner.LocoMovement {
 	/// <summary>
@@ -21,6 +22,8 @@ namespace Cohort.GameRunner.LocoMovement {
 					else {
 						_sm.State = (State)changes[_key];
 						_state = (State)changes[_key];
+						
+						Debug.LogError($"Remote state change {_state} {initialize}");
 					}
 				}
 			}
