@@ -1,3 +1,6 @@
+# v0.4.1
+- added score popup that shows the amount of points the player has earned.
+
 # v0.4.0
 - Removed lobby scene as and option. Experience starts in the scene provided in the Server handle and activity description.
 - Added collectible interactables that are worth points and can be used to trigger minigames.
