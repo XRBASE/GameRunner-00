@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using Cohort.GameRunner.Input;
+using Cohort.GameRunner.Score;
 using Cohort.Networking.PhotonKeys;
 using Cohort.Patterns;
 using Cohort.UI.Generic;
