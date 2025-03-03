@@ -1,3 +1,4 @@
+using Cohort.GameRunner.Audio;
 using Cohort.UI.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class ServerActionsUI : UIPanel
 	[SerializeField] private Button _toggleBtn;
 	[SerializeField] private Button _startBtn;
 	[SerializeField] private Button _stopBtn;
+	[SerializeField] private Toggle _audioTgl;
 	private Vector2 _openAnchorPos, _closeAnchorPos;
 	
 	private void Awake() {
@@ -24,8 +26,15 @@ public class ServerActionsUI : UIPanel
 		_toggleBtn.onClick.AddListener(ToggleState);
 		_startBtn.onClick.AddListener(StartGame);
 		_stopBtn.onClick.AddListener(StopGame);
+		_audioTgl.onValueChanged.AddListener(ToggleMute);
 		
 		DeactivateInstant();
+	}
+
+	private void ToggleMute(bool isMuted) {
+		AudioManager.Instance.SetAudioVolume((isMuted)? 0f : 1f, AudioManager.Channel.Minigame);
+		AudioManager.Instance.SetAudioVolume((isMuted)? 0f : 1f, AudioManager.Channel.Player);
+		AudioManager.Instance.SetAudioVolume((isMuted)? 0f : 1f, AudioManager.Channel.Environment);
 	}
 
 	private void OnDestroy() {
@@ -38,10 +47,12 @@ public class ServerActionsUI : UIPanel
 	
 	private void StopGame() {
 		ActivityLoader.Instance.StopActivity();
+		Deactivate();
 	}
 
-	private void StartGame() { ;
+	private void StartGame() {
 		ActivityLoader.Instance.LoadActivity();
+		Deactivate();
 	}
 
 	public void ToggleState() {

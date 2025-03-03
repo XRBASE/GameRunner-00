@@ -18,10 +18,10 @@ MonoBehaviour:
     oneShot: 0
     state: 0
   - audio: {fileID: 8300000, guid: 60f1025236f59c643b27bd8930e5870b, type: 3}
-    loop: 1
-    oneShot: 0
+    loop: 0
+    oneShot: 1
     state: 1
   - audio: {fileID: 8300000, guid: 9b1fc15cc28b7644899539beab889f0c, type: 3}
-    loop: 1
-    oneShot: 0
+    loop: 0
+    oneShot: 1
     state: 2

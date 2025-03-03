@@ -1,3 +1,4 @@
+using System;
 using Cohort.Patterns;
 using UnityEngine;
 
@@ -6,6 +7,10 @@ namespace Cohort.GameRunner.Audio {
 		public bool IsActive {
 			get { return gameObject.activeSelf; }
 			set { gameObject.SetActive(value); }
+		}
+
+		public AudioSource AudioSource {
+			get { return _source; }
 		}
 
 		[SerializeField] private AudioSource _source;
@@ -23,12 +28,20 @@ namespace Cohort.GameRunner.Audio {
 			}
 		}
 
-		private void Stop() {
+		public void Stop() {
 			_source.Stop();
-			_pool.RemoveItem(this);
+			_pool?.RemoveItem(this);
 		}
 
 		public void UpdatePoolable(int index, AudioData data) {
+			gameObject.name = $"Audiosource_{index}_{data.clipdata.audio.name}";
+				
+			SetData(data);
+		}
+
+		public void SetData(AudioData data) {
+			IsActive = true;
+			
 			_source.clip = data.clipdata.audio;
 			_source.loop = data.clipdata.loop;
 			

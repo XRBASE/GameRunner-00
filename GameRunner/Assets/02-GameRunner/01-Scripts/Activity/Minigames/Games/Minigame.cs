@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
+using Cohort.GameRunner.Audio;
+using Cohort.GameRunner.Audio.Minigames;
 using MathBuddy.FloatExtentions;
 using UnityEngine;
+using AudioType = Cohort.GameRunner.Audio.Minigames.AudioType;
 
 namespace Cohort.GameRunner.Minigames {
 	/// <summary>
@@ -32,7 +35,10 @@ namespace Cohort.GameRunner.Minigames {
 		[SerializeField] protected IntRange _scoreRange;
 		
 		[SerializeField] private GameTimer _timer;
-		
+		[SerializeField] protected MinigameAudioHandle _audioHandle;
+		private bool _hasAudio;
+
+		private AudioSourceController _ambienceController;
 		
 		/// <summary>
 		/// Initializes the minigame with given json data.
@@ -53,6 +59,11 @@ namespace Cohort.GameRunner.Minigames {
 			else {
 				_timer.gameObject.SetActive(true);
 				_timer.Initialize(timeLimit, TimeLimitReached);
+			}
+
+			_hasAudio = _audioHandle != null;
+			if (_hasAudio) {
+				_ambienceController = _audioHandle.PlayClip(AudioType.Ambience);
 			}
 		}
 
@@ -80,6 +91,10 @@ namespace Cohort.GameRunner.Minigames {
 		/// Finishes the minigame and assigns the currently earned score to the player.
 		/// </summary>
 		public void FinishMinigame(FinishCause cause) {
+			if (_hasAudio) {
+				_ambienceController.Stop();
+			}
+
 			_onFinished?.Invoke(cause, Score);
 		}
 

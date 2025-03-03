@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cohort.GameRunner.Audio.Minigames;
 using Cohort.Patterns;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -7,16 +8,26 @@ using Range = MathBuddy.FloatExtentions.Range;
 
 namespace Cohort.GameRunner.Audio {
     public class AudioManager : Singleton<AudioManager> {
-        private const string CHANNEL_VOL_POSTFIX = "Volume"; 
-        
+        private const string CHANNEL_VOL_POSTFIX = "Volume";
+
+        public MinigameAudioSet DefaultMinigameAudio {
+            get { return _defaultMinigameAudio; }
+        }
+
         [SerializeField] private AudioMixer _mixer;
         [SerializeField] private AudioSourceController _template;
+        [SerializeField] private MinigameAudioSet _defaultMinigameAudio;
 
         private Dictionary<Channel, AudioMixerGroup> _groups;
         private ObjectPool<AudioData, AudioSourceController> _sourcePool;
-        private Range _dbRange = new Range(-80f, 20f);
+        private Range _dbRange = new Range(-80f, 0f);
 
-        private void Awake() {
+        protected override void Awake() {
+            base.Awake();
+            
+            _groups = new Dictionary<Channel, AudioMixerGroup>();
+            _sourcePool = new ObjectPool<AudioData, AudioSourceController>(_template);
+            
             //match all mixer groups under master to their respective enum for easy access.
             foreach (var group in _mixer.FindMatchingGroups("Master/")) {
                 if (!Enum.TryParse(group.name, out Channel channel)) {
@@ -32,28 +43,22 @@ namespace Cohort.GameRunner.Audio {
         /// Creates an audio source based on template and uses it to play the clip on.
         /// Audiosources are pooled and reused when needed.
         /// </summary>
-        public AudioSourceController PlayClip(ClipEntry _clip, Channel channel, float volume = 1f) {
-            AudioData data = new AudioData(_groups[channel], _clip, volume);
+        public AudioSourceController PlayClip(ClipEntry clip, Channel channel, float volume = 1f) {
+            AudioData data = GetAudioData(clip, channel, volume);
             
             return _sourcePool.AddItem(data);
+        }
+
+        public AudioData GetAudioData(ClipEntry _clip, Channel channel, float volume = 1f) {
+            return new AudioData(_groups[channel], _clip, volume);
         }
         
         /// <summary>
         /// Plays audioclip on specified audiosource, so a source in the scene or with specific settings can be used.
         /// </summary>
-        public void PlayClip(ClipEntry clip, Channel channel, AudioSource source, float volume = 1f, bool oneShot = false) {
-            source.clip = clip.audio;
-            source.loop = clip.loop;
-			
-            source.volume = volume;
-            source.outputAudioMixerGroup = _groups[channel];
-			
-            if (!source.loop && oneShot) {
-                source.PlayOneShot(clip.audio);
-            }
-            else {
-                source.Play();
-            }
+        public void PlayClip(ClipEntry clip, Channel channel, AudioSourceController source, float volume = 1f, bool oneShot = false) {
+            AudioData data = GetAudioData(clip, channel, volume);
+            source.SetData(data);
         }
 
         /// <summary>
@@ -84,9 +89,9 @@ namespace Cohort.GameRunner.Audio {
         
         public float volume;
 
-        public AudioData(AudioMixerGroup channel, ClipEntry clip, float volume = 1f) {
+        public AudioData(AudioMixerGroup channel, ClipEntry clipdata, float volume = 1f) {
             this.channel = channel;
-            this.clipdata = clip;
+            this.clipdata = clipdata;
             this.volume = volume;
         }
     }
