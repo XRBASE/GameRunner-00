@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using MathBuddy.FloatExtentions;
 using UnityEngine;
 
 namespace Cohort.GameRunner.Minigames {
@@ -12,28 +13,39 @@ namespace Cohort.GameRunner.Minigames {
 		protected abstract float FaultiveVisualDuration { get; }
 		protected abstract float FinishedVisualDuration { get; }
 
-		public abstract float Score {
+		public abstract int Score {
 			get;
 			set;
 		}
 
-		protected bool IsPlaying;
+		public int MaxScore {
+			get { return _scoreRange.max; }
+		}
 		
-		protected Action<FinishCause, float> _onFinished;
+		public int MinScore {
+			get { return _scoreRange.min; }
+		}
+		
+		protected Action<FinishCause, int> _onFinished;
 		protected Action _onExit;
 
+		[SerializeField] protected IntRange _scoreRange;
+		
 		[SerializeField] private GameTimer _timer;
 		
-
+		
 		/// <summary>
 		/// Initializes the minigame with given json data.
 		/// </summary>
 		/// <param name="gameData">Json data.</param>
-		/// <param name="scoreMultiplier">Score multiplier, only used for displaying score.</param>
 		/// <param name="onFinished">Range(0,1) decimal percentage of completeness.</param>
-		public virtual void Initialize(string gameData, float timeLimit, Action<FinishCause, float> onFinished, Action onExit) {
+		public virtual void Initialize(string gameData, float timeLimit, int minScore, int maxScore, Action<FinishCause, int> onFinished, Action onExit) {
 			_onFinished = onFinished;
 			_onExit = onExit;
+			
+			_scoreRange = new IntRange(minScore, maxScore);
+			//present minimum score, so if no points are earned the minimum is already assigned.
+			Score = minScore;
 
 			if (timeLimit < 0) {
 				_timer.gameObject.SetActive(false);
@@ -49,7 +61,17 @@ namespace Cohort.GameRunner.Minigames {
 		}
 
 		public virtual void FinishMinigame() {
-			FinishCause cause = Score <= MinigameManager.FAILURE_THRESHOLD ? FinishCause.Failed : FinishCause.Completed;
+			float scorePercent = _scoreRange.GetTime(Score, true);
+			FinishCause cause;
+			
+			if (scorePercent <= MinigameManager.FAILURE_THRESHOLD) {
+				cause = FinishCause.FinFailed;
+			} else if (scorePercent <= MinigameManager.AMAZING_THRESHOLD) {
+				cause = FinishCause.FinSuccess;
+			}
+			else {
+				cause = FinishCause.FinPerfect;
+			}
 			
 			FinishMinigame(cause);
 		}
@@ -81,10 +103,12 @@ namespace Cohort.GameRunner.Minigames {
 		[Flags]
 		public enum FinishCause {
 			None = 0,
-			Completed = 1<<0,
-			Failed = 1<<1,
-			Timeout = 1<<2,
-			ActivityStop = 1<<3
+			FinSuccess = 1<<0,
+			FinFailed = 1<<1,
+			FinPerfect = 1<<2,
+			Timeout = 1<<3,
+			ActivityStop = 1<<4,
+			FinPointless = 1<<5, //This option skips the point panel and acts as if there were no points earned.
 		}
 	}
 }

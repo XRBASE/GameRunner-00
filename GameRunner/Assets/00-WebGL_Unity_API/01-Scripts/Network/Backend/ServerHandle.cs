@@ -41,7 +41,7 @@ public class ServerHandle : Singleton<ServerHandle>
 
     [SerializeField] private bool _testData = false;
 
-    public ActivityDescription activityDef;
+    public string scene;
     [SerializeField] private string _testInput =
         "{\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhaS5zcGFjZXNoaWZ0LnBsYXRmb3JtLmNlbnRhdXIiLCJzdWIiOiJydXRnZXJ2ZDIxNyIsImV4cCI6MTcxMzM0NjY3MiwiaWF0IjoxNzEzMjYwMjcyLCJyb2xlcyI6WyJBRE1JTiIsIkdVRVNUIiwiTUFOQUdFUiIsIlNVUEVSIiwiVVNFUiJdfQ.fSKZtqa3yN_bZTVubN3Mj5UXuoRVld_pvFdQsL70qhM\",\"baseUrl\":\"https://dev.spaceshift.ai\",\"roomId\":\"58d6a142-e326-4d40-859a-3fa0d57540e2\",\"spaceId\":\"8d3d6c74-a2ce-4585-acad-b321ae6596bd\"}";
     
@@ -98,22 +98,22 @@ public class ServerHandle : Singleton<ServerHandle>
 
     private IEnumerator Connect() {
         _dataValid = true;
-        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Start();
+        LoadingManager.Instance[LoadPhase.Scene, LoadType.ConnectToPhoton].Start();
         
-        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Increment("loading network data");
+        LoadingManager.Instance[LoadPhase.Scene, LoadType.ConnectToPhoton].Increment("loading network data");
         _baseUrl = StringExtentions.PickFromJson<string>("baseUrl", _initData) + "/";
         _dataValid = !string.IsNullOrEmpty(_baseUrl);
         AppConfig.Config.OverrideBaseUrl(_baseUrl);
         
-        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Increment("Logging in user");
+        LoadingManager.Instance[LoadPhase.Scene, LoadType.ConnectToPhoton].Increment("Logging in user");
         _token = JsonUtility.FromJson<LoginRequest.SimpleToken>(_initData);
         if (_dataValid)
             _dataValid = !string.IsNullOrEmpty(_token.token);
-        LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Start();
+        LoadingManager.Instance[LoadPhase.Scene, LoadType.RetrieveUserData].Start();
         DataServices.Login.OnSystemsTokenRecieved(_token);
-        LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Increment("Playerdata recieved");
+        LoadingManager.Instance[LoadPhase.Scene, LoadType.RetrieveUserData].Increment("Playerdata recieved");
         
-        LoadingManager.Instance[LoadPhase.Lobby, LoadType.RetrieveUserData].Finish();
+        LoadingManager.Instance[LoadPhase.Scene, LoadType.RetrieveUserData].Finish();
         
         
         _sessionId = StringExtentions.PickFromJson<string>("sessionId", _initData);
@@ -126,12 +126,21 @@ public class ServerHandle : Singleton<ServerHandle>
             yield break;
         }
         
-        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Increment("Connecting networking client");
+        LoadingManager.Instance[LoadPhase.Scene, LoadType.ConnectToPhoton].Increment("Connecting networking client");
+        
+        Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
         DataServices.Photon.ConnectToPhotonRoom(_sessionId, OnConnected, OnConnectionError);
     }
 
+    private void OnJoinedRoom() {
+        Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
+        
+        EnvironmentLoader.Instance.LoadScene(scene);
+        ActivityLoader.Instance.SetScene(scene);
+    }
+
     private void OnConnected() {
-        LoadingManager.Instance[LoadPhase.Lobby, LoadType.ConnectToPhoton].Finish();
+        LoadingManager.Instance[LoadPhase.Scene, LoadType.ConnectToPhoton].Finish();
     }
     
     private void OnConnectionError(string error) {

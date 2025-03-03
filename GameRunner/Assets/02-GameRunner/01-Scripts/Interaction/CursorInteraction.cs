@@ -12,7 +12,7 @@ namespace Cohort.GameRunner.Interaction {
 		}
 		
 		void OnInteract() {
-			Interactable i = _raycaster.CurHit.collider.GetComponent<Interactable>();
+			BaseInteractable i = _raycaster.CurHit.collider.GetComponent<BaseInteractable>();
 			if (i == null) {
 				//TODO_COHORT: really wanna do this?
 				//does it even work?
@@ -20,7 +20,7 @@ namespace Cohort.GameRunner.Interaction {
 				return;
 			}
 
-			if (i.CheckInRange()) {
+			if (i.InInteractRange) {
 				i.OnInteract();
 			}
 		}

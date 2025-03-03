@@ -7,17 +7,21 @@ using Cohort.CustomAttributes;
 namespace Cohort.GameRunner.Minigames {
 	[Serializable]
 	public class MinigameDescription {
-		public State MinigameState {
-			get { return _state; }
-		}
-
 		public string actionDescription = "Do minigame";
+
+		[Tooltip("Determines the order of minigames. Minigames in the same phase are available at the same time. -1 Means the minigame does not get activat")]
+		public int phase = -1;
+		
+		public State state;
 		public string sceneName = "";
 		public string data;
 		public int[] locations;
 		public bool networked;
 		[Tooltip("If timelimit is negative, the timer is disabled")]
 		public float timeLimit = -1;
+
+		public int minScore;
+		public int maxScore;
 
 		[Tooltip("Events is called when the learning is finished while the user is in the activity.")]
 		public UnityEvent onFinCinematic;
@@ -26,18 +30,27 @@ namespace Cohort.GameRunner.Minigames {
 		public UnityEvent onFinDirect;
 
 		public UnityEvent onReset;
-
-		[ReadOnly, SerializeField] private State _state = State.Open;
+		
 		[ReadOnly] public int index;
 		[ReadOnly] public MingameLogEntry log;
+		
+
+		public void SetState(State newState, bool init) {
+			if (newState.status != state.status) {
+				SetStatus(newState.status, init);
+			}
+			
+			state = newState;
+		}
 
 		/// <summary>
-		/// Sets the state of the learning.
+		/// Sets the status of the minigame.
 		/// </summary>
 		/// <param name="newState">New state of the learning.</param>
 		/// <param name="init">Is this an initial/join room set data call?</param>
-		public void SetState(State newState, bool init, bool forceInvoke = false) {
-			if (forceInvoke || newState == State.Completed || newState == State.Failed) {
+		/// <param name="forceInvoke">Force invoke of the matching event?</param>
+		public void SetStatus(Status newState, bool init, bool forceInvoke = false) {
+			if (forceInvoke || newState == Status.FinSuccess || newState == Status.FinFailed) {
 				if (init) {
 					onFinDirect?.Invoke();
 				}
@@ -45,23 +58,36 @@ namespace Cohort.GameRunner.Minigames {
 					onFinCinematic?.Invoke();
 				}
 			}
-
-			_state = newState;
+			state.status = newState;
 		}
 
 		public void Reset() {
-			_state = State.Open;
+			state.status = Status.Open;
 
 			onReset?.Invoke();
 		}
 
-		public enum State {
+		public enum Status {
 			Open = 0,
+			Available,
 			Active,
+			FinSuccess,
+			FinFailed
+		}
 
-			//Available,
-			Completed,
-			Failed
+		[Serializable]
+		public class State {
+			[ReadOnly] public Status status = Status.Open;
+			[ReadOnly] public int location = -1;
+		}
+
+		public static int SortPhase(MinigameDescription left, MinigameDescription right) {
+			if (left.phase > right.phase)
+				return 1;
+			if (left.phase < right.phase)
+				return -1;
+			
+			return 0;
 		}
 	}
 }

@@ -18,8 +18,9 @@ public class ArrangeGame : Minigame
         get { return 2f; }
     }
 
-    public override float Score { get; set; }
-    
+    public override int Score { get; set; }
+
+
     private const float FEEDBACK_INTERVAL = .5f;
 
     public TextMeshProUGUI title;
@@ -37,6 +38,7 @@ public class ArrangeGame : Minigame
     private List<ArrangeSlot> _slots = new List<ArrangeSlot>();
     private List<ArrangeElement> _arrangeElements = new List<ArrangeElement>();
     private static Random _rng = new Random();
+    private bool _isPlaying;
     
     protected virtual void OnDestroy()
     {
@@ -50,10 +52,16 @@ public class ArrangeGame : Minigame
         InputManager.Instance.LearningCursor.leftUp += LeftUp;
         InputManager.Instance.LearningCursor.leftDown += LeftDown;
     }
+    public override void Initialize(string gameData, float timeLimit, int minScore, int maxScore, Action<FinishCause, int> onFinished, Action onExit) {
+        base.Initialize(gameData, timeLimit,minScore, maxScore, onFinished, onExit);
+        _arrangeGameData = JsonUtility.FromJson<ArrangeGameData>(gameData);
+        BuildGame();
+    }
+    
     
     private void LeftDown()
     {
-        if(!IsPlaying)
+        if(!_isPlaying)
             return;
         //Select   
         if (HoverOverSlot(out var hoverSlot) && hoverSlot.occupied)
@@ -69,7 +77,7 @@ public class ArrangeGame : Minigame
 
     private void LeftUp()
     {
-        if(!IsPlaying)
+        if(!_isPlaying)
             return;
         //Release
         if (HoverOverSlot(out var hoverSlot))
@@ -95,11 +103,7 @@ public class ArrangeGame : Minigame
     }
 
 
-    public override void Initialize(string gameData, float timeLimit, Action<FinishCause, float> onFinished, Action onExit) {
-        base.Initialize(gameData, timeLimit, onFinished, onExit);
-        _arrangeGameData = JsonUtility.FromJson<ArrangeGameData>(gameData);
-        BuildGame();
-    }
+
 
     private void BuildGame()
     {
@@ -121,7 +125,7 @@ public class ArrangeGame : Minigame
         }
         
         ShuffleArrangeElements();
-        IsPlaying = true;
+        _isPlaying = true;
     }
     
     private void ShuffleArrangeElements()
@@ -167,7 +171,7 @@ public class ArrangeGame : Minigame
 
     public void Submit()
     {
-        if(!IsPlaying)
+        if(!_isPlaying)
             return;
         if (_slots.Any(slot => !slot.occupied))
         {
@@ -176,7 +180,7 @@ public class ArrangeGame : Minigame
             return;
         }
 
-        IsPlaying = false;
+        _isPlaying = false;
         DoFeedbackRoutine();
     }
 
@@ -219,7 +223,7 @@ public class ArrangeGame : Minigame
     
     private void GameFinishedFeedback(int correctSubmissions)
     {
-        Score = (float)correctSubmissions/_slots.Count;
+        Score = _scoreRange.GetValueRound((float)correctSubmissions/_slots.Count);
 
         if(Score > .2f)
             feedbackAudio.PlayOneShot(completedAudioClip);

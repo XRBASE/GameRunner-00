@@ -122,8 +122,6 @@ namespace Cohort.Networking.PhotonKeys {
             Index = 0,
             Actor = 1,
             State = 2,
-            ManagerTimer = 3,
-            ManagerActor = 4,
         }
 
         public enum Time {

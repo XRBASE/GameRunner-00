@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class ButtonInteraction : MonoBehaviour {
     [SerializeField] private ObjIndicator _btnFeedback;
     
-    [SerializeField] private Interactable[] _interactables;
+    [SerializeField] private BaseInteractable[] _interactables;
 
     private int _activeId = -1;
     private bool _hasInteractables;
@@ -31,8 +31,9 @@ public class ButtonInteraction : MonoBehaviour {
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        _interactables = FindObjectsOfType<Interactable>();
+        _interactables = FindObjectsOfType<BaseInteractable>();
         _hasInteractables = _interactables.Length > 0;
+        _btnFeedback.SetActive(false);
     }
 
     void Update() {
@@ -41,9 +42,8 @@ public class ButtonInteraction : MonoBehaviour {
 
         bool found = false;
         if (_activeId >= 0) {
-            if (_interactables[_activeId].interactable && _interactables[_activeId].CheckInRange()) {
+            if (_interactables[_activeId].interactable && _interactables[_activeId].InInteractRange) {
                 _btnFeedback.transform.position = _interactables[_activeId].transform.position;
-                _interactables[_activeId].SetInRange(true);
                 found = true;
             }
             else {
@@ -52,20 +52,17 @@ public class ButtonInteraction : MonoBehaviour {
         }
         
         //TODO_COHORT: make sure that if interactables overlap it takes the camera angle to determine the most valid one.
-
-        for (int i = 0; i < _interactables.Length; i++) {
-            if (!found && _interactables[i].interactable && _interactables[i].CheckInRange()) {
-                _btnFeedback.transform.position = _interactables[i].transform.position;
-                _activeId = i;
+        if (!found) {
+            for (int i = 0; i < _interactables.Length; i++) {
+                if (_interactables[i].interactable && _interactables[i].InInteractRange) {
+                    _btnFeedback.transform.position = _interactables[i].transform.position;
+                    _activeId = i;
                 
-                found = true;
-                _interactables[i].SetInRange(true);
-            }
-            else if (i != _activeId) {
-                _interactables[i].SetInRange(false);
+                    found = true;
+                    break;
+                }
             }
         }
-        
         
         _btnFeedback.SetActive(found);
     }

@@ -10,25 +10,33 @@ using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 
 namespace Cohort.GameRunner.Minigames {
-    [DefaultExecutionOrder(0)] //Before learningManager
-    public class MinigameInteractable : Interactable {
+    public class MinigameInteractable : BaseInteractable {
 
         public string LocationDescription {
             get { return _locationDescription; }
         }
 
-        public bool HasLearning {
-            get { return _hasLearning; }
+        public bool HasMinigame {
+            get { return hasMinigame; }
             private set {
                 interactable = value;
-                _hasLearning = value;
+                hasMinigame = value;
             }
         }
 
-        [ReadOnly, SerializeField] private bool _hasLearning;
+        public int MinigameIndex {
+            get { return HasMinigame? _minigame.index : -1; }
+        }
+        
+        protected bool InViewRange { get; private set; }
+
+        [ReadOnly, SerializeField] private bool hasMinigame;
 
         [SerializeField] private string _locationDescription = "At position";
         [SerializeField] private ObjIndicator _indicator;
+        
+        [Tooltip("Icon is shown within this radius, negative value will always be visible"), SerializeField] 
+        private float _viewRadius = -1;
 
         private int _actor = -1;
         private MinigameDescription _minigame;
@@ -39,20 +47,43 @@ namespace Cohort.GameRunner.Minigames {
 
         protected override void Start() {
             base.Start();
-
+            
             if (_networked) {
                 Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
             }
         }
 
-        public override void SetInRange(bool value) {
-            base.SetInRange(value);
+        protected override void OnDestroy() {
+            base.OnDestroy();
+            
+            if (_networked) {
+                Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
+            }
 
-            _indicator.SetActive(!InRange && HasLearning);
+            if (HasMinigame && _minigame.log) {
+                _minigame.log.RemoveDirect();
+            }
+        }
+
+        protected override void Update() {
+            base.Update();
+            CheckViewRange();
+
+            _indicator.SetActive( InViewRange && !InInteractRange && HasMinigame);
+        }
+
+        public virtual bool CheckViewRange() {
+            if (_viewRadius < 0)
+                InViewRange = true;
+            else {
+                InViewRange = (transform.position - Player.Local.transform.position).magnitude <= _viewRadius;
+            }
+
+            return InViewRange;
         }
 
         public override void OnInteract() {
-            if (!HasLearning) {
+            if (!HasMinigame) {
                 return;
             }
 
@@ -78,7 +109,7 @@ namespace Cohort.GameRunner.Minigames {
 
         protected override void ActivateLocal() {
             _indicator.SetActive(false);
-            MinigameManager.Instance.OnMinigameStart(_minigame, this);
+            MinigameManager.Instance.StartMinigame(_minigame, this);
         }
 
         protected override void Deactivate(Hashtable changes, Hashtable expected = null) {
@@ -91,7 +122,9 @@ namespace Cohort.GameRunner.Minigames {
                 changes = new Hashtable();
 
             changes.Add(GetActorKey(), null);
-
+            
+            //Should we even track actor on deactivate?
+            
             //if there is an actor this item can only be deactivated by that actor.
             if (_actor != -1) {
                 if (expected == null)
@@ -105,31 +138,28 @@ namespace Cohort.GameRunner.Minigames {
 
         protected override void DeactivateLocal() { }
 
-        public void SetMinigame(int index = -1, bool networked = false) {
-            _networked = networked;
-            if (!networked) {
-                SetMinigameLocal(index);
-                return;
-            }
+        public void SetMinigame(int index = -1) {
+            HasMinigame = index >= 0;
 
-            Hashtable changes = new Hashtable();
-            changes.Add(GetMinigameKey(), index);
-
-            Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
-        }
-
-        public void SetMinigameLocal(int index) {
-            HasLearning = index >= 0;
-
-            if (HasLearning) {
+            if (HasMinigame) {
                 _minigame = MinigameManager.Instance[index];
 
-                Debug.LogError($"Set indicator {!InRange} for {index}");
-                _indicator.SetActive(!InRange);
-                MinigameManager.Instance.SetMinigameLog(_minigame, this);
+                if (_minigame.state.status == MinigameDescription.Status.FinSuccess ||
+                    _minigame.state.status == MinigameDescription.Status.FinFailed) {
+                    Debug.LogWarning("Minigame already finished");
+                    
+                    HasMinigame = false;
+                    _indicator.SetActive(false);
+                    _minigame = null;
+                    return;
+                }
+                
+                _indicator.SetActive(!InInteractRange);
+                
+                MinigameManager.Instance.SetMinigameLog(_minigame, this); 
                 return;
             }
-
+            
             _indicator.SetActive(false);
             _minigame = null;
         }
@@ -151,17 +181,7 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         protected override void OnPropertiesChanged(Hashtable changes) {
-            string key = GetMinigameKey();
-            if (changes.ContainsKey(key)) {
-                if (changes[key] == null) {
-                    SetMinigameLocal(-1);
-                }
-                else {
-                    SetMinigameLocal((int)changes[key]);
-                }
-            }
-
-            key = GetActorKey();
+            string key =  GetActorKey();
             if (changes.ContainsKey(key)) {
                 if (changes[key] == null) {
                     _actor = -1;
@@ -179,25 +199,34 @@ namespace Cohort.GameRunner.Minigames {
                 Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.Actor),
                 Identifier.ToString());
         }
-
-        private string GetMinigameKey() {
-            return Keys.Concatenate(
-                Keys.Concatenate(Keys.Room.Minigame, Keys.Minigame.Index),
-                Identifier.ToString());
-        }
         
 #if UNITY_EDITOR
+        public override void OnDrawGizmosSelected() {
+            if (_viewRadius > 0) {
+                Color buffer = Gizmos.color;
+                Gizmos.color = Color.green;
+            
+                Gizmos.DrawWireSphere(transform.position, _viewRadius);
+            
+                Gizmos.color = buffer;
+            }
+            
+            base.OnDrawGizmosSelected();
+        }
+        
         public override void OnValidate() {
             base.OnValidate();
             
-            if (!_networked) {
-                _networked = true;
+            if (_networked) {
+                _networked = false;
                 EditorUtility.SetDirty(this);
-                
-                Debug.LogWarning("Minigame interactables are always networked, minigames themselves can be set to not networked! See sceneConfig!");
-                GameObject ping = FindObjectOfType<SceneConfiguration>().gameObject;
-                if (ping != null) {
-                    EditorGUIUtility.PingObject(ping);
+
+                if (!Application.isPlaying) {
+                    Debug.LogWarning("Minigame interactables are never networked, minigames themselves can be set to not networked! See sceneConfig!");
+                    GameObject ping = FindObjectOfType<SceneConfiguration>()?.gameObject;
+                    if (ping != null) {
+                        EditorGUIUtility.PingObject(ping);
+                    }
                 }
             }
         }

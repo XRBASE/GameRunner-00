@@ -12,15 +12,17 @@ namespace Cohort.GameRunner.Minigames {
 
         private readonly Dictionary<Minigame.FinishCause, string> BODIES =
             new Dictionary<Minigame.FinishCause, string> {
-                {Minigame.FinishCause.Completed, "You finished [MINIGAME] and earned [POINTS] points!"},
-                {Minigame.FinishCause.Failed, "You failed [MINIGAME]... \n[POINTS] Points earned."},
+                {Minigame.FinishCause.FinPerfect, "Amazing, you finished [MINIGAME] perfectly and earned [POINTS] points!"},
+                {Minigame.FinishCause.FinSuccess, "You finished [MINIGAME] and earned [POINTS] points!"},
+                {Minigame.FinishCause.FinFailed, "You failed [MINIGAME]... \n[POINTS] Points earned."},
                 {Minigame.FinishCause.Timeout, "You ran out of time... \n[POINTS] Points earned."},
                 {Minigame.FinishCause.ActivityStop, "The activity was stopped. \n[POINTS] Points earned!"}
             };
         private readonly Dictionary<Minigame.FinishCause, string> TITLES =
             new Dictionary<Minigame.FinishCause, string> {
-                {Minigame.FinishCause.Completed, "[MINIGAME] minigame finished!"},
-                {Minigame.FinishCause.Failed, "[MINIGAME] minigame failed!"},
+                {Minigame.FinishCause.FinPerfect, "[MINIGAME] perfect score!"},
+                {Minigame.FinishCause.FinSuccess, "[MINIGAME] minigame finished!"},
+                {Minigame.FinishCause.FinFailed, "[MINIGAME] minigame failed!"},
                 {Minigame.FinishCause.Timeout, "Time limit reached!"},
                 {Minigame.FinishCause.ActivityStop, "Activity stopped!"}
             };
@@ -52,10 +54,12 @@ namespace Cohort.GameRunner.Minigames {
             MinigameManager.Instance.onMinigameFinished -= OnMinigameFinished;
         }
 
-        private void OnMinigameFinished(Minigame.FinishCause cause, float score) {
-            Activate();
+        private void OnMinigameFinished(Minigame.FinishCause cause, int score) {
+            if (cause == Minigame.FinishCause.FinPointless)
+                return;
             
-            ShowScore(score, MinigameManager.Instance.ScoreMultiplier,
+            Activate();
+            ShowScore(score, MinigameManager.Instance.Current.minScore, MinigameManager.Instance.Current.maxScore,
                       MinigameManager.Instance.Current.actionDescription, cause);
         }
 
@@ -76,14 +80,12 @@ namespace Cohort.GameRunner.Minigames {
             _scoreSlider.value = _scoreSlideCurve.Evaluate(Mathf.Clamp01(_timer / _slideDuration)) * _score;
         }
 
-        private void ShowScore(float score, int scoreMod, string learningName, Minigame.FinishCause cause) {
-            bool amazing = score >= MinigameManager.AMAZING_THRESHOLD;
+        private void ShowScore(int score, int minScore, int maxscore, string learningName, Minigame.FinishCause cause) {
+            _bodyField.text = GetInfoString(score, learningName, BODIES[cause]);
+            _titleField.text = GetInfoString(score, learningName, TITLES[cause]);
 
-            _bodyField.text = GetInfoString(Mathf.RoundToInt(score * scoreMod), learningName, BODIES[cause]);
-            _titleField.text = GetInfoString(Mathf.RoundToInt(score * scoreMod), learningName, TITLES[cause]);
-
-            _score = score;
-            if (amazing) {
+            _score = (float)(score - minScore) / (maxscore - minScore);
+            if (cause == Minigame.FinishCause.FinPerfect) {
                 _confetti.Clear();
                 _confetti.Play();
             }

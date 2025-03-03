@@ -33,13 +33,13 @@ namespace Cohort.GameRunner.Minigames {
             _tgl.isOn = false;
         }
 
-        public void CheckLogItem(MinigameDescription.State state) {
+        public void CheckLogItem(MinigameDescription.Status state) {
             switch (state) {
-                case MinigameDescription.State.Completed:
+                case MinigameDescription.Status.FinSuccess:
                     StartCoroutine(WaitAndRemove());
                     break;
-                case MinigameDescription.State.Failed:
-                    RemoveTask();
+                case MinigameDescription.Status.FinFailed:
+                    RemoveDirect();
                     break;
                 default:
                     Debug.LogError($"No check implemented for learning type: {state}");
@@ -47,7 +47,7 @@ namespace Cohort.GameRunner.Minigames {
             }
         }
 
-        private void RemoveTask() {
+        public void RemoveDirect() {
             _pool.RemoveItem(this);
         }
 
@@ -55,7 +55,7 @@ namespace Cohort.GameRunner.Minigames {
             _tgl.isOn = true;
 
             yield return new WaitForSeconds(DEATH_TIME);
-            RemoveTask();
+            RemoveDirect();
         }
 
         public MingameLogEntry Copy() {
