@@ -9,6 +9,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = System.Random;
 
+using AudioType = Cohort.GameRunner.Audio.Minigames.AudioType;
+
 public class MatchGame : Minigame
 {
     protected override float CorrectVisualDuration
@@ -32,11 +34,8 @@ public class MatchGame : Minigame
 
     public Transform answerElementParent, questionElementParent, dragTransform;
     public AudioSource pitchedAudio;
-    public AudioClip gameCompleteAudioClip;
-    public AudioClip correctSoundEffect;
-    public AudioClip inCorrectSoundEffect;
-    public AudioClip selectSoundEffect;
     public AudioClip matchFoundSoundEffect;
+    public AudioClip selectSoundEffect;
 
     public TMP_Text title;
     public AudioSource feedbackAudio;
@@ -110,15 +109,15 @@ public class MatchGame : Minigame
         {
             matchElement.Complete();
         }
-
-        feedbackAudio.PlayOneShot(correctSoundEffect);
+        
+        _audioHandle.PlayClip(AudioType.Success);
     }
 
     private void IncorrectFeedback()
     {
         _selectedMatchElement.WrongAnswer();
         _targetMatchElement.WrongAnswer();
-        feedbackAudio.PlayOneShot(inCorrectSoundEffect);
+        _audioHandle.PlayClip(AudioType.Failure);
 
         InputManager.Instance.SetActionMapActive(InputManager.ActionMaps.LearningCursor, false);
         StartCoroutine(DoTimeout(FaultiveVisualDuration, Deselect));
@@ -128,7 +127,6 @@ public class MatchGame : Minigame
     {
         Score = _scoreRange.GetValueRound((float) _pairAmount / _attempts, true);
         
-        feedbackAudio.PlayOneShot(gameCompleteAudioClip);
         DoGameFinishedFeedback();
         StartCoroutine(DoTimeout(FinishedVisualDuration, FinishMinigame));
     }
@@ -245,7 +243,7 @@ public class MatchGame : Minigame
             {
                 matchElement.Flip();
             }
-
+            
             pitchedAudio.PlayOneShot(matchFoundSoundEffect);
             pitchedAudio.pitch += .1f;
             yield return new WaitForSeconds(.3f);

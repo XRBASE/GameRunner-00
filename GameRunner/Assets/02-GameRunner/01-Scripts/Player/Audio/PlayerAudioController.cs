@@ -1,18 +1,20 @@
-using Cohort.GameRunner.AvatarAnimations;
 using UnityEngine;
+
+using Cohort.GameRunner.AvatarAnimations;
+using Cohort.GameRunner.Audio;
 
 [DefaultExecutionOrder(0)] //Before CharAnimator
 public class PlayerAudioController : MonoBehaviour {
-    [SerializeField] private AudioSet _audioSet;
+    [SerializeField] private CharacterAudioSet characterAudioSet;
     [SerializeField] private AudioSource _source;
     [SerializeField] private AudioSource _oneshotSource;
 
     private float _flux;
     private CharAnimator _animator;
-    private AudioSet.ClipEntry _curClip;
+    private CharClipEntry _curClip;
     
-    public void Initialize(CharAnimator animator, AudioSet audioOverride) {
-        _audioSet = audioOverride;
+    public void Initialize(CharAnimator animator, CharacterAudioSet characterAudioOverride) {
+        characterAudioSet = characterAudioOverride;
         _animator = animator;
         _animator.onStateChange += OnAnimationStateChanged;
         enabled = false;
@@ -25,7 +27,7 @@ public class PlayerAudioController : MonoBehaviour {
     }
 
     private void OnAnimationStateChanged(CharAnimator.AnimationState state) {
-        if (_audioSet.TryGetClip(state, out AudioSet.ClipEntry clip)) {
+        if (characterAudioSet.TryGetClip(state, out CharClipEntry clip)) {
             if (_source.isPlaying && !_curClip.oneShot) {
                 _source.Stop();
             }

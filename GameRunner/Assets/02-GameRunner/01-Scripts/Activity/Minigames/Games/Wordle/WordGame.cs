@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cohort.GameRunner.Audio.Minigames;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
+using AudioType = Cohort.GameRunner.Audio.Minigames.AudioType;
 using Random = UnityEngine.Random;
 
 namespace Cohort.GameRunner.Minigames.Wordle {
@@ -41,8 +43,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         public WordGameInput wordGameInput;
         public Transform gameParent;
         public TextMeshProUGUI title;
-        public AudioSource feedbackAudio;
-        public AudioClip successAudioClip, failureAudioClip;
+        public AudioSource letterFeedback;
         public TextMeshProUGUI hintText;
         public PlayableDirector invalidWordFeedback;
 
@@ -115,7 +116,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
             for (int i = 0; i < _wordGameData.tries; i++) {
                 var word = Instantiate(wordPrefab, gameParent);
                 _words.Add(word);
-                word.Initialise(_chosenWord.word.Length, feedbackAudio);
+                word.Initialise(_chosenWord.word.Length, letterFeedback);
             }
 
             hintText.text = _chosenWord.hint;
@@ -164,7 +165,8 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         // Handle invalid word input and give feedback
         private void HandleAnswerInvalid() {
             CurrentWord.InCorrectFeedback();
-            feedbackAudio.PlayOneShot(failureAudioClip);
+            
+            _audioHandle.PlayClip(AudioType.Failure);
             PlayableDirectorFeedback(invalidWordFeedback);
             wordGameInput.SetInputActive(false);
 
@@ -190,12 +192,12 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private void HandleAnswer(bool correct) {
             if (correct) {
                 CurrentWord.DoCorrectFeedbackRoutine(); // Show correct feedback
-                feedbackAudio.PlayOneShot(successAudioClip); // Play success audio
+                _audioHandle.PlayClip(AudioType.Success); // Play success audio
                 NextPuzzle(); // Move to the next puzzle
             }
             else {
                 CurrentWord.InCorrectFeedback(); // Show incorrect feedback
-                feedbackAudio.PlayOneShot(failureAudioClip); // Play failure audio
+                _audioHandle.PlayClip(AudioType.Failure); // Play failure audio
             }
 
             _text = string.Empty;

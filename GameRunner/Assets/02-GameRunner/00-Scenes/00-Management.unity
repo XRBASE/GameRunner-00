@@ -804,6 +804,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3916302343818920129, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: _defaultMinigameAudio
+      value: 
+      objectReference: {fileID: 11400000, guid: 6bf74e16491b32648a772fb51f17f1c1, type: 2}
+    - target: {fileID: 5456451777468354867, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7550730037129506291, guid: f73c74175149dc04b8554c4df40572f1, type: 3}
@@ -1069,10 +1077,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1593420574}
-    - target: {fileID: 1170715247519993080, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -36.999817
-      objectReference: {fileID: 0}
     - target: {fileID: 1180636790054817251, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1087,7 +1091,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1180636790054817251, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 760.269
+      value: 760.287
       objectReference: {fileID: 0}
     - target: {fileID: 1180636790054817251, guid: 9f4b2d9ddba6bab4da02ba40af254f81, type: 3}
       propertyPath: m_AnchoredPosition.y
