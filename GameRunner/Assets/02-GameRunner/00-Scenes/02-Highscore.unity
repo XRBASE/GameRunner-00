@@ -1543,6 +1543,29 @@ MonoBehaviour:
           m_Calls: []
       index: 3
       log: {fileID: 0}
+    - actionDescription: 4-Test Arrange
+      phase: 2
+      state:
+        status: 0
+        location: -1
+      sceneName: 04-Arrange
+      data: '{"title":"Arrange the pictures correctly in sequence","ArrangeData":[{"instanceID":10952},{"instanceID":10954},{"instanceID":10956},{"instanceID":10958},{"instanceID":10960}],"chosenIds":["d23ef070-ae9e-4458-8295-49bb7c53a6eb","3272e382-5f84-4510-80a1-1d282b2d3cb5","51292336-01a7-403f-9f43-7877a14f16ed","9b9a3138-6b17-479c-90d5-09685f643468","869972dd-8c1c-43d1-b565-7afb89da5f66"]}'
+      locations: 01000000
+      networked: 1
+      timeLimit: -1
+      minScore: 3
+      maxScore: 100
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      index: 4
+      log: {fileID: 0}
     - actionDescription: 3-Test
       phase: 3
       state:
@@ -1564,7 +1587,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 4
+      index: 5
       log: {fileID: 0}
     - actionDescription: 3-Test Wordle
       phase: 3
@@ -1592,7 +1615,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 5
+      index: 6
       log: {fileID: 0}
     - actionDescription: 3-Test Quiz
       phase: 3
@@ -1631,7 +1654,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 6
+      index: 7
       log: {fileID: 0}
     - actionDescription: 3-Test
       phase: 3
@@ -1654,7 +1677,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 7
+      index: 8
       log: {fileID: 0}
     - actionDescription: Col-Test
       phase: -1
@@ -1677,7 +1700,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 8
+      index: 9
       log: {fileID: 0}
     - actionDescription: Col-Test2
       phase: -1
@@ -1700,7 +1723,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 9
+      index: 10
       log: {fileID: 0}
 --- !u!4 &1957266246
 Transform:

@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/02-GameRunner/00-Scenes/Info/01-InfoVi.unity
     guid: c29f59b4eada6da4aa1f795a4ab19447
+  - enabled: 1
+    path: Assets/02-GameRunner/00-Scenes/Minigames/04-Arrange.unity
+    guid: ca6279b82994d3a45be8d50ddb7cc8bc
   m_configObjects: {}
