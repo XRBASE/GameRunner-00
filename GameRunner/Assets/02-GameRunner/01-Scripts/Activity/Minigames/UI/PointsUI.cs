@@ -86,8 +86,14 @@ namespace Cohort.GameRunner.Minigames {
 
             _score = (float)(score - minScore) / (maxscore - minScore);
             if (cause == Minigame.FinishCause.FinPerfect) {
-                _confetti.Clear();
-                _confetti.Play();
+                if (_confetti == null) {
+                    //prevents error breaking and the panel not closing
+                    Debug.LogError("Missing reference to confetti particles");
+                }
+                else {
+                    _confetti.Clear();
+                    _confetti.Play();
+                }
             }
 
             AnimateSlider();

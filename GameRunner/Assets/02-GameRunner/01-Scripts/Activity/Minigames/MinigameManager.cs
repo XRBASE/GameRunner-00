@@ -146,10 +146,12 @@ namespace Cohort.GameRunner.Minigames {
                 OnMinigameStart(minigame);
                 return;
             }
-            
-            for (int i = 0; i < _interactables.Length; i++) {
-                if (_interactables[i].Identifier == state.location && !_interactables[i].HasMinigame) {
-                    _interactables[i].SetMinigame(minigame.index);
+
+            if (state.status == MinigameDescription.Status.Available) {
+                for (int i = 0; i < _interactables.Length; i++) {
+                    if (_interactables[i].Identifier == state.location && !_interactables[i].HasMinigame) {
+                        _interactables[i].SetMinigame(minigame.index);
+                    }
                 }
             }
         }
@@ -207,22 +209,40 @@ namespace Cohort.GameRunner.Minigames {
             return false;
         }
 
+
+        private bool AllGamesFinished() {
+            int prevIndex = (_currenMinigameDescription == null) ? -1 : _currenMinigameDescription.index;
+            for (int i = 0; i < Setting.minigames.Count; i++) {
+                if (Setting.minigames[i].required && Setting.minigames[i].state.status <= MinigameDescription.Status.Active && i != prevIndex) {
+                    Debug.LogError($"Minigame {i} not done, status is {Setting.minigames[i].state.status}.");
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
         private void ActivateMinigames() {
             if (!TryGetPhaseIndex(out int phase)) {
-                onAllMinigamesFinished?.Invoke(HighscoreTracker.Instance.Local.score);
+                if (AllGamesFinished()) {
+                    onAllMinigamesFinished?.Invoke(HighscoreTracker.Instance.Local.score);
                 
-                Debug.LogWarning("All minigames finished");
+                    Debug.LogWarning("All minigames finished");
+                }
                 return;
             }
-
+            //current is set to null here, so the all games finished can account for the previously finished minigame.
+            _currenMinigameDescription = null;
+            
             bool hasChanges = false;
             List<int> takenInteractables = new List<int>();
             Hashtable changes = new Hashtable();
 
             for (int i = 0; i < Setting.minigames.Count; i++) {
-                if (Setting.minigames[i].phase == phase &&
-                    Setting.minigames[i].state.status == MinigameDescription.Status.Open) {
-                    
+                if (Setting.minigames[i].phase != phase)
+                    continue;
+                
+                if (Setting.minigames[i].state.status == MinigameDescription.Status.Open) {
                     if (TryGetInteractable(Setting.minigames[i], out MinigameInteractable interactable) && !takenInteractables.Contains(interactable.Identifier))
                     {
                         changes = GetMinigameStateChangeTable(Setting.minigames[i].index, MinigameDescription.Status.Available, interactable.Identifier,
@@ -297,7 +317,7 @@ namespace Cohort.GameRunner.Minigames {
             }
 
             if (!found) {
-                Debug.LogWarning($"No available interactable for learning {minigame.index}!");
+                Debug.LogWarning($"No available interactable for minigame {minigame.index}!");
 
                 interactable = null;
                 return false;
@@ -384,8 +404,7 @@ namespace Cohort.GameRunner.Minigames {
                 _currentInteractable.Deactivate();
                 _currentInteractable.SetMinigame();
             }
-
-            _currenMinigameDescription = null;
+            
             _currentInteractable = null;
             ActivateMinigames();
         }

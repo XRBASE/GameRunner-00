@@ -31,7 +31,7 @@ public class ButtonInteraction : MonoBehaviour {
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        _interactables = FindObjectsOfType<BaseInteractable>();
+        _interactables = FindObjectsOfType<BaseInteractable>(true);
         _hasInteractables = _interactables.Length > 0;
         _btnFeedback.SetActive(false);
     }

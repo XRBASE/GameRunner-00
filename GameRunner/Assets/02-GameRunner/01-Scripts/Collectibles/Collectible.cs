@@ -1,10 +1,10 @@
 using Cohort.GameRunner.Interaction;
 using Cohort.GameRunner.Players;
 using Cohort.GameRunner.Score;
+using Cohort.Networking.PhotonKeys;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Collider))]
 public class Collectible : BaseInteractable {
 	
 	[SerializeField, Tooltip("Is fired when resetting the collectible, so it can be grabbed again.")]
@@ -19,6 +19,14 @@ public class Collectible : BaseInteractable {
 	[SerializeField] private int _score;
 
 	private bool _localTrigger = false;
+	private bool _useIds;
+
+	protected override void Start() {
+		_useIds = _networked;
+		_networked = true;
+		
+		base.Start();
+	}
 
 	protected override bool CheckInteractRange() {
 		if (!Value)
@@ -29,12 +37,25 @@ public class Collectible : BaseInteractable {
 		}
 	}
 	
-	public override void OnInteract() {
+	public override bool CheckViewRange() {
 		if (!Value)
+			return base.CheckViewRange();
+		else {
+			InViewRange = false;
+			return InViewRange;
+		}
+	}
+	
+	public override void OnInteract() {
+		if (!Value) {
+			_localTrigger = true;
 			Activate();
+		}
 	}
 
 	protected override void ActivateLocal() {
+		base.ActivateLocal();
+		
 		if (Initial) {
 			onCollectDirect?.Invoke();
 		}
@@ -51,6 +72,8 @@ public class Collectible : BaseInteractable {
 	}
 
 	protected override void DeactivateLocal() {
+		base.DeactivateLocal();
+		
 		onReset?.Invoke();
 	}
 
@@ -58,6 +81,15 @@ public class Collectible : BaseInteractable {
 		if (other.transform == Player.Local.transform) {
 			_localTrigger = true;
 			Activate();
+		}
+	}
+	
+	protected override string GetInteractableKey() {
+		if (_useIds) {
+			return Keys.Concatenate(Keys.GetUUID(Keys.Room.Interactable, Identifier.ToString()), Player.Local.UUID);
+		}
+		else {
+			return base.GetInteractableKey();
 		}
 	}
 }

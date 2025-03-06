@@ -20,6 +20,9 @@ namespace Cohort.GameRunner.Minigames {
 		[Tooltip("If timelimit is negative, the timer is disabled")]
 		public float timeLimit = -1;
 
+		[Tooltip("Minigames that are required have to be finished before the all finished ui is shown. Other minigames are optional and not required for this panel.")]
+		public bool required = true;
+
 		public int minScore;
 		public int maxScore;
 

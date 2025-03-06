@@ -9,12 +9,16 @@ public class ServerActionsUI : UIPanel
 {
 	private const float ANIM_DURATION = 0.5f;
 
-	private bool Open { get; set; }
-	
+	public bool Open {
+		get { return _sprite.IsOn; }
+		set { _sprite.IsOn = value; }
+	}
+
 	[SerializeField] private Button _toggleBtn;
 	[SerializeField] private Button _startBtn;
 	[SerializeField] private Button _stopBtn;
 	[SerializeField] private Toggle _audioTgl;
+	[SerializeField] private ToggleSprite _sprite;
 	private Vector2 _openAnchorPos, _closeAnchorPos;
 	
 	private void Awake() {
@@ -26,6 +30,7 @@ public class ServerActionsUI : UIPanel
 		_toggleBtn.onClick.AddListener(ToggleState);
 		_startBtn.onClick.AddListener(StartGame);
 		_stopBtn.onClick.AddListener(StopGame);
+		
 		_audioTgl.onValueChanged.AddListener(ToggleMute);
 		
 		DeactivateInstant();
@@ -69,6 +74,7 @@ public class ServerActionsUI : UIPanel
 
 	private void DeactivateInstant() {
 		RectTransform.DOAnchorMax(_closeAnchorPos, 0);
+		Open = false;
 	}
 
 	public override void Deactivate() {
