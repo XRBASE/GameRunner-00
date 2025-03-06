@@ -1,3 +1,7 @@
+# v0.5.0
+- collectible state saved on network.
+- mingames can now be optional, so that minigames finished panel does not trigger.
+
 # v0.4.1
 - added score popup that shows the amount of points the player has earned.
 - added generic audio management system for minigame sound.
