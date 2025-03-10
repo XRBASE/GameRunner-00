@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,8 +8,9 @@ public class InteractiveVideoDataSO : ScriptableObject
 {
     public InteractiveVideoData interactiveVideoData;
 
-    public string InteractiveVideoDataJson()
+    private string InteractiveVideoDataJson()
     {
+        interactiveVideoData.chosenIds = interactiveVideoData.popups.Select(popup => popup.UID).ToList();
         return JsonUtility.ToJson(interactiveVideoData);
     }
     

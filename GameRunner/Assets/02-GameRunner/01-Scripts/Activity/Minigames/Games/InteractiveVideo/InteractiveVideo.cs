@@ -40,7 +40,10 @@ public class InteractiveVideo : VideoViewer
     {
         titleText.text = _interactiveVideoData.titleText;
         _popups = new List<Popup>();
-        _popups.AddRange(_interactiveVideoData.popups);
+        foreach (var id in _interactiveVideoData.chosenIds)
+        {
+            _popups.Add(interactiveVideoLibrary.popups.First(item => item.UID == id));
+        }
         _popups = _popups.OrderBy(n => n.timestamp).ToList();
         _answers.Clear();
     }
