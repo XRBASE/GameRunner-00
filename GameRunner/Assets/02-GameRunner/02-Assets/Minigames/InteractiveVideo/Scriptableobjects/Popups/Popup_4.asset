@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0274478ab200e41bc4b684bd128f38, type: 3}
   m_Name: Popup_4
   m_EditorClassIdentifier: 
+  UID: ba3e56fa-f0cc-4df0-bfbf-c7b6a644b025
   text: Lef
   timestamp: 9
   dummy: 1

@@ -9,5 +9,5 @@ using UnityEngine;
 public class VideoInfo
 {
 	[Tooltip("This is the backend uuid, which points to the video asset.")]
-	public string uuid;
+	public string videouuid;
 }

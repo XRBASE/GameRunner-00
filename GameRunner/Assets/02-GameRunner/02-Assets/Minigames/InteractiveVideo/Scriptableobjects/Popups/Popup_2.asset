@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0274478ab200e41bc4b684bd128f38, type: 3}
   m_Name: Popup_2
   m_EditorClassIdentifier: 
+  UID: 690986f1-a96f-45d8-906b-9f2d551b2b90
   text: Samen
   timestamp: 13.68
+  dummy: 0

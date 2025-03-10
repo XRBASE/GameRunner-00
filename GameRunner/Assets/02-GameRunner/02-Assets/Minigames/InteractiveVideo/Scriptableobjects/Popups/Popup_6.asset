@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0274478ab200e41bc4b684bd128f38, type: 3}
   m_Name: Popup_6
   m_EditorClassIdentifier: 
+  UID: 92d697de-46d3-485a-9f85-96e22dd05d09
   text: Vrij
   timestamp: 11
   dummy: 1

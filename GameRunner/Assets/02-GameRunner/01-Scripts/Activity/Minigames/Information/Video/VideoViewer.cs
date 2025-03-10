@@ -82,7 +82,7 @@ public class VideoViewer : Minigame {
         
         _data = JsonUtility.FromJson<VideoInfo>(gameData);
         
-        _player.url = AssetRequest.GetDownloadURL(_data.uuid);
+        _player.url = AssetRequest.GetDownloadURL(_data.videouuid);
         _player.Prepare();
     }
 

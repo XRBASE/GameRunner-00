@@ -42,7 +42,13 @@ public class InteractiveVideo : VideoViewer
         _popups = new List<Popup>();
         foreach (var id in _interactiveVideoData.chosenIds)
         {
-            _popups.Add(interactiveVideoLibrary.popups.First(item => item.UID == id));
+            var popup = interactiveVideoLibrary.popups.FirstOrDefault(item => item.UID == id);
+            if(popup != null)
+                _popups.Add(popup);
+            else
+            {
+                Debug.LogError($"No pupup found in the Interactive video library wih chosenID {id}, Add all the used popups in the interactive video library");
+            }
         }
         _popups = _popups.OrderBy(n => n.timestamp).ToList();
         _answers.Clear();
