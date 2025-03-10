@@ -37,7 +37,7 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         public MinigameDescription Current {
-            get { return _currenMinigameDescription; }
+            get { return _currentMinigameDescription; }
         }
 
         public Action<int> onAllMinigamesFinished;
@@ -46,10 +46,11 @@ namespace Cohort.GameRunner.Minigames {
         private MinigameInteractable[] _interactables;
 
         //this is the currently open interactable and learning for the local user. There should never be two minigames open at the same time.
-        private MinigameDescription _currenMinigameDescription;
+        private MinigameDescription _currentMinigameDescription;
         private Minigame _currentMinigame;
         private MinigameInteractable _currentInteractable;
         private bool _initialized;
+        private int _prevMinigameIndex = -1;
 
         private void Start() {
             //join room is called when the activity is started
@@ -208,13 +209,10 @@ namespace Cohort.GameRunner.Minigames {
 
             return false;
         }
-
-
+        
         private bool AllGamesFinished() {
-            int prevIndex = (_currenMinigameDescription == null) ? -1 : _currenMinigameDescription.index;
             for (int i = 0; i < Setting.minigames.Count; i++) {
-                if (Setting.minigames[i].required && Setting.minigames[i].state.status <= MinigameDescription.Status.Active && i != prevIndex) {
-                    Debug.LogError($"Minigame {i} not done, status is {Setting.minigames[i].state.status}.");
+                if (Setting.minigames[i].required && Setting.minigames[i].state.status <= MinigameDescription.Status.Active && i != _prevMinigameIndex) {
                     return false;
                 }
             }
@@ -231,8 +229,6 @@ namespace Cohort.GameRunner.Minigames {
                 }
                 return;
             }
-            //current is set to null here, so the all games finished can account for the previously finished minigame.
-            _currenMinigameDescription = null;
             
             bool hasChanges = false;
             List<int> takenInteractables = new List<int>();
@@ -347,27 +343,29 @@ namespace Cohort.GameRunner.Minigames {
             if (_currentMinigame != null) {
                 _currentMinigame.ExitMinigame();
             }
-            _currenMinigameDescription = minigame;
+            _currentMinigameDescription = minigame;
+            Debug.LogError($"Set description {_currentMinigameDescription.index}.");
             
             InputManager.Instance.SetMinigameInput();
-            SceneManager.LoadScene(_currenMinigameDescription.sceneName, LoadSceneMode.Additive);
+            SceneManager.LoadScene(_currentMinigameDescription.sceneName, LoadSceneMode.Additive);
         }
 
         private void OnExitMinigame() {
             InputManager.Instance.SetGameInput();
 
-            Hashtable changes = GetMinigameStateChangeTable(_currenMinigameDescription.index,
+            Hashtable changes = GetMinigameStateChangeTable(_currentMinigameDescription.index,
                                                             MinigameDescription.Status.Open,
-                                                            _currenMinigameDescription.state.location, false);
+                                                            _currentMinigameDescription.state.location, false);
             Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
             
-            SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
+            SceneManager.UnloadSceneAsync(_currentMinigameDescription.sceneName);
 
             if (_currentInteractable) {
                 _currentInteractable.Deactivate();
             }
             
-            _currenMinigameDescription = null;
+            _prevMinigameIndex = _currentMinigameDescription.index;
+            _currentMinigameDescription = null;
             _currentInteractable = null;
         }
         
@@ -389,16 +387,16 @@ namespace Cohort.GameRunner.Minigames {
                     break;
             }
 
-            Hashtable changes = GetMinigameStateChangeTable(_currenMinigameDescription.index, s, -1, false);
+            Hashtable changes = GetMinigameStateChangeTable(_currentMinigameDescription.index, s, -1, false);
             Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
             
             onMinigameFinished?.Invoke(cause, score);
 
-            if (_currenMinigameDescription.log) {
-                _currenMinigameDescription.log.CheckLogItem(s);
-                _currenMinigameDescription.log = null;
+            if (_currentMinigameDescription.log) {
+                _currentMinigameDescription.log.CheckLogItem(s);
+                _currentMinigameDescription.log = null;
             }
-            SceneManager.UnloadSceneAsync(_currenMinigameDescription.sceneName);
+            SceneManager.UnloadSceneAsync(_currentMinigameDescription.sceneName);
 
             if (_currentInteractable) {
                 _currentInteractable.Deactivate();
@@ -415,8 +413,9 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         public void InitializeMinigame(Minigame minigame) {
-            minigame.Initialize(_currenMinigameDescription.data, _currenMinigameDescription.timeLimit,
-                                _currenMinigameDescription.minScore, _currenMinigameDescription.maxScore,
+            Debug.LogError($"MinigameStart {_currentMinigameDescription}.");
+            minigame.Initialize(_currentMinigameDescription.data, _currentMinigameDescription.timeLimit,
+                                _currentMinigameDescription.minScore, _currentMinigameDescription.maxScore,
                                 OnMinigameFinished, OnExitMinigame);
             
             _currentMinigame = minigame;

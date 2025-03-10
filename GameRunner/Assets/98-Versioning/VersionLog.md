@@ -1,3 +1,7 @@
+# v0.5.1
+- small patch in collectible networking.
+- Fixed bug in opening the minigame when the user logged out while the minigame was still opened.
+
 # v0.5.0
 - collectible state saved on network.
 - mingames can now be optional, so that minigames finished panel does not trigger.
