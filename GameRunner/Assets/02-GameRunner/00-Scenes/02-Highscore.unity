@@ -1438,7 +1438,8 @@ MonoBehaviour:
         status: 0
         location: -1
       sceneName: 05-InteractiveVideo
-      data: '{"uuid":"7ebd4bdc-dd6d-43ba-a464-8a1d7cb0a6a9"}'
+      data: '{"uuid":"7ebd4bdc-dd6d-43ba-a464-8a1d7cb0a6a9","titleText":"Click at
+        the right time on the correct word","popups":[{"instanceID":25350},{"instanceID":25348},{"instanceID":25304},{"instanceID":25320},{"instanceID":25442},{"instanceID":25280},{"instanceID":25566}]}'
       locations: 03000000
       networked: 0
       timeLimit: -1

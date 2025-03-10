@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -13,6 +14,8 @@ public class InteractiveButton : MonoBehaviour
     public Button button;
     private float _timer = 0f;
     public bool dummy;
+    public Action<InteractiveButton> onTimeout;
+    private const float APEX_TIME = .6f;
 
 
     public void Initialise(Popup popup)
@@ -26,7 +29,7 @@ public class InteractiveButton : MonoBehaviour
         _timer += Time.deltaTime;
         if (_timer > _playableDirector.duration)
         {
-            Destroy(gameObject);
+            onTimeout?.Invoke(this);
         }
     }
 
@@ -42,17 +45,26 @@ public class InteractiveButton : MonoBehaviour
 
     public float GetClickAccuracy()
     {
-        float apex = (float)_playableDirector.duration / 2;
-        float apexDeviation = (float) _playableDirector.time - apex;
+        if (dummy)
+            return 0f;
+        float apex = GetClickApex();
+        float apexDeviation = _timer - apex;
         apexDeviation = Mathf.Abs(apexDeviation);
-        if (apexDeviation < .2f)
+        float accuracy = ((apex - apexDeviation) / apex);
+        if (apexDeviation < APEX_TIME/2)
         {
             return 1f;
         }
-        else
+        if(accuracy <.1f)
         {
-            return ((apex - apexDeviation) / apex);
+            return 0f;
         }
+        return accuracy;
+    }
+
+    public float GetClickApex()
+    {
+        return (float) _playableDirector.duration / 2;
     }
     
     

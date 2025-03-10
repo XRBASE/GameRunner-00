@@ -1,9 +1,9 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-[CreateAssetMenu(fileName = "InteractiveVideoData", menuName = "Cohort/InteractiveVideoData")]
-public class InteractiveVideoData : ScriptableObject
+[Serializable]
+public class InteractiveVideoData : VideoInfo
 {
+    public string titleText;
     public List<Popup> popups;
 }

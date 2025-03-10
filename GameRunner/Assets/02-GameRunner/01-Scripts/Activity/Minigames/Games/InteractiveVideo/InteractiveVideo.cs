@@ -2,88 +2,121 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Cohort.GameRunner.Minigames;
-using Cohort.Networking.Spaces;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class InteractiveVideo : VideoViewer
 {
-
-    
+    public TextMeshProUGUI titleText;
     public InteractiveButton _interactiveButton;
     public InteractiveVideoFeedback interactiveVideoFeedback;
     public double videoTime => _player.time;
-    public InteractiveVideoData InteractiveVideoData;
+    //This needs to be serialised in the scene in which the game is played so the assets get build in the asset library
+    public InteractiveVideoLibrary interactiveVideoLibrary;
+    private InteractiveVideoData _interactiveVideoData;
     private List<Popup> _popups;
     public Transform buttonParent;
-    private float WIND_UP_TIME = 1f;
+    private float _clickApex;
     private List<float> _answers = new List<float>();
-    private bool videoFinished;
-    private int popupIndex;
+    private bool _videoFinished;
+    private int _popupIndex;
+    public AudioSource feedbackAudio;
+    public AudioClip correctAudioClip, inCorrectAudioClip;
+    private const string TIMEOUT_TEXT = "TOO LATE";
+    private const string INCORRECT_TEXT = "INCORRECT";
 
-
-    
     public override void Initialize(string gameData, float timeLimit, int minScore, int maxScore,
-        Action<FinishCause, int> onFinished, Action onExit) {
+        Action<FinishCause, int> onFinished, Action onExit)
+    {
         base.Initialize(gameData, timeLimit, minScore, maxScore, onFinished, onExit);
-
+        _interactiveVideoData = JsonUtility.FromJson<InteractiveVideoData>(gameData);
+        _clickApex = _interactiveButton.GetClickApex();
         BuildGame();
     }
-    
+
     private void BuildGame()
     {
+        titleText.text = _interactiveVideoData.titleText;
         _popups = new List<Popup>();
-        _popups.AddRange(InteractiveVideoData.popups);
-        _popups =_popups.OrderBy(n => n).ToList();
+        _popups.AddRange(_interactiveVideoData.popups);
+        _popups = _popups.OrderBy(n => n.timestamp).ToList();
         _answers.Clear();
     }
 
     protected override void OnVideoFinished(VideoPlayer source)
     {
         Score = _scoreRange.GetValueRound(_answers.Average(), true);
-        Debug.LogError(Score);
         base.OnVideoFinished(source);
     }
 
     protected void Update()
     {
-        if (_player.isPlaying && _player.time <  _player.length && _player.time > WIND_UP_TIME)
+        if (_player.isPlaying && _player.time < _player.length && _player.time > _clickApex)
         {
-            if (popupIndex < _popups.Count && _player.time >= _popups[popupIndex].timestamp - WIND_UP_TIME)
+            if (_popupIndex < _popups.Count && _player.time >= _popups[_popupIndex].timestamp - _clickApex)
             {
                 var button = Instantiate(_interactiveButton, buttonParent);
-                button.button.onClick.AddListener(() => OnClick(button));
-                button.Initialise(_popups.First());
+                button.button.onClick.AddListener(() => Submit(button));
+                button.Initialise(_popups[_popupIndex]);
+                button.onTimeout += TimeOut;
                 button.StartAnimation();
                 PlaceChildRandomly((RectTransform) buttonParent, (RectTransform) button.transform);
-                popupIndex++;
+                _popupIndex++;
             }
         }
     }
-    
-    private void OnClick(InteractiveButton button)
+
+    private void Submit(InteractiveButton button)
     {
-        ((RectTransform) interactiveVideoFeedback.transform).anchoredPosition =
-            ((RectTransform) button.transform).anchoredPosition;
-        int percent = (int) (button.GetClickAccuracy() * 100f);
-        interactiveVideoFeedback.PlayFeedback($"{percent.ToString()}%");
         if (button.dummy)
         {
-            _answers.Add(0f);
+            HandleAnswerInCorrect(button);
         }
         else
         {
-            _answers.Add(button.GetClickAccuracy());
+            HandleAnswerCorrect(button);
         }
-
         Destroy(button.gameObject);
     }
 
 
-    void PlaceChildRandomly(RectTransform parentTransform,RectTransform childTransform)
+    private void HandleAnswerCorrect(InteractiveButton button)
+    {
+        _answers.Add(button.GetClickAccuracy());
+        int percent = (int) (button.GetClickAccuracy() * 100f);
+        PlayTextFeedback(button, $"{percent.ToString()}%");
+        feedbackAudio.PlayOneShot(correctAudioClip);
+    }
+
+    private void HandleAnswerInCorrect(InteractiveButton button)
+    {
+        _answers.Add(button.GetClickAccuracy());
+        PlayTextFeedback(button, INCORRECT_TEXT);
+        feedbackAudio.PlayOneShot(inCorrectAudioClip);
+    }
+    
+    private void TimeOut(InteractiveButton button)
+    {
+        if (!button.dummy)
+        {
+            _answers.Add(button.GetClickAccuracy());
+            PlayTextFeedback(button, TIMEOUT_TEXT);
+            feedbackAudio.PlayOneShot(inCorrectAudioClip);
+        }
+        Destroy(button.gameObject);
+    }
+
+
+    private void PlayTextFeedback(InteractiveButton button, string text)
+    {
+        ((RectTransform) interactiveVideoFeedback.transform).anchoredPosition =
+            ((RectTransform) button.transform).anchoredPosition;
+        interactiveVideoFeedback.PlayFeedback(text);
+    }
+    
+    void PlaceChildRandomly(RectTransform parentTransform, RectTransform childTransform)
     {
         if (parentTransform == null || childTransform == null)
         {
@@ -101,14 +134,15 @@ public class InteractiveVideo : VideoViewer
 
         // Calculate random anchored position, ensuring child remains within bounds
         float randomX = UnityEngine.Random.Range(-parentWidth / 2 + childWidth / 2, parentWidth / 2 - childWidth / 2);
-        float randomY =  UnityEngine.Random.Range(-parentHeight / 2 + childHeight / 2, parentHeight / 2 - childHeight / 2);
+        float randomY =
+            UnityEngine.Random.Range(-parentHeight / 2 + childHeight / 2, parentHeight / 2 - childHeight / 2);
 
         // Set the local position
         childTransform.anchoredPosition = new Vector2(randomX, randomY);
     }
-
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(InteractiveVideo))]
 public class CreatePopup : Editor
 {
@@ -116,7 +150,7 @@ public class CreatePopup : Editor
     {
         base.OnInspectorGUI();
 
-        InteractiveVideo script = (InteractiveVideo)target;
+        InteractiveVideo script = (InteractiveVideo) target;
         SerializedObject so = new SerializedObject(target);
 
         if (GUILayout.Button("Create popup"))
@@ -125,13 +159,14 @@ public class CreatePopup : Editor
             Popup popup = CreateInstance<Popup>();
             popup.name = "Popup";
             popup.timestamp = (float) script.videoTime;
-            
-            
-            string folderPath = "Assets/02-GameRunner/02-Assets/Minigames/InteractiveVideo/Scriptableobjects/Popups"; // Change this to your target folder
+
+
+            string folderPath =
+                "Assets/02-GameRunner/02-Assets/Minigames/InteractiveVideo/Scriptableobjects/Popups"; // Change this to your target folder
             string searchName = "Popup"; // Change this to your desired name
 
             // Get all asset GUIDs in the specified folder
-            string[] assetGUIDs = AssetDatabase.FindAssets("", new[] { folderPath });
+            string[] assetGUIDs = AssetDatabase.FindAssets("", new[] {folderPath});
 
             // Count assets that match the given name
             int count = assetGUIDs
@@ -148,3 +183,4 @@ public class CreatePopup : Editor
         }
     }
 }
+#endif
