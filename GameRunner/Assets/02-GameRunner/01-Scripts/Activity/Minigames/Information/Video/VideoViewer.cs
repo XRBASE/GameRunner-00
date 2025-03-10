@@ -35,7 +35,7 @@ public class VideoViewer : Minigame {
 
     private bool _interactable;
 
-    [SerializeField] private VideoPlayer _player;
+    [SerializeField] protected VideoPlayer _player;
     [SerializeField] private RawImage _viewport;
     
     [SerializeField] private Toggle _playPause;
@@ -115,7 +115,7 @@ public class VideoViewer : Minigame {
         }
     }
     
-    private void OnVideoFinished(VideoPlayer source) {
+    protected virtual void OnVideoFinished(VideoPlayer source) {
         FinishMinigame();
     }
 

@@ -1432,6 +1432,29 @@ MonoBehaviour:
   _teleportEnabled: 0
   minigame:
     minigames:
+    - actionDescription: 0-Test interactive video
+      phase: 0
+      state:
+        status: 0
+        location: -1
+      sceneName: 05-InteractiveVideo
+      data: '{"uuid":"7ebd4bdc-dd6d-43ba-a464-8a1d7cb0a6a9"}'
+      locations: 03000000
+      networked: 0
+      timeLimit: -1
+      minScore: 3
+      maxScore: 100
+      onFinCinematic:
+        m_PersistentCalls:
+          m_Calls: []
+      onFinDirect:
+        m_PersistentCalls:
+          m_Calls: []
+      onReset:
+        m_PersistentCalls:
+          m_Calls: []
+      index: 0
+      log: {fileID: 0}
     - actionDescription: 0-Test video
       phase: 0
       state:
@@ -1453,7 +1476,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 0
+      index: 1
       log: {fileID: 0}
     - actionDescription: 1-Test tx
       phase: 1
@@ -1479,7 +1502,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 1
+      index: 2
       log: {fileID: 0}
     - actionDescription: 2-Test Quiz
       phase: 2
@@ -1518,7 +1541,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 2
+      index: 3
       log: {fileID: 0}
     - actionDescription: 2-Test Match
       phase: 2
@@ -1541,7 +1564,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 3
+      index: 4
       log: {fileID: 0}
     - actionDescription: 3-Test
       phase: 3
@@ -1564,7 +1587,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 4
+      index: 5
       log: {fileID: 0}
     - actionDescription: 3-Test Wordle
       phase: 3
@@ -1592,7 +1615,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 5
+      index: 6
       log: {fileID: 0}
     - actionDescription: 3-Test Quiz
       phase: 3
@@ -1631,7 +1654,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 6
+      index: 7
       log: {fileID: 0}
     - actionDescription: 3-Test
       phase: 3
@@ -1654,7 +1677,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 7
+      index: 8
       log: {fileID: 0}
     - actionDescription: Col-Test
       phase: -1
@@ -1677,7 +1700,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 8
+      index: 9
       log: {fileID: 0}
     - actionDescription: Col-Test2
       phase: -1
@@ -1700,7 +1723,7 @@ MonoBehaviour:
       onReset:
         m_PersistentCalls:
           m_Calls: []
-      index: 9
+      index: 10
       log: {fileID: 0}
 --- !u!4 &1957266246
 Transform:
