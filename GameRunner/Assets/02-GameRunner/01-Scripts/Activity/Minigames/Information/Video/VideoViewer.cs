@@ -43,6 +43,8 @@ public class VideoViewer : Minigame {
     
     [SerializeField] private Toggle _audioTgl;
     [SerializeField] private Slider _volume;
+
+    [SerializeField] private AudioSource _videoAudioSource;
     
     private VideoInfo _data;
     private RenderTexture _tex;
@@ -153,13 +155,13 @@ public class VideoViewer : Minigame {
         else {
             _volume.SetValueWithoutNotify(_vol);
         }
-        
-        _player.SetDirectAudioVolume(0, (_audioEnabled)?_vol * VOLUME_SCALAR : 0f);
+
+        _videoAudioSource.volume = (_audioEnabled) ? _vol * VOLUME_SCALAR : 0f;
     }
 
     private void SetVolume(float volume) {
         _vol = volume;
-        _player.SetDirectAudioVolume(0, volume * VOLUME_SCALAR);
+        _videoAudioSource.volume = volume * VOLUME_SCALAR;
 
         _audioTgl.isOn = _vol > 0.01f;
     }
