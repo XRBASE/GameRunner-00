@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 
 using Cohort.Patterns;
+using AudioType = Cohort.GameRunner.Audio.Minigames.AudioType;
 
 namespace Cohort.GameRunner.Minigames.Quiz {
 	public class Quiz : Minigame {
@@ -57,9 +58,11 @@ namespace Cohort.GameRunner.Minigames.Quiz {
 				_correctCount++;
 				_score = _scoreRange.GetValueRound((float) _correctCount / _data._questions.Length, true);
 				
+				_audioHandle.PlayClip(AudioType.Success);
 				onCorrect?.Invoke();
 			}
 			else {
+				_audioHandle.PlayClip(AudioType.Failure);
 				onIncorrect?.Invoke();
 			}
 

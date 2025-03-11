@@ -149,7 +149,6 @@ namespace Cohort.GameRunner.LocoMovement {
 			string key = Keys.Get(Keys.Player.Position);
 			if (_lm.Control != Locomotion.ControlType.Local &&
 			    changes.ContainsKey(key) && changes[key] != null) {
-				Debug.LogError($"Remote position {(Vector3) changes[key]} {initialize}");
 				if (initialize) {
 					_rb.MovePosition((Vector3) changes[key]);
 				}

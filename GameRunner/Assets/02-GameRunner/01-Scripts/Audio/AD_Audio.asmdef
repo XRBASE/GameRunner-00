@@ -1,0 +1,17 @@
+{
+    "name": "AD_Audio",
+    "rootNamespace": "",
+    "references": [
+        "GUID:47e4282a650095e4492c2d80a320cc49",
+        "GUID:9f0995e706b816f418d9600d72c84a0a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

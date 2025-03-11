@@ -102,7 +102,9 @@ namespace Cohort.GameRunner.Score {
 		public void AddPoints(int score) {
 			_local.score += score;
 
-			_popups.ShowPointsEarned(score);
+			if (score > 0) {
+				_popups.ShowPointsEarned(score);
+			}
 
 			UpdateLocalPlayerScore(_local);
 		}

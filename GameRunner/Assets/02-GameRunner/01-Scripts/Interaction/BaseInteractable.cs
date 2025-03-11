@@ -16,6 +16,7 @@ namespace Cohort.GameRunner.Interaction {
         }
         
         public bool InInteractRange { get; protected set; }
+        protected bool InViewRange { get; set; }
 
         protected bool Initial {
             get { return (_networked && _initial); }
@@ -24,6 +25,10 @@ namespace Cohort.GameRunner.Interaction {
         public bool interactable = true;
         
         [Tooltip("Can only be activated within this radius"), SerializeField] private float _interactRadius = 1;
+        
+        [SerializeField] protected ObjIndicator _indicator;
+        [Tooltip("Icon is shown within this radius, negative value will always be visible"), SerializeField] 
+        protected float _viewRadius = -1;
         
         //all interactables always have a state. True will fire events, false will not.
         //event like interactions will fire and directly reset themselves, whereas more
@@ -52,9 +57,27 @@ namespace Cohort.GameRunner.Interaction {
                 Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropertiesChanged;
             }
         }
-
         protected virtual void Update() {
             CheckInteractRange();
+            CheckViewRange();
+
+            if (_indicator != null) {
+                _indicator.SetActive(IndicatorActive());
+            }
+        }
+
+        protected virtual bool IndicatorActive() {
+            return InViewRange && !InInteractRange;
+        }
+
+        public virtual bool CheckViewRange() {
+            if (_viewRadius < 0)
+                InViewRange = true;
+            else {
+                InViewRange = (transform.position - Player.Local.transform.position).magnitude <= _viewRadius;
+            }
+
+            return InViewRange;
         }
 
         protected virtual bool CheckInteractRange() {
@@ -115,9 +138,13 @@ namespace Cohort.GameRunner.Interaction {
             _initial = false;
         }
 
-        protected abstract void ActivateLocal();
+        protected virtual void ActivateLocal() {
+            _value = true;
+        }
 
-        protected abstract void DeactivateLocal();
+        protected virtual void DeactivateLocal() {
+            _value = false;
+        }
 
         protected virtual void OnJoinedRoom() {
             if (!_networked)
@@ -146,7 +173,7 @@ namespace Cohort.GameRunner.Interaction {
             }
         }
 
-        protected string GetInteractableKey() {
+        protected virtual string GetInteractableKey() {
             return Keys.GetUUID(Keys.Room.Interactable, Identifier.ToString());
         }
 

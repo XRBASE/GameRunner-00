@@ -33,6 +33,8 @@ public class Interactable : BaseInteractable {
     }
 
     protected override void ActivateLocal() {
+        base.ActivateLocal();
+        
         if (Initial) {
             activateDirect?.Invoke();
         }
@@ -42,6 +44,8 @@ public class Interactable : BaseInteractable {
     }
 
     protected override void DeactivateLocal() {
+        base.DeactivateLocal();
+        
         if (Initial) {
             deactivateDirect?.Invoke();
         }
