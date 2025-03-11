@@ -8,6 +8,7 @@ using Cohort.CustomAttributes;
 using Cohort.GameRunner.Interaction;
 using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
+using UnityEngine.EventSystems;
 
 namespace Cohort.GameRunner.Minigames {
     public class MinigameInteractable : BaseInteractable {
@@ -28,16 +29,10 @@ namespace Cohort.GameRunner.Minigames {
             get { return HasMinigame? _minigame.index : -1; }
         }
         
-        protected bool InViewRange { get; private set; }
-
         [ReadOnly, SerializeField] private bool hasMinigame;
 
         [SerializeField] private string _locationDescription = "At position";
-        [SerializeField] private ObjIndicator _indicator;
         
-        [Tooltip("Icon is shown within this radius, negative value will always be visible"), SerializeField] 
-        private float _viewRadius = -1;
-
         private int _actor = -1;
         private MinigameDescription _minigame;
 
@@ -72,14 +67,8 @@ namespace Cohort.GameRunner.Minigames {
             _indicator.SetActive( InViewRange && !InInteractRange && HasMinigame);
         }
 
-        public virtual bool CheckViewRange() {
-            if (_viewRadius < 0)
-                InViewRange = true;
-            else {
-                InViewRange = (transform.position - Player.Local.transform.position).magnitude <= _viewRadius;
-            }
-
-            return InViewRange;
+        protected override bool IndicatorActive() {
+            return base.IndicatorActive() && HasMinigame;
         }
 
         public override void OnInteract() {
@@ -108,6 +97,8 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         protected override void ActivateLocal() {
+            base.ActivateLocal();
+            
             _indicator.SetActive(false);
             MinigameManager.Instance.StartMinigame(_minigame, this);
         }
@@ -135,8 +126,6 @@ namespace Cohort.GameRunner.Minigames {
 
             base.Deactivate(changes, expected);
         }
-
-        protected override void DeactivateLocal() { }
 
         public void SetMinigame(int index = -1) {
             HasMinigame = index >= 0;

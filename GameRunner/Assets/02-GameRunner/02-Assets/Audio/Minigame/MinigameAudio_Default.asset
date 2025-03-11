@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d560450dc839b46a79e87d9ff8f2df, type: 3}
+  m_Name: MinigameAudio_Default
+  m_EditorClassIdentifier: 
+  _entries:
+  - audio: {fileID: 8300000, guid: 2727f26de283a9748996926c87e96930, type: 3}
+    loop: 1
+    oneShot: 0
+    state: 0
+  - audio: {fileID: 8300000, guid: 60f1025236f59c643b27bd8930e5870b, type: 3}
+    loop: 0
+    oneShot: 1
+    state: 1
+  - audio: {fileID: 8300000, guid: 9b1fc15cc28b7644899539beab889f0c, type: 3}
+    loop: 0
+    oneShot: 1
+    state: 2
