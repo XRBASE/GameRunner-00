@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bb3105d1f59fed4bbd73c077dff4e18, type: 3}
+  m_Name: ArrangeGameDataSO
+  m_EditorClassIdentifier: 
+  arrangeGameData:
+    title: Arrange the pictures correctly in sequence
+    ArrangeData:
+    - {fileID: 11400000, guid: 3268cfd31b462ae41b34b2b2a7c448a5, type: 2}
+    - {fileID: 11400000, guid: bde686e2222982f4db19b957ca8ffb46, type: 2}
+    - {fileID: 11400000, guid: 6559d07733e73e442b94af3901282b91, type: 2}
+    - {fileID: 11400000, guid: fceca1883bcf9304280fb82203a70599, type: 2}
+    - {fileID: 11400000, guid: 6b82b1987a9ca3c48b6f4cac7b5c5264, type: 2}
+    chosenIds: []

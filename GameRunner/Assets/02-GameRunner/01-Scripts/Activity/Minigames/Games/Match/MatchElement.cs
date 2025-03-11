@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
-public class MatchElement : MonoBehaviour
+public class MatchElement : UIPointerOver
 {
     public enum MatchState
     {
@@ -95,15 +95,6 @@ public class MatchElement : MonoBehaviour
             onDropMatch?.Invoke();
             _inClick = false;
         }
-    }
-
-    public bool PointerOver()
-    {
-        Vector2 localPos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            (RectTransform) transform, InputManager.Instance.LearningCursor.ScreenPosition,
-            Camera.main, out localPos);
-        return ((RectTransform) transform).rect.Contains(localPos);
     }
 
     public void Initialise(int pId, MatchPairData.MatchType pMatchType, Category pCategory, Sprite sprite, string text,
