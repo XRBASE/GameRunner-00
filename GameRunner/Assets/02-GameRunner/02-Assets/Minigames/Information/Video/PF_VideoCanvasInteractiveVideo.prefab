@@ -377,15 +377,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 100%
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0bcd985ae7cf2f94290368ea4f953c42, type: 2}
-  m_sharedMaterial: {fileID: 6538811332270155265, guid: 0bcd985ae7cf2f94290368ea4f953c42, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b8298626ff93ef043bb98b75ebfb3d53, type: 2}
+  m_sharedMaterial: {fileID: 6538811332270155265, guid: b8298626ff93ef043bb98b75ebfb3d53, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 65280
-  m_fontColor: {r: 0.85679054, g: 1, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -696,6 +696,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 373175985904170512, guid: f1042c5524cc1fb46871111954c277c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1960735660249205244, guid: f1042c5524cc1fb46871111954c277c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2496140320373825274, guid: f1042c5524cc1fb46871111954c277c2, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -779,7 +787,7 @@ PrefabInstance:
     - target: {fileID: 2865539267150738537, guid: f1042c5524cc1fb46871111954c277c2, type: 3}
       propertyPath: _controller
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6342267196777083703}
     - target: {fileID: 4220004519946614460, guid: f1042c5524cc1fb46871111954c277c2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -823,6 +831,14 @@ PrefabInstance:
     - target: {fileID: 8103122176411807362, guid: f1042c5524cc1fb46871111954c277c2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: 6342267196777083703}
+    - target: {fileID: 8103122176411807362, guid: f1042c5524cc1fb46871111954c277c2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ExitMinigame
+      objectReference: {fileID: 0}
+    - target: {fileID: 8103122176411807362, guid: f1042c5524cc1fb46871111954c277c2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Cohort.GameRunner.Minigames.Minigame, AD_ActivityLoader
       objectReference: {fileID: 0}
     - target: {fileID: 8103668989019526339, guid: f1042c5524cc1fb46871111954c277c2, type: 3}
       propertyPath: m_AnchorMax.y
@@ -937,6 +953,7 @@ MonoBehaviour:
     max: 0
     _isPositive: 0
   _timer: {fileID: 7825366435818106097}
+  _audioHandle: {fileID: 0}
   _player: {fileID: 5205641382034438664}
   _viewport: {fileID: 694743956827520802}
   _playPause: {fileID: 829889112330316926}
@@ -946,7 +963,7 @@ MonoBehaviour:
   titleText: {fileID: 5533492529714751836}
   _interactiveButton: {fileID: 1542144697660828068, guid: c28bcc52237873d46adf0434b53821c5, type: 3}
   interactiveVideoFeedback: {fileID: 2035933597865440457}
-  interactiveVideoLibrary: {fileID: 0}
+  interactiveVideoLibrary: {fileID: 11400000, guid: 7075a3349c5e7144681ac208da8eb51f, type: 2}
   buttonParent: {fileID: 1107475406988546300}
   feedbackAudio: {fileID: 1022772104175841815}
   correctAudioClip: {fileID: 8300000, guid: 25145577f3776c5429d53303336c6762, type: 3}

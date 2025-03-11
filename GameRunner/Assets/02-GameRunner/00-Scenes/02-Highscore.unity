@@ -174,6 +174,8 @@ MonoBehaviour:
   _subscribed: 0
   interactable: 1
   _interactRadius: 5
+  _indicator: {fileID: 0}
+  _viewRadius: -1
   _value: 0
   _networked: 1
   activateCinematic:
@@ -1439,10 +1441,11 @@ MonoBehaviour:
         location: -1
       sceneName: 05-InteractiveVideo
       data: '{"videouuid":"7ebd4bdc-dd6d-43ba-a464-8a1d7cb0a6a9","titleText":"Click
-        at the right time on the correct word","popups":[{"instanceID":25360},{"instanceID":25358},{"instanceID":25314},{"instanceID":25330},{"instanceID":25452},{"instanceID":25290},{"instanceID":25582},{"instanceID":25228},{"instanceID":25536},{"instanceID":25480},{"instanceID":25514},{"instanceID":25120},{"instanceID":25076}],"chosenIds":["b29e95ce-5ecb-4f42-8a20-5c9e15c00c31","a23650bd-97e3-4d17-8fca-1c2bbfe04433","690986f1-a96f-45d8-906b-9f2d551b2b90","5dd4a461-d538-4da5-8409-a586f1303849","ba3e56fa-f0cc-4df0-bfbf-c7b6a644b025","d299d4e9-26bd-479a-9802-9b55fad2428d","92d697de-46d3-485a-9f85-96e22dd05d09","b4308883-044d-49b4-ba9d-61ad12467a5c","317866c4-e2d0-4ee7-8fe1-09c7d180cc6a","2b64bd5f-6fb1-49eb-9190-3c19e9df2bbf","03eb29ca-15a6-403f-8687-4553d88767a2","25483af3-3c80-41cd-a4c0-69d01c4a29c5","f0b5987e-a87f-439c-9dad-b3d2a4ebdd68"]}'
+        at the right time on the correct word","popups":[{"instanceID":25412},{"instanceID":25410},{"instanceID":25356},{"instanceID":25376},{"instanceID":25506},{"instanceID":25332},{"instanceID":25642},{"instanceID":25270},{"instanceID":25594},{"instanceID":25536},{"instanceID":25572},{"instanceID":25154},{"instanceID":25096}],"chosenIds":["b29e95ce-5ecb-4f42-8a20-5c9e15c00c31","a23650bd-97e3-4d17-8fca-1c2bbfe04433","690986f1-a96f-45d8-906b-9f2d551b2b90","5dd4a461-d538-4da5-8409-a586f1303849","ba3e56fa-f0cc-4df0-bfbf-c7b6a644b025","d299d4e9-26bd-479a-9802-9b55fad2428d","92d697de-46d3-485a-9f85-96e22dd05d09","b4308883-044d-49b4-ba9d-61ad12467a5c","317866c4-e2d0-4ee7-8fe1-09c7d180cc6a","2b64bd5f-6fb1-49eb-9190-3c19e9df2bbf","03eb29ca-15a6-403f-8687-4553d88767a2","25483af3-3c80-41cd-a4c0-69d01c4a29c5","f0b5987e-a87f-439c-9dad-b3d2a4ebdd68"]}'
       locations: 03000000
       networked: 0
       timeLimit: -1
+      required: 1
       minScore: 3
       maxScore: 100
       onFinCinematic:
@@ -1466,6 +1469,7 @@ MonoBehaviour:
       locations: 03000000
       networked: 0
       timeLimit: -1
+      required: 1
       minScore: 3
       maxScore: 100
       onFinCinematic:
@@ -1492,6 +1496,7 @@ MonoBehaviour:
       locations: 03000000
       networked: 1
       timeLimit: -1
+      required: 1
       minScore: 3
       maxScore: 100
       onFinCinematic:
@@ -1531,6 +1536,7 @@ MonoBehaviour:
       locations: 00000000
       networked: 0
       timeLimit: 120
+      required: 1
       minScore: 0
       maxScore: 100
       onFinCinematic:
@@ -1554,6 +1560,7 @@ MonoBehaviour:
       locations: 02000000
       networked: 1
       timeLimit: 1000
+      required: 1
       minScore: 2
       maxScore: 100
       onFinCinematic:
@@ -1577,6 +1584,7 @@ MonoBehaviour:
       locations: 03000000
       networked: 0
       timeLimit: -1
+      required: 1
       minScore: 3
       maxScore: 100
       onFinCinematic:
@@ -1605,6 +1613,7 @@ MonoBehaviour:
       locations: 03000000
       networked: 0
       timeLimit: 30
+      required: 1
       minScore: 1
       maxScore: 100
       onFinCinematic:
@@ -1644,6 +1653,7 @@ MonoBehaviour:
       locations: 00000000
       networked: 0
       timeLimit: 120
+      required: 1
       minScore: 0
       maxScore: 100
       onFinCinematic:
@@ -1667,6 +1677,7 @@ MonoBehaviour:
       locations: 01000000
       networked: 0
       timeLimit: -1
+      required: 1
       minScore: 3
       maxScore: 100
       onFinCinematic:
@@ -1690,6 +1701,7 @@ MonoBehaviour:
       locations: 01000000
       networked: 0
       timeLimit: -1
+      required: 1
       minScore: 3
       maxScore: 100
       onFinCinematic:
@@ -1713,6 +1725,7 @@ MonoBehaviour:
       locations: 01000000
       networked: 1
       timeLimit: -1
+      required: 1
       minScore: 3
       maxScore: 100
       onFinCinematic:

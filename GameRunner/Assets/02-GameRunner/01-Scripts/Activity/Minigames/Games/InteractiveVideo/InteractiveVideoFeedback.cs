@@ -9,6 +9,16 @@ public class InteractiveVideoFeedback : MonoBehaviour
     [SerializeField] private PlayableDirector _playableDirector;
 
     [SerializeField] private TextMeshProUGUI _textMeshProUGUI;
+    
+    private Color _correctColor = Color.green;
+    private Color _incorrectColor = Color.red;
+    private Color _timeOutColor = Color.yellow;
+    public enum FeedBackState
+    {
+        Correct,
+        Incorrect,
+        TimeOut
+    };
 
 
     private void StartPlayable()
@@ -19,9 +29,21 @@ public class InteractiveVideoFeedback : MonoBehaviour
         _playableDirector.Play();
     }
 
-    public void PlayFeedback(string text)
+    public void PlayFeedback(string text, FeedBackState state)
     {
         SetText(text);
+        switch (state)
+        {
+            case FeedBackState.Correct:
+                _textMeshProUGUI.color = _correctColor;
+                break;
+            case FeedBackState.Incorrect:
+                _textMeshProUGUI.color = _incorrectColor;
+                break;
+            case FeedBackState.TimeOut:
+                _textMeshProUGUI.color = _timeOutColor;
+                break;
+        }
         StartPlayable();
     }
 
