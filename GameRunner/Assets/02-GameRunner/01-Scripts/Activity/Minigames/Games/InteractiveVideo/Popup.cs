@@ -16,6 +16,7 @@ public class Popup : ScriptableObject
     
     
 }
+#if UNITY_EDITOR
 [CanEditMultipleObjects]
 [CustomEditor(typeof(Popup))]
 public class MyScriptableObjectEditor : Editor
@@ -33,3 +34,4 @@ public class MyScriptableObjectEditor : Editor
         }
     }
 }
+#endif
