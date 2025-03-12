@@ -280,6 +280,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_VideoCanvasInteractiveVideo
       objectReference: {fileID: 0}
+    - target: {fileID: 2521386895333611250, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3283869459157073320, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
