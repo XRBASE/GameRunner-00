@@ -51,4 +51,9 @@ public class InteractiveVideoFeedback : MonoBehaviour
     {
         _textMeshProUGUI.text = text;
     }
+
+    public void PlayCorrectFeedBack(string text)
+    {
+        PlayFeedback(text, FeedBackState.Correct);
+    }
 }

@@ -1,3 +1,7 @@
+# v0.5.2
+- added arrange minigame
+- added interactive video minigame
+
 # v0.5.1
 - small patch in collectible networking.
 - Fixed bug in opening the minigame when the user logged out while the minigame was still opened.
