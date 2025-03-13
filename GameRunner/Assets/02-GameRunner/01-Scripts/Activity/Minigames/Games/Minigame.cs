@@ -102,6 +102,10 @@ namespace Cohort.GameRunner.Minigames {
 		/// Stops minigame without finishing it, it is still possible to restart the game afterwards and no score is earned.
 		/// </summary>
 		public virtual void ExitMinigame() {
+			if (_hasAudio) {
+				_ambienceController.Stop();
+			}
+			
 			_onExit?.Invoke();
 		}
 

@@ -344,7 +344,6 @@ namespace Cohort.GameRunner.Minigames {
                 _currentMinigame.ExitMinigame();
             }
             _currentMinigameDescription = minigame;
-            Debug.LogError($"Set description {_currentMinigameDescription.index}.");
             
             InputManager.Instance.SetMinigameInput();
             SceneManager.LoadScene(_currentMinigameDescription.sceneName, LoadSceneMode.Additive);
@@ -413,7 +412,6 @@ namespace Cohort.GameRunner.Minigames {
         }
 
         public void InitializeMinigame(Minigame minigame) {
-            Debug.LogError($"MinigameStart {_currentMinigameDescription}.");
             minigame.Initialize(_currentMinigameDescription.data, _currentMinigameDescription.timeLimit,
                                 _currentMinigameDescription.minScore, _currentMinigameDescription.maxScore,
                                 OnMinigameFinished, OnExitMinigame);
