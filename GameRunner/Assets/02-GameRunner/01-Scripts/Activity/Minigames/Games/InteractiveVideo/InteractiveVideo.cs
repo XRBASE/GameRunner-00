@@ -28,19 +28,16 @@ public class InteractiveVideo : VideoViewer
     public AudioClip correctAudioClip, inCorrectAudioClip;
     private const string TIMEOUT_TEXT = "TOO LATE";
     private const string INCORRECT_TEXT = "INCORRECT";
-    private Action OnStart;
-    
+
 
     public override void Initialize(string gameData, float timeLimit, int minScore, int maxScore,
         Action<FinishCause, int> onFinished, Action onExit)
     {
-        OnStart = () =>
-        {
-            base.Initialize(gameData, timeLimit, minScore, maxScore, onFinished, onExit);
-            _interactiveVideoData = JsonUtility.FromJson<InteractiveVideoData>(gameData);
-            _clickApex = _interactiveButton.GetClickApex();
-            BuildGame();
-        };
+        base.Initialize(gameData, timeLimit, minScore, maxScore, onFinished, onExit);
+        _interactiveVideoData = JsonUtility.FromJson<InteractiveVideoData>(gameData);
+        _clickApex = _interactiveButton.GetClickApex();
+        BuildGame();
+        _player.Stop();
     }
 
     private void BuildGame()
@@ -66,7 +63,7 @@ public class InteractiveVideo : VideoViewer
 
     public void StartGame()
     {
-        OnStart?.Invoke();
+        _player.Play();
     }
 
     protected override void OnVideoFinished(VideoPlayer source)
