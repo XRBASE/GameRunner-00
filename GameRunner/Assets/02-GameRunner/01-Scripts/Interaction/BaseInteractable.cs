@@ -1,3 +1,4 @@
+using System;
 using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
 using ExitGames.Client.Photon;
@@ -57,6 +58,11 @@ namespace Cohort.GameRunner.Interaction {
                 Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropertiesChanged;
             }
         }
+
+        protected void OnDisable() {
+            _indicator.SetActive(false);
+        }
+
         protected virtual void Update() {
             CheckInteractRange();
             CheckViewRange();
