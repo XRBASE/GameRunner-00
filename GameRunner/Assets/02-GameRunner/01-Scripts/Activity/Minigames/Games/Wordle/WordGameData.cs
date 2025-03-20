@@ -9,6 +9,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         public int tries;
         public int puzzleAmount;
         public List<WordData> wordList;
+        public bool useDictionary;
     }
 
 

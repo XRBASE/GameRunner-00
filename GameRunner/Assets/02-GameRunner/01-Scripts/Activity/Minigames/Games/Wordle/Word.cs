@@ -74,5 +74,13 @@ namespace Cohort.GameRunner.Minigames.Wordle {
                 yield return new WaitForSeconds(CORRECT_FEEDBACK_INTERVAL);
             }
         }
+
+        public void RevealWord(string word)
+        {
+            for (int i = 0; i < word.Length; i++)
+            {
+                SetLetter(i,word[i]);
+            }
+        }
     }
 }
