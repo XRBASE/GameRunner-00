@@ -15,7 +15,11 @@ namespace Cohort.GameRunner.Interaction {
         public override string Name {
             get { return gameObject.name; }
         }
-        
+
+        public virtual bool Interactable {
+            get { return _interactable; }
+        }
+
         public bool InInteractRange { get; protected set; }
         protected bool InViewRange { get; set; }
 
@@ -23,7 +27,7 @@ namespace Cohort.GameRunner.Interaction {
             get { return (_networked && _initial); }
         }
 
-        public bool interactable = true;
+        protected bool _interactable = true;
         
         [Tooltip("Can only be activated within this radius"), SerializeField] private float _interactRadius = 1;
         
@@ -75,7 +79,7 @@ namespace Cohort.GameRunner.Interaction {
         }
 
         protected virtual bool IndicatorActive() {
-            return InViewRange && !InInteractRange;
+            return InViewRange && !InInteractRange && Interactable;
         }
 
         public virtual bool CheckViewRange() {
@@ -179,6 +183,15 @@ namespace Cohort.GameRunner.Interaction {
                     ChangeState((bool)changes[key]);
                 }
             }
+        }
+
+        /// <summary>
+        /// Sets interactablility of interactable. Note that this state is not networked and must therefore be called by and
+        /// networked item in order to be set on all player devices.
+        /// </summary>
+        /// <param name="value">should interactable be interactable.</param>
+        public void SetInteractable(bool value) {
+            _interactable = value;
         }
 
         protected virtual string GetInteractableKey() {

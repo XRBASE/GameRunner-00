@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using UnityEngine.Events;
@@ -25,7 +26,8 @@ public class GroupTrigger : MonoBehaviour {
     [SerializeField] private string countStringFormat = "[COUNT] of [MIN]";
     [SerializeField] private UnityEvent<string> onCountChanged;
 
-    private List<string> uuids;
+    
+    private HashSet<int> actors;
 
     private bool _value;
     private bool _containsLocal;
@@ -52,13 +54,26 @@ public class GroupTrigger : MonoBehaviour {
         }
         onCountChanged?.Invoke(invokeString);
 
-        uuids = new List<string>();
+        actors = new HashSet<int>();
         
         Network.Local.Callbacks.onJoinedRoom += OnJoinedRoom;
+        Network.Local.Callbacks.onPlayerLeftRoom += OnPlayerLeftRoom;
         Network.Local.Callbacks.onRoomPropertiesChanged += OnRoompropsChanged;
 
         if (Network.Local.Client.InRoom) {
             OnJoinedRoom();
+        }
+    }
+
+    private void OnDestroy() {
+        Network.Local.Callbacks.onJoinedRoom -= OnJoinedRoom;
+        Network.Local.Callbacks.onPlayerLeftRoom -= OnPlayerLeftRoom;
+        Network.Local.Callbacks.onRoomPropertiesChanged -= OnRoompropsChanged;
+    }
+
+    private void OnPlayerLeftRoom(Photon.Realtime.Player player) {
+        if (actors.Contains(player.ActorNumber)) {
+            RemovePlayer(player.ActorNumber);
         }
     }
 
@@ -77,23 +92,34 @@ public class GroupTrigger : MonoBehaviour {
         string baseKey = GetPlayerKey("");
         foreach (var kv_change in changes) {
             if (kv_change.Key.ToString().StartsWith(baseKey)) {
+                if (kv_change.Value == null)
+                    continue;
+
                 if ((bool)kv_change.Value) {
                     //add player local
-                    if (TryGetUUIDFromKey(kv_change.Key.ToString(), out string uuid)) {
-                        uuids.Add(uuid);
+                    if (TryGetActorFromKey(kv_change.Key.ToString(), out int actor)) {
+                        if (PlayerManager.Instance.ActorNumberExists(actor)) 
+                        {
+                            actors.Add(actor);
+                        }
+                        else {
+                            ClearPlayer(actor.ToString());
+                        }
                     }
                 }
                 else {
                     //remove player local
-                    if (TryGetUUIDFromKey(kv_change.Key.ToString(), out string uuid)) {
-                        uuids.Remove(uuid);
+                    if (TryGetActorFromKey(kv_change.Key.ToString(), out int actor)) {
+                        if (actors.Contains(actor)) {
+                            actors.Remove(actor);
+                        }
                     }
                 }
             }
         }
 
         //no changes escape
-        _curCount = uuids.Count;
+        _curCount = actors.Count;
         if (_curCount == prevCount)
             return;
         string invokeString;
@@ -143,58 +169,72 @@ public class GroupTrigger : MonoBehaviour {
     private void Update() {
         if ((Player.Local.transform.position - transform.position).magnitude <= _radius) {
             if (!_containsLocal) {
-#if UNITY_EDITOR
-                AddPlayer(Player.Local.UUID + "-editor");
-#else
-                AddPlayer(Player.Local.UUID);                
-#endif
-                
+                AddPlayer(Player.Local.ActorNumber);
                 _containsLocal = true;
             }
         }
         else {
             if (_containsLocal) {
-#if UNITY_EDITOR
-                RemovePlayer(Player.Local.UUID + "-editor");
-#else
-                RemovePlayer(Player.Local.UUID);
-#endif
+                RemovePlayer(Player.Local.ActorNumber);
                 _containsLocal = false;
             }
         }
     }
 
-    private void AddPlayer(string uuid) {
+    private void AddPlayer(int actor) {
         Hashtable changes = new Hashtable();
-        changes.Add(GetPlayerKey(uuid), true);
+        changes.Add(GetPlayerKey(actor.ToString()), true);
 
         Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
     }
 
-    private void RemovePlayer(string uuid) {
+    /// <summary>
+    /// Removes player from the list of players in the area.
+    /// </summary>
+    /// <param name="actor">Actor number of player.</param>
+    private void RemovePlayer(int actor) {
         Hashtable changes = new Hashtable();
-        changes.Add(GetPlayerKey(uuid), false);
+        changes.Add(GetPlayerKey(actor.ToString()), false);
 
         Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
     }
     
-    private string GetPlayerKey(string uuid) {
-        if (string.IsNullOrEmpty(uuid)) {
+    /// <summary>
+    /// Clears the player data. This does not explicitly remove the player from the list, but rather removes the entry of the player from the photondata.
+    /// </summary>
+    /// <param name="actor">Actor number of player.</param>
+    private void ClearPlayer(string actor) {
+        Debug.LogWarning($"GroupTrigger: Clear data of player {actor}!");
+        
+        Hashtable changes = new Hashtable();
+        changes.Add(GetPlayerKey(actor), null);
+
+        Network.Local.Client.CurrentRoom.SetCustomProperties(changes);
+    }
+    
+    private string GetPlayerKey(string actor) {
+        if (string.IsNullOrEmpty(actor)) {
             return Keys.Get(Keys.Room.Group);
         }
         else {
-            return Keys.GetUUID(Keys.Room.Group, uuid);
+            return Keys.GetUUID(Keys.Room.Group, actor);
         }
     }
 
-    private bool TryGetUUIDFromKey(string key, out string uuid) {
-        uuid = key.Split(Keys.SEPARATOR)[^1];
-        if (uuid == Keys.Get(Keys.Room.Group)) {
-            uuid = "";
+    private bool TryGetActorFromKey(string key, out int actor) {
+        string[] keys = key.Split(Keys.SEPARATOR);
+        if (keys.Length == 1) {
+            actor = -1;
             return false;
         }
         else {
-            return true;
+            if (int.TryParse(keys[^1], out actor)) {
+                return true;
+            }
+            
+            //clear any invalid keys
+            ClearPlayer(key);
+            return false;
         }
     }
     

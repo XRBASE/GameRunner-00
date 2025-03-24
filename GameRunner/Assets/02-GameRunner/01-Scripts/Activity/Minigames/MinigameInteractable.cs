@@ -8,7 +8,6 @@ using Cohort.CustomAttributes;
 using Cohort.GameRunner.Interaction;
 using Cohort.GameRunner.Players;
 using Cohort.Networking.PhotonKeys;
-using UnityEngine.EventSystems;
 
 namespace Cohort.GameRunner.Minigames {
     public class MinigameInteractable : BaseInteractable {
@@ -20,7 +19,6 @@ namespace Cohort.GameRunner.Minigames {
         public bool HasMinigame {
             get { return hasMinigame; }
             private set {
-                interactable = value;
                 hasMinigame = value;
             }
         }
@@ -28,7 +26,11 @@ namespace Cohort.GameRunner.Minigames {
         public int MinigameIndex {
             get { return HasMinigame? _minigame.index : -1; }
         }
-        
+
+        public override bool Interactable {
+            get { return base.Interactable && hasMinigame; }
+        }
+
         [ReadOnly, SerializeField] private bool hasMinigame;
 
         [SerializeField] private string _locationDescription = "At position";
@@ -37,7 +39,7 @@ namespace Cohort.GameRunner.Minigames {
         private MinigameDescription _minigame;
 
         private void Awake() {
-            interactable = false;
+            hasMinigame = false;
         }
 
         protected override void Start() {
@@ -58,17 +60,6 @@ namespace Cohort.GameRunner.Minigames {
             if (HasMinigame && _minigame.log) {
                 _minigame.log.RemoveDirect();
             }
-        }
-
-        protected override void Update() {
-            base.Update();
-            CheckViewRange();
-
-            _indicator.SetActive( InViewRange && !InInteractRange && HasMinigame);
-        }
-
-        protected override bool IndicatorActive() {
-            return base.IndicatorActive() && HasMinigame;
         }
 
         public override void OnInteract() {
