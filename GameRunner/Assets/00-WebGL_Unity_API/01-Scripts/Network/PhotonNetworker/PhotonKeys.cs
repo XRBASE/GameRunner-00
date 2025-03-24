@@ -109,6 +109,7 @@ namespace Cohort.Networking.PhotonKeys {
             Activity = 3,
             Scene = 4,
             Minigame = 5,
+            Group = 6,
         }
 
         public enum Activity {

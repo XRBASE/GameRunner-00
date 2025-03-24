@@ -42,7 +42,7 @@ public class ButtonInteraction : MonoBehaviour {
 
         bool found = false;
         if (_activeId >= 0) {
-            if (_interactables[_activeId].interactable && _interactables[_activeId].InInteractRange) {
+            if (_interactables[_activeId].gameObject.activeSelf && _interactables[_activeId].interactable && _interactables[_activeId].InInteractRange) {
                 _btnFeedback.transform.position = _interactables[_activeId].transform.position;
                 found = true;
             }
@@ -54,7 +54,7 @@ public class ButtonInteraction : MonoBehaviour {
         //TODO_COHORT: make sure that if interactables overlap it takes the camera angle to determine the most valid one.
         if (!found) {
             for (int i = 0; i < _interactables.Length; i++) {
-                if (_interactables[i].interactable && _interactables[i].InInteractRange) {
+                if (_interactables[i].gameObject.activeSelf &&  _interactables[i].interactable && _interactables[i].InInteractRange) {
                     _btnFeedback.transform.position = _interactables[i].transform.position;
                     _activeId = i;
                 

@@ -57,6 +57,13 @@ namespace Cohort.GameRunner.Interaction {
                 Network.Local.Callbacks.onRoomPropertiesChanged -= OnPropertiesChanged;
             }
         }
+
+        protected void OnDisable() {
+            if (_indicator != null) {
+                _indicator.SetActive(false);
+            }
+        }
+
         protected virtual void Update() {
             CheckInteractRange();
             CheckViewRange();

@@ -67,7 +67,9 @@ public class ObjIndicator : MonoBehaviour {
             }
         }
         _enabled = enabled;
-        _rt.gameObject.SetActive(enabled);
+        if (_rt != null) {
+            _rt.gameObject.SetActive(enabled);
+        }
     }
 
     private void Update() {

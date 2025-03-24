@@ -1,6 +1,7 @@
 # v0.5.2
 - added arrange minigame
 - added interactive video minigame
+- added group trigger that fires when the correct amount of people enter a given area.
 
 # v0.5.1
 - small patch in collectible networking.
