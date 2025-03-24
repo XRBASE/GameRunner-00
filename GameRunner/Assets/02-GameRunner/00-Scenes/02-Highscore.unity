@@ -1708,7 +1708,7 @@ MonoBehaviour:
       index: 6
       log: {fileID: 0}
     - actionDescription: 3-Test Wordle
-      phase: 3
+      phase: 0
       state:
         status: 0
         location: -1
@@ -1718,7 +1718,7 @@ MonoBehaviour:
         veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt veel gebruikt in thaise
         recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen
         worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt
-        na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}]}"
+        na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}],\"useDictionary\":true}"
       locations: 03000000
       networked: 0
       timeLimit: 30

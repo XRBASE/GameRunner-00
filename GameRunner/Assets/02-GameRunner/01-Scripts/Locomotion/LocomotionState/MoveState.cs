@@ -205,7 +205,7 @@ namespace Cohort.GameRunner.LocoMovement {
 		/// Make target jump using coroutine values.
 		/// </summary>
 		public void Jump() {
-			if (_lm.Seated)
+			if (_lm.Seated || _lm.Animator == null)
 				return;
 			float jumpHeight = Locomotion.JUMP_HEIGHT;
 			if (_jumpCounter < 2) {

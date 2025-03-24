@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cohort.GameRunner.Audio.Minigames;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -61,6 +60,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private bool _pickRandomWord;
         private int _attempts;
         private WordGameMode _wordGameMode;
+        private bool _useDictionary;
 
         // Method to initialize the game with data, score multiplier, and callback on game finish
         public override void Initialize(string gameData, float timeLimit, int minScore, int maxScore, Action<FinishCause, int> onFinished, Action onExit) {
@@ -72,6 +72,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
                 return;
             }
 
+            _useDictionary = _wordGameData.useDictionary;
             _wordGameMode = _wordGameData.wordGameMode;
             title.text = _wordGameData.title;
             BuildGame();
@@ -110,7 +111,11 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private void BuildGame() {
             _chosenWord = GetWord();
             _chosenWord.word = _chosenWord.word.ToLower();
-            _wordDictionary = WordDictionary.GetWordDictionary(_chosenWord.word.Length);
+            if (_useDictionary)
+            {
+                _wordDictionary = WordDictionary.GetWordDictionary(_chosenWord.word.Length);
+            }
+
 
             // Create multiple word objects for each try and initialize them
             for (int i = 0; i < _wordGameData.tries; i++) {
@@ -152,7 +157,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
             if (!CanPlay || _text.Length < _chosenWord.word.Length)
                 return;
 
-            if (!_wordDictionary.Contains(_text)) {
+            if (_useDictionary && !_wordDictionary.Contains(_text)) {
                 HandleAnswerInvalid();
                 return;
             }
@@ -203,8 +208,10 @@ namespace Cohort.GameRunner.Minigames.Wordle {
             _text = string.Empty;
             _entryIndex += 1;
             if (_entryIndex >= _words.Count) {
+                _words.Last().RevealWord(_chosenWord.word);
                 NextPuzzle();
             }
+
         }
 
         // Handle the completion of the game (show score and finish)
@@ -213,7 +220,6 @@ namespace Cohort.GameRunner.Minigames.Wordle {
                                  ((float)_wordGameData.tries * _wordGameData.puzzleAmount -
                                   _wordGameData.puzzleAmount); // Calculate completion percentage
             _isPlaying = false;
-            
             StartCoroutine(DoTimeout(FinishedVisualDuration, FinishMinigame));
         }
 
