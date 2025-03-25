@@ -1810,54 +1810,6 @@ MonoBehaviour:
           m_Calls: []
       index: 9
       log: {fileID: 0}
-    - actionDescription: Col-Test
-      phase: -1
-      state:
-        status: 0
-        location: -1
-      sceneName: 00-Tester
-      data: 
-      locations: 01000000
-      networked: 0
-      timeLimit: -1
-      required: 1
-      minScore: 3
-      maxScore: 100
-      onFinCinematic:
-        m_PersistentCalls:
-          m_Calls: []
-      onFinDirect:
-        m_PersistentCalls:
-          m_Calls: []
-      onReset:
-        m_PersistentCalls:
-          m_Calls: []
-      index: 10
-      log: {fileID: 0}
-    - actionDescription: Col-Test2
-      phase: -1
-      state:
-        status: 0
-        location: -1
-      sceneName: 00-Tester
-      data: 
-      locations: 01000000
-      networked: 1
-      timeLimit: -1
-      required: 1
-      minScore: 3
-      maxScore: 100
-      onFinCinematic:
-        m_PersistentCalls:
-          m_Calls: []
-      onFinDirect:
-        m_PersistentCalls:
-          m_Calls: []
-      onReset:
-        m_PersistentCalls:
-          m_Calls: []
-      index: 11
-      log: {fileID: 0}
 --- !u!4 &1957266246
 Transform:
   m_ObjectHideFlags: 0

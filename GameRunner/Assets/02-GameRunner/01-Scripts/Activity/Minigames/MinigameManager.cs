@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 using Cohort.GameRunner.Input;
 using Cohort.GameRunner.Score;
 using Cohort.Networking.PhotonKeys;
@@ -50,8 +49,7 @@ namespace Cohort.GameRunner.Minigames {
         private Minigame _currentMinigame;
         private MinigameInteractable _currentInteractable;
         private bool _initialized;
-        private int _prevMinigameIndex = -1;
-
+        
         private void Start() {
             //join room is called when the activity is started
             Network.Local.Callbacks.onRoomPropertiesChanged += OnRoomPropertiesChanged;
@@ -212,7 +210,7 @@ namespace Cohort.GameRunner.Minigames {
         
         private bool AllGamesFinished() {
             for (int i = 0; i < Setting.minigames.Count; i++) {
-                if (Setting.minigames[i].required && Setting.minigames[i].state.status <= MinigameDescription.Status.Active && i != _prevMinigameIndex) {
+                if (Setting.minigames[i].required && Setting.minigames[i].state.status <= MinigameDescription.Status.Active && i != _currentMinigameDescription.index) {
                     return false;
                 }
             }
@@ -363,7 +361,6 @@ namespace Cohort.GameRunner.Minigames {
                 _currentInteractable.Deactivate();
             }
             
-            _prevMinigameIndex = _currentMinigameDescription.index;
             _currentMinigameDescription = null;
             _currentInteractable = null;
         }
