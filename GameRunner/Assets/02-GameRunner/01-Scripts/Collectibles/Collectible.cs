@@ -22,7 +22,7 @@ public class Collectible : BaseInteractable {
 	private bool _useIds;
 
 	protected override void Start() {
-		_useIds = _networked;
+		_useIds = !_networked;
 		_networked = true;
 		
 		base.Start();
