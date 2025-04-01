@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Cohort.GameRunner.Audio.Minigames;
 using Cohort.Patterns;
 using UnityEngine;
@@ -71,15 +72,30 @@ namespace Cohort.GameRunner.Audio {
             _mixer.SetFloat(channel + CHANNEL_VOL_POSTFIX, GetDBValue(volume));
         }
 
+        public float GetAudioVolume(Channel channel)
+        {
+            _mixer.GetFloat(channel + CHANNEL_VOL_POSTFIX, out float volume);
+            return GetVolumePercentage(volume);
+        }
+
         private float GetDBValue(float percentage) {
             return _dbRange.GetValue(percentage);
         }
 
+        private float GetVolumePercentage(float volume)
+        {
+            float a = _dbRange.min;
+            float b = _dbRange.max;
+            volume += Mathf.Abs(a);
+            b += Mathf.Abs(a);
+            return volume / b;
+        }
+
         //Matches channel names in mixer for easy access.
         public enum Channel {
-            Environment = 0,
-            Minigame,
-            Player
+            Master = 0,
+            Music,
+            Sfx
         }
     }
 

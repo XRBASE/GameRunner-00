@@ -386,7 +386,7 @@ AudioSource:
   m_GameObject: {fileID: 1224936249552034477}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1041635696267655322, guid: a80f4588e7f3f31488a85621a5faf584, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.14
@@ -781,7 +781,7 @@ AudioSource:
   m_GameObject: {fileID: 2591450808723956980}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1041635696267655322, guid: a80f4588e7f3f31488a85621a5faf584, type: 2}
   m_audioClip: {fileID: 8300000, guid: 3e9949148e79e764797f4ff7719ee74d, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.14
@@ -1826,11 +1826,8 @@ MonoBehaviour:
   questionElementParent: {fileID: 3336099001695233246}
   dragTransform: {fileID: 4181030989185906755}
   pitchedAudio: {fileID: 6654806899634630537}
-  gameCompleteAudioClip: {fileID: 8300000, guid: 60f1025236f59c643b27bd8930e5870b, type: 3}
-  correctSoundEffect: {fileID: 8300000, guid: 2c08ae852c649b44a86bfb987cc1f3e0, type: 3}
-  inCorrectSoundEffect: {fileID: 8300000, guid: 9b1fc15cc28b7644899539beab889f0c, type: 3}
-  selectSoundEffect: {fileID: 8300000, guid: 7fd6f647f9d68b24b9eb0c7dd6ae754c, type: 3}
   matchFoundSoundEffect: {fileID: 8300000, guid: 25145577f3776c5429d53303336c6762, type: 3}
+  selectSoundEffect: {fileID: 8300000, guid: 7fd6f647f9d68b24b9eb0c7dd6ae754c, type: 3}
   title: {fileID: 8091194150158464788}
   feedbackAudio: {fileID: 4815462309847788959}
 --- !u!1 &7905581878215370765

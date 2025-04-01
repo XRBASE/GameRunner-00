@@ -675,14 +675,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_WordGame
       objectReference: {fileID: 0}
-    - target: {fileID: 1616206964961886210, guid: 1769e3f9a7db434409d4742286c3e552, type: 3}
-      propertyPath: m_audioClip
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1616206964961886210, guid: 1769e3f9a7db434409d4742286c3e552, type: 3}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: -1041635696267655322, guid: a80f4588e7f3f31488a85621a5faf584, type: 2}
     - target: {fileID: 1653059567278720044, guid: 1769e3f9a7db434409d4742286c3e552, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

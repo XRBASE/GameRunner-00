@@ -771,10 +771,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4489367212233320600}
-  - component: {fileID: 2593980203127570890}
-  - component: {fileID: 303250420166448016}
+  - component: {fileID: 1902815596307121752}
   m_Layer: 0
-  m_Name: MuteTgl
+  m_Name: SettingBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -800,7 +799,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &2593980203127570890
+--- !u!114 &1902815596307121752
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -809,7 +808,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3076750565250777990}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -841,42 +840,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 8957133449885855855}
-  toggleTransition: 0
-  graphic: {fileID: 0}
-  m_Group: {fileID: 0}
-  onValueChanged:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 303250420166448016}
-        m_TargetAssemblyTypeName: ToggleSprite, AD_UIGeneric
-        m_MethodName: set_IsOn
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
-  m_IsOn: 0
---- !u!114 &303250420166448016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3076750565250777990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f85d4a41854fe5041a0c2bb9c0fb3e06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isOn: 0
-  _graphic: {fileID: 8957133449885855855}
-  _onSpr: {fileID: 21300000, guid: 960498a344f894ff3a2fcca660aba91f, type: 3}
-  _offSpr: {fileID: 21300000, guid: ee480c11ddccf46c4bf9d3b863fb55ef, type: 3}
-  onValueChanged:
+  m_OnClick:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &3079787492755084009
@@ -1482,8 +1446,9 @@ MonoBehaviour:
   _toggleBtn: {fileID: 7981190717749460828}
   _startBtn: {fileID: 1262440306734110686}
   _stopBtn: {fileID: 2932356247804981048}
-  _audioTgl: {fileID: 2593980203127570890}
+  _settingsBtn: {fileID: 1902815596307121752}
   _sprite: {fileID: 8494494142225443853}
+  _settingsUI: {fileID: 0}
 --- !u!223 &1870973011304654458
 Canvas:
   m_ObjectHideFlags: 0
@@ -1726,7 +1691,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ee480c11ddccf46c4bf9d3b863fb55ef, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d49b46b9df6280d4ea9177583abbd29f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

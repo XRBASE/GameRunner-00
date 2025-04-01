@@ -17,11 +17,11 @@ namespace Cohort.GameRunner.Audio.Minigames {
             }
 
             if (_sourceOverride != null) {
-                AudioManager.Instance.PlayClip(clip, AudioManager.Channel.Minigame, _sourceOverride);
+                AudioManager.Instance.PlayClip(clip, AudioManager.Channel.Music, _sourceOverride);
                 return _sourceOverride;
             }
             else {
-                return AudioManager.Instance.PlayClip(clip, AudioManager.Channel.Minigame);
+                return AudioManager.Instance.PlayClip(clip, AudioManager.Channel.Music);
             }
         }
     }

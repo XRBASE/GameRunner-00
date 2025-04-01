@@ -17,8 +17,9 @@ public class ServerActionsUI : UIPanel
 	[SerializeField] private Button _toggleBtn;
 	[SerializeField] private Button _startBtn;
 	[SerializeField] private Button _stopBtn;
-	[SerializeField] private Toggle _audioTgl;
+	[SerializeField] private Button _settingsBtn;
 	[SerializeField] private ToggleSprite _sprite;
+	[SerializeField] private SettingsUI _settingsUI;
 	private Vector2 _openAnchorPos, _closeAnchorPos;
 	
 	private void Awake() {
@@ -31,15 +32,13 @@ public class ServerActionsUI : UIPanel
 		_startBtn.onClick.AddListener(StartGame);
 		_stopBtn.onClick.AddListener(StopGame);
 		
-		_audioTgl.onValueChanged.AddListener(ToggleMute);
+		_settingsBtn.onClick.AddListener(OpenSettings);
 		
 		DeactivateInstant();
 	}
 
-	private void ToggleMute(bool isMuted) {
-		AudioManager.Instance.SetAudioVolume((isMuted)? 0f : 1f, AudioManager.Channel.Minigame);
-		AudioManager.Instance.SetAudioVolume((isMuted)? 0f : 1f, AudioManager.Channel.Player);
-		AudioManager.Instance.SetAudioVolume((isMuted)? 0f : 1f, AudioManager.Channel.Environment);
+	private void OpenSettings() {
+		_settingsUI.Activate();
 	}
 
 	private void OnDestroy() {
