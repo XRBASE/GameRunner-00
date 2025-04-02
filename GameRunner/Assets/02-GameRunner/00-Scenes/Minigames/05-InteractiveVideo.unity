@@ -276,9 +276,41 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1993307282859908539, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1993307282859908539, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1993307282859908539, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1993307282859908539, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2392732774526955993, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
       propertyPath: m_Name
       value: PF_VideoCanvasInteractiveVideo
+      objectReference: {fileID: 0}
+    - target: {fileID: 2457899174786363468, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2457899174786363468, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2457899174786363468, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2457899174786363468, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2521386895333611250, guid: 9ebcaee326e5fa043adaa90a2814530c, type: 3}
       propertyPath: m_PlayOnAwake

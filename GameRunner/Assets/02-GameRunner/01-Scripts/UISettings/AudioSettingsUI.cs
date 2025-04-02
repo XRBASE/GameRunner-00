@@ -10,10 +10,13 @@ public class AudioSettingsUI : UIPanel
     [SerializeField] private AudioSliderUI _musicSlider;
     [SerializeField] private AudioSliderUI _sfXSlider;
     [SerializeField] private Button _exitButton;
+    
 
-
-    private void Awake()
+    private void Start()
     {
+        _masterSlider.SetSlider(AudioManager.Instance.GetAudioVolume(AudioManager.Channel.Master));
+        _musicSlider.SetSlider(AudioManager.Instance.GetAudioVolume(AudioManager.Channel.Music));
+        _sfXSlider.SetSlider(AudioManager.Instance.GetAudioVolume(AudioManager.Channel.Sfx));
         _masterSlider.slider.onValueChanged.AddListener(OnMasterValueChanged);
         _musicSlider.slider.onValueChanged.AddListener(OnMusicValueChanged);
         _sfXSlider.slider.onValueChanged.AddListener(OnSFXValueChanged);
@@ -31,26 +34,21 @@ public class AudioSettingsUI : UIPanel
 
     private void OnMasterValueChanged(float value)
     {
-        AudioManager.Instance.SetAudioVolume(value, AudioManager.Channel.Master);
+        AudioManager.Instance.HandleVolumeChanged(value, AudioManager.Channel.Master);
         _masterSlider.SetSlider(value);
     }
 
     private void OnMusicValueChanged(float value)
     {
-        AudioManager.Instance.SetAudioVolume(value, AudioManager.Channel.Music);
+        AudioManager.Instance.HandleVolumeChanged(value, AudioManager.Channel.Music);
         _musicSlider.SetSlider(value);
     }
 
     private void OnSFXValueChanged(float value)
     {
-        AudioManager.Instance.SetAudioVolume(value, AudioManager.Channel.Sfx);
+        AudioManager.Instance.HandleVolumeChanged(value, AudioManager.Channel.Sfx);
         _sfXSlider.SetSlider(value);
     }
-
-    private void OnEnable()
-    {
-        _masterSlider.SetSlider(AudioManager.Instance.GetAudioVolume(AudioManager.Channel.Master));
-        _musicSlider.SetSlider(AudioManager.Instance.GetAudioVolume(AudioManager.Channel.Music));
-        _sfXSlider.SetSlider(AudioManager.Instance.GetAudioVolume(AudioManager.Channel.Sfx));
-    }
+    
+ 
 }
