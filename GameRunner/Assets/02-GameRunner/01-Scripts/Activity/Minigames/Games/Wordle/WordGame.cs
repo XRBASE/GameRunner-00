@@ -93,6 +93,7 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         // Proceed to the next puzzle or complete the game if there are no more puzzles
         private void NextPuzzle() {
             _currentPuzzle++;
+            _isPlaying = false;
             if (_currentPuzzle < _wordGameData.puzzleAmount && _currentPuzzle < _wordGameData.wordList.Count) {
                 StartCoroutine(DoTimeout(CorrectVisualDuration, ResetGame));
             }
@@ -211,7 +212,6 @@ namespace Cohort.GameRunner.Minigames.Wordle {
                 _words.Last().RevealWord(_chosenWord.word);
                 NextPuzzle();
             }
-
         }
 
         // Handle the completion of the game (show score and finish)
@@ -219,7 +219,6 @@ namespace Cohort.GameRunner.Minigames.Wordle {
             _completionPercent = (_wordGameData.tries * _wordGameData.puzzleAmount - _attempts) /
                                  ((float)_wordGameData.tries * _wordGameData.puzzleAmount -
                                   _wordGameData.puzzleAmount); // Calculate completion percentage
-            _isPlaying = false;
             StartCoroutine(DoTimeout(FinishedVisualDuration, FinishMinigame));
         }
 
@@ -227,7 +226,6 @@ namespace Cohort.GameRunner.Minigames.Wordle {
         private void ValueChanged(string text) {
             if (!CanPlay || (_text + text).Length > _chosenWord.word.Length)
                 return;
-
             _text += text;
             CurrentWord.AddLetter(_text.Length - 1, _text.Last());
 
