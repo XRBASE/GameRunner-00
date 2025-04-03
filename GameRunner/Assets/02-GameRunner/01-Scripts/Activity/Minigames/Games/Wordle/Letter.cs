@@ -6,11 +6,21 @@ using UnityEngine.UI;
 namespace Cohort.GameRunner.Minigames.Wordle {
 	public class Letter : MonoBehaviour {
 		public enum LetterState {
+			Unset=0,
 			Incorrect,
 			Correct,
 			Contains
 		}
 
+		public char letter
+		{
+			get
+			{
+				return _letter;
+			}
+		}
+
+		public LetterState letterState;
 		public Image image;
 		public TextMeshProUGUI textMeshPro;
 		public PlayableDirector playableDirector;
@@ -66,25 +76,14 @@ namespace Cohort.GameRunner.Minigames.Wordle {
 			playableDirector.Play();
 		}
 
-		public bool CheckLetter(string correctWord) {
-			if (correctWord.Contains(_letter)) {
-				if (correctWord[_index] == _letter) {
-					HandleLetterState(LetterState.Correct);
-					return true;
-				}
-				else {
-					HandleLetterState(LetterState.Contains);
-				}
-			}
-			else {
-				HandleLetterState(LetterState.Incorrect);
-			}
-
-			return false;
-
+		public bool CheckLetter(char letter)
+		{
+			return _letter == letter;
 		}
 
-		private void HandleLetterState(LetterState letterState) {
+		public void HandleLetterState(LetterState letterState)
+		{
+			this.letterState = letterState;
 			switch (letterState) {
 				case LetterState.Incorrect:
 					image.color = _incorrectColor;

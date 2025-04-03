@@ -1856,10 +1856,10 @@ MonoBehaviour:
         veroordeeld\"},{\"word\":\"pinda\",\"hint\":\"wordt veel gebruikt in thaise
         recepten\"},{\"word\":\"panda\",\"hint\":\"Een groot dier uit Azi\xEB\"},{\"word\":\"woord\",\"hint\":\"Zinnen
         worden er mee gemaakt\"},{\"word\":\"start\",\"hint\":\"Komt voor het einde\"},{\"word\":\"einde\",\"hint\":\"komt
-        na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}],\"useDictionary\":true}"
+        na de start\"},{\"word\":\"sport\",\"hint\":\"Je wordt er sterk van\"}],\"useDictionary\":false}"
       locations: 03000000
       networked: 0
-      timeLimit: 30
+      timeLimit: 400
       required: 1
       minScore: 1
       maxScore: 100

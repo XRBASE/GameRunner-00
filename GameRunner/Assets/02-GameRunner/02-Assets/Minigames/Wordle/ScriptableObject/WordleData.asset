@@ -34,6 +34,7 @@ MonoBehaviour:
       hint: komt na de start
     - word: sport
       hint: Je wordt er sterk van
+    useDictionary: 0
   wordDictionary:
   - Aafje
   - Aafke
